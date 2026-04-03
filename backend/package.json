@@ -1,0 +1,21 @@
+{
+  "name": "dj-technologies-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API backend for AI-powered website platform",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test tests/**/*.test.js",
+    "lint": "echo 'linting configured later'"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "helmet": "^8.0.0"
+  },
+  "devDependencies": {}
+}

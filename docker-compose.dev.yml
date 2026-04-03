@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./website-platform
+      dockerfile: Dockerfile
+    container_name: dj-frontend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./website-platform:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    command: npm run dev
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dj-backend-dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/dj_platform
+      - PORT=4000
+    depends_on:
+      - db
+    command: npm run dev
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: dj-postgres-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dj_platform
+    volumes:
+      - postgres-data-dev:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres-data-dev:
+
+networks:
+  app-network:
+    driver: bridge
