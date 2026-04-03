@@ -8,12 +8,7 @@
 
 We are building the **next generation AI Website Operating System** — a platform that eliminates traditional development barriers and allows anyone to create, manage, and scale digital experiences using **simple prompts and intuitive interfaces**.
 
-Our goal is to replace:
-- WordPress
-- Wix
-- Webflow
-
-With something faster, smarter, and fully automated.
+Our goal is to replace WordPress, Wix, and Webflow with something faster, smarter, and fully automated.
 
 ---
 
@@ -39,274 +34,100 @@ With something faster, smarter, and fully automated.
 
 ---
 
-## 🧩 Core Features
+## 📚 Documentation
 
-### 🤖 AI Website Generation
-- Prompt → Fully functional website
-- Auto layout, sections, and content
-- AI-assisted design decisions
-
-### ✍️ AI Editing Engine
-- Modify anything using text prompts
-- Example:
-  - “Make this section more modern”
-  - “Add pricing section”
-  - “Change color theme to dark”
-
-### 🧱 Modular Page Builder
-- Drag & drop builder
-- Reusable components
-- Section-based architecture
-
-### 🎨 World-Class UI/UX
-- Ultra-smooth animations
-- Modern transitions
-- Micro-interactions
-- Mobile-first design
-- High-performance rendering
-
-### ⚙️ Automation Engine
-- Forms → CRM workflows
-- Lead capture → automation
-- Trigger-based actions
-
-### 🌐 Built-in Hosting
-- Instant deployment
-- Domain connection
-- SSL, CDN, caching
-- Zero-config hosting
-
-### 📊 Analytics + Insights
-- Website performance
-- Conversion tracking
-- User behavior insights
-
-### 🧾 CMS + Content System
-- Blog support
-- Dynamic content
-- SEO-ready structure
-
-### 🛒 Commerce Ready (Future)
-- Payments integration
-- Product catalogs
-- Checkout systems
+| Document | Description |
+|----------|-------------|
+| [Platform Features](PLATFORM.md) | Core features, architecture, and tech stack |
+| [Roadmap](ROADMAP.md) | Phased development plan |
+| [Business Model](BUSINESS.md) | Revenue model, target users, and strategy |
+| [Infrastructure](INFRASTRUCTURE.md) | Docker setup, deployment, and hosting |
 
 ---
 
-## 🏗️ Architecture Philosophy
+## 🚀 Quick Start
 
-- Modular system design
-- Component-driven architecture
-- API-first backend
-- Event-driven workflows
-- Scalable infrastructure
-- Multi-tenant SaaS system
+### Prerequisites
 
----
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- Git
+- Node.js 18+ (for local development without Docker)
 
-## 🧠 AI Layer
+### Installation
 
-- Prompt-based UI control
-- Context-aware editing
-- Smart layout generation
-- AI-powered suggestions
-- Continuous learning from usage
+1. **Clone the repository**
 
----
+```bash
+git clone https://github.com/dineshjoshi-technologies/paperclip.git
+cd my-project
+```
 
-## 🧱 Platform Layers
+2. **Start the development environment**
 
-1. **Presentation Layer**
-   - UI builder
-   - animations
-   - interaction engine
+```bash
+docker compose -f docker-compose.dev.yml up -d
+```
 
-2. **Logic Layer**
-   - workflows
-   - triggers
-   - automation
+3. **Access the application**
 
-3. **AI Layer**
-   - prompt engine
-   - decision engine
-   - content generation
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:4000
+- Health check: http://localhost:4000/health
 
-4. **Infrastructure Layer**
-   - hosting
-   - deployment
-   - scaling
+### Production Deployment
+
+See [Infrastructure Guide](INFRASTRUCTURE.md) for full production setup including SSL, domain configuration, and CI/CD.
 
 ---
 
-## 🚀 Roadmap (Phases)
+## ✅ What's Built (Phase 1)
+
+- ✅ Docker-based development environment
+- ✅ Next.js frontend foundation
+- ✅ Express.js backend API
+- ✅ PostgreSQL database setup
+- ✅ Nginx reverse proxy
+- ✅ SSL certificate automation (Certbot)
+- ✅ CI/CD pipeline (GitHub Actions)
+- ✅ Health checks for all services
+- ✅ Basic project structure and documentation
 
 ---
 
-### 🟢 Phase 1 — Core Foundation
-- Basic website builder
-- Template system
-- Hosting integration
-- Deployment pipeline
-- Simple UI/UX
+## 🚧 What's Coming
 
----
+### Phase 2 — AI Integration
+- Prompt-to-website generation
+- AI-powered editing engine
+- Smart content generation
+- Layout suggestions
 
-### 🟡 Phase 2 — AI Integration
-- Prompt-to-website
-- AI editing
-- Content generation
-- Smart layout suggestions
-
----
-
-### 🔵 Phase 3 — Automation Engine
-- Workflow builder
+### Phase 3 — Automation Engine
+- Visual workflow builder
 - Form automation
-- CRM integration
-- Trigger systems
+- CRM integrations
+- Event-driven triggers
 
----
-
-### 🟣 Phase 4 — Advanced UI/UX
+### Phase 4 — Advanced UI/UX
 - Animation engine
 - Interactive components
-- Motion system
+- Motion design system
 - Advanced design controls
 
----
-
-### 🔴 Phase 5 — Productization
+### Phase 5+ — Platform Growth
 - Template marketplace
 - Component library
-- Vertical solutions (business types)
-
----
-
-### ⚫ Phase 6 — Platform Expansion
 - SaaS ecosystem
 - API exposure
 - White-label solutions
-- Agency mode
 
----
-
-### 🟠 Phase 7 — Intelligence Layer
-- Self-optimizing websites
-- AI recommendations
-- conversion optimization
-- behavior-driven UI changes
-
----
-
-## 🎯 Target Users
-
-- startups
-- small businesses
-- agencies
-- freelancers
-- enterprises (future)
-
----
-
-## 💰 Business Model
-
-- subscription plans
-- hosting bundles
-- premium templates
-- automation packs
-- enterprise licensing
-- white-label solutions
-
----
-
-## 🧠 Strategic Advantage
-
-- AI-native platform (not retrofitted)
-- full control over hosting + infra
-- faster deployment than competitors
-- automation-first workflows
-- platform evolution from real client work
-
----
-
-## ⚙️ Tech Stack (Planned)
-
-- frontend: modern JS framework (React / Next.js)
-- backend: scalable API (Node / Python)
-- database: PostgreSQL / NoSQL hybrid
-- AI: local + API models (Ollama + others)
-- infra: VPS / cloud + CDN
-- storage: object storage (S3-compatible)
-
----
-
-## 🧩 Internal Philosophy
-
-Every feature must:
-- reduce manual effort
-- improve speed
-- increase scalability
-- support platform evolution
-
----
-
-## 🔒 Security & Reliability
-
-- SSL by default
-- secure deployments
-- backup systems
-- monitoring and logging
-- scalable architecture
-
----
-
-## 🚀 Long-Term Vision
-
-To become:
-
-> The default operating system for building and running websites and digital businesses globally.
-
----
-
-## 🏢 Organization
-
-Built and maintained by:
-
-**DJ Technologies**
-- AI Automation
-- Software Development
-- Hosting & Infrastructure
-- Digital Systems
-
----
-
-## 🤝 Contribution
-
-Currently internal.
-
-Future:
-- open APIs
-- plugin ecosystem
-- developer tools
+See [Roadmap](ROADMAP.md) for complete phased plan.
 
 ---
 
 ## 📌 Status
 
 🚧 Active Development — Phase 1 in progress
-
----
-
-## ⚡ Final Note
-
-This is not just a website builder.
-
-This is a **platform shift**.
-
-From:
-manual → automated  
-tools → systems  
-builders → AI-driven creation  
 
 ---
 
