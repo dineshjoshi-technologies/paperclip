@@ -5,11 +5,18 @@ FROM base AS deps
 COPY package.json package-lock.json* ./
 RUN npm ci
 
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npx prisma generate
+
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/src/generated/prisma ./src/generated/prisma
 COPY . .
 
 EXPOSE 4000
