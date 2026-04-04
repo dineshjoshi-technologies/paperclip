@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit')
 const authRoutes = require('./routes/auth.routes')
 const websiteRoutes = require('./routes/website.routes')
 const templateRoutes = require('./routes/template.routes')
+const pageRoutes = require('./routes/page.routes')
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -39,6 +40,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/websites', websiteRoutes)
 app.use('/api/templates', templateRoutes)
+app.use('/api/websites', pageRoutes)
 
 // 404 handler
 app.use((_req, res) => {
