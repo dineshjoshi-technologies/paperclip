@@ -13,8 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DJ Technologies — AI-Powered Website Platform",
-  description: "Build, launch, and scale websites instantly using AI, automation, and next-gen UI/UX.",
+  title: {
+    default: "DJ Technologies — AI-Powered Website Builder",
+    template: "%s | DJ Technologies",
+  },
+  description: "Build stunning websites without writing code. AI-powered drag-and-drop builder with instant deployment, custom domains, and built-in hosting.",
+  keywords: ["website builder", "AI website generator", "no-code platform", "drag and drop builder", "website hosting"],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "DJ Technologies",
+  },
 };
 
 export default function RootLayout({

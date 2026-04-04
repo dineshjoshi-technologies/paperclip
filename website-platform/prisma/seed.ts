@@ -1,7 +1,10 @@
-import { PrismaClient } from '../src/generated/prisma/index.js';
+import { PrismaClient } from '../src/generated/prisma/client';
 import { hash } from 'crypto';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL || '';
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('Seeding database...');

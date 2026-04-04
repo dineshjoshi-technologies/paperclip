@@ -1,18 +1,18 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
-const { authMiddleware } = require('../middleware/auth')
+const { authenticate } = require('../middleware/auth')
 
 const router = express.Router()
 const prisma = new PrismaClient()
 
 // GET /api/websites/:websiteId/pages - Get all pages for a website
-router.get('/:websiteId/pages', authMiddleware, async (req, res) => {
+router.get('/:websiteId/pages', authenticate, async (req, res) => {
   try {
     const website = await prisma.website.findUnique({
       where: { id: req.params.websiteId },
     })
 
-    if (!website || website.userId !== req.user.id) {
+    if (!website || website.userId !== req.userId) {
       return res.status(404).json({ message: 'Website not found' })
     }
 
@@ -29,7 +29,7 @@ router.get('/:websiteId/pages', authMiddleware, async (req, res) => {
 })
 
 // GET /api/websites/:websiteId/pages/:pageId - Get a specific page
-router.get('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
+router.get('/:websiteId/pages/:pageId', authenticate, async (req, res) => {
   try {
     const page = await prisma.page.findUnique({
       where: { id: req.params.pageId },
@@ -44,7 +44,7 @@ router.get('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
       where: { id: req.params.websiteId },
     })
 
-    if (!website || website.userId !== req.user.id) {
+    if (!website || website.userId !== req.userId) {
       return res.status(404).json({ message: 'Website not found' })
     }
 
@@ -64,7 +64,7 @@ router.get('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
 })
 
 // POST /api/websites/:websiteId/pages - Create a new page
-router.post('/:websiteId/pages', authMiddleware, async (req, res) => {
+router.post('/:websiteId/pages', authenticate, async (req, res) => {
   try {
     const { name, slug, content = [] } = req.body
 
@@ -76,7 +76,7 @@ router.post('/:websiteId/pages', authMiddleware, async (req, res) => {
       where: { id: req.params.websiteId },
     })
 
-    if (!website || website.userId !== req.user.id) {
+    if (!website || website.userId !== req.userId) {
       return res.status(404).json({ message: 'Website not found' })
     }
 
@@ -107,7 +107,7 @@ router.post('/:websiteId/pages', authMiddleware, async (req, res) => {
 })
 
 // PUT /api/websites/:websiteId/pages/:pageId - Update page content
-router.put('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
+router.put('/:websiteId/pages/:pageId', authenticate, async (req, res) => {
   try {
     const { name, slug, isPublished, content } = req.body
 
@@ -123,7 +123,7 @@ router.put('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
       where: { id: req.params.websiteId },
     })
 
-    if (!website || website.userId !== req.user.id) {
+    if (!website || website.userId !== req.userId) {
       return res.status(404).json({ message: 'Website not found' })
     }
 
@@ -164,7 +164,7 @@ router.put('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
 })
 
 // DELETE /api/websites/:websiteId/pages/:pageId - Delete a page
-router.delete('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
+router.delete('/:websiteId/pages/:pageId', authenticate, async (req, res) => {
   try {
     const page = await prisma.page.findUnique({
       where: { id: req.params.pageId },
@@ -178,7 +178,7 @@ router.delete('/:websiteId/pages/:pageId', authMiddleware, async (req, res) => {
       where: { id: req.params.websiteId },
     })
 
-    if (!website || website.userId !== req.user.id) {
+    if (!website || website.userId !== req.userId) {
       return res.status(404).json({ message: 'Website not found' })
     }
 
