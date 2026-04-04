@@ -1,0 +1,454 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ===========================
+// ENUMS
+// ===========================
+
+enum Role {
+  ADMIN
+  USER
+  DEVELOPER
+  DESIGNER
+  SUPPORT
+}
+
+enum SubscriptionTier {
+  FREE
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  UPI
+  NET_BANKING
+  WALLET
+}
+
+enum WebsiteStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  SUSPENDED
+}
+
+enum DeploymentStatus {
+  QUEUED
+  BUILDING
+  DEPLOYING
+  SUCCESS
+  FAILED
+  ROLLED_BACK
+}
+
+enum ComponentType {
+  HEADER
+  HERO
+  FEATURES
+  PRICING
+  TESTIMONIALS
+  CTA
+  FOOTER
+  GALLERY
+  FORM
+  NAVBAR
+  SIDEBAR
+  CARD
+  MODAL
+  CUSTOM
+}
+
+enum TemplateCategory {
+  BUSINESS
+  PORTFOLIO
+  ECOMMERCE
+  BLOG
+  LANDING_PAGE
+  RESTAURANT
+  AGENCY
+  EDUCATION
+  HEALTH
+  TECHNOLOGY
+  CUSTOM
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELED
+}
+
+// ===========================
+// MODELS
+// ===========================
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  firstName     String?
+  lastName      String?
+  avatarUrl     String?
+  role          Role      @default(USER)
+  emailVerified Boolean   @default(false)
+  phone         String?
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  websites          Website[]
+  subscriptions     Subscription[]
+  invoices          Invoice[]
+  payments          Payment[]
+  templates         Template[]    @relation("TemplateCreator")
+  components        Component[]   @relation("ComponentCreator")
+  deployments       Deployment[]
+  auditLogs         AuditLog[]
+  resetTokens       PasswordResetToken[]
+  apiKeys           ApiKey[]
+
+  @@index([email])
+  @@index([role])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  userId      String
+  name        String
+  keyHash     String    @unique
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  permissions String[]  @default(["read"])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@map("api_keys")
+}
+
+model Website {
+  id              String        @id @default(uuid())
+  userId          String
+  name            String
+  slug            String        @unique
+  description     String?
+  status          WebsiteStatus @default(DRAFT)
+  customDomain    String?
+  isCustomDomain  Boolean       @default(false)
+  sslEnabled      Boolean       @default(false)
+  config          Json?
+  theme           Json?
+  seoSettings     Json?
+  analyticsConfig Json?
+  publishedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pages       Page[]
+  deployments Deployment[]
+  auditLogs   AuditLog[]
+
+  @@index([userId])
+  @@index([slug])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId, status])
+  @@map("websites")
+}
+
+model Page {
+  id         String   @id @default(uuid())
+  websiteId  String
+  name       String
+  slug       String
+  title      String?
+  metaDesc   String?
+  isHomepage Boolean  @default(false)
+  content    Json?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  website        Website             @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  pageComponents PageComponent[]
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@index([isHomepage])
+  @@map("pages")
+}
+
+model Template {
+  id          String           @id @default(uuid())
+  creatorId   String?
+  name        String
+  slug        String           @unique
+  description String?
+  category    TemplateCategory @default(CUSTOM)
+  thumbnail   String?
+  previewUrl  String?
+  isPublic    Boolean          @default(false)
+  isFeatured  Boolean          @default(false)
+  config      Json?
+  price       Decimal?         @default(0)
+  usageCount  Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  creator        User?              @relation("TemplateCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  templateComponents TemplateComponent[]
+
+  @@index([category])
+  @@index([isPublic])
+  @@index([isFeatured])
+  @@index([price])
+  @@index([createdAt])
+  @@map("templates")
+}
+
+model Component {
+  id          String        @id @default(uuid())
+  creatorId   String?
+  name        String
+  slug        String        @unique
+  type        ComponentType @default(CUSTOM)
+  description String?
+  thumbnail   String?
+  isPublic    Boolean       @default(false)
+  config      Json?
+  html        String?
+  css         String?
+  javascript  String?
+  props       Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  creator          User?               @relation("ComponentCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  pageComponents   PageComponent[]
+  templateComponents TemplateComponent[]
+
+  @@index([type])
+  @@index([isPublic])
+  @@index([createdAt])
+  @@map("components")
+}
+
+model PageComponent {
+  id          String   @id @default(uuid())
+  pageId      String
+  componentId String
+  config      Json?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Restrict)
+
+  @@unique([pageId, componentId, sortOrder])
+  @@index([pageId])
+  @@index([componentId])
+  @@map("page_components")
+}
+
+model TemplateComponent {
+  id          String   @id @default(uuid())
+  templateId  String
+  componentId String
+  config      Json?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  template  Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Restrict)
+
+  @@unique([templateId, componentId, sortOrder])
+  @@index([templateId])
+  @@index([componentId])
+  @@map("template_components")
+}
+
+model Deployment {
+  id          String           @id @default(uuid())
+  websiteId   String
+  userId      String
+  status      DeploymentStatus @default(QUEUED)
+  version     String
+  commitHash  String?
+  buildLog    String?
+  deployUrl   String?
+  error       String?
+  deployedAt  DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([websiteId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([websiteId, status])
+  @@index([websiteId, createdAt(sort: Desc)])
+  @@map("deployments")
+}
+
+model Subscription {
+  id              String             @id @default(uuid())
+  userId          String
+  tier            SubscriptionTier   @default(FREE)
+  status          SubscriptionStatus @default(ACTIVE)
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean          @default(false)
+  canceledAt         DateTime?
+  trialEndsAt        DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([tier])
+  @@index([currentPeriodEnd])
+  @@index([stripeCustomerId])
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id              String        @id @default(uuid())
+  userId          String
+  subscriptionId  String?
+  invoiceNumber   String        @unique
+  amount          Decimal
+  tax             Decimal       @default(0)
+  total           Decimal
+  currency        String        @default("INR")
+  status          InvoiceStatus @default(DRAFT)
+  dueDate         DateTime
+  paidAt          DateTime?
+  stripeInvoiceId String?
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  payments     Payment[]
+
+  @@index([userId])
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([invoiceNumber])
+  @@map("invoices")
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  userId          String
+  invoiceId       String?
+  amount          Decimal
+  currency        String        @default("INR")
+  status          PaymentStatus @default(PENDING)
+  method          PaymentMethod
+  transactionId   String?
+  stripePaymentId String?
+  receiptUrl      String?
+  metadata        Json?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([invoiceId])
+  @@index([status])
+  @@index([transactionId])
+  @@index([stripePaymentId])
+  @@index([createdAt])
+  @@map("payments")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  websiteId String?
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  website Website? @relation(fields: [websiteId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([websiteId])
+  @@index([entity])
+  @@index([entityId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("audit_logs")
+}

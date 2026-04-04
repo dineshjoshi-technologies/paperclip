@@ -10,6 +10,10 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 
+// Auth routes
+const authRoutes = require('./routes/authRoutes')
+app.use('/api/auth', authRoutes)
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
