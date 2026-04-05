@@ -5,13 +5,27 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsdoc = require('swagger-jsdoc')
+const pino = require('pino')
+const pinoHttp = require('pino-http')
 
 const { errorHandler } = require('./middleware/errorHandler')
 const { apiLimiter } = require('./middleware/rateLimiter')
 const authRoutes = require('./routes/auth/authRoutes')
 
+// Logger configuration
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  transport: process.env.NODE_ENV !== 'production' ? {
+    target: 'pino-pretty',
+    options: { colorize: true }
+  } : undefined
+})
+
 const app = express()
 const PORT = process.env.PORT || 4000
+
+// Request logging
+app.use(pinoHttp({ logger }))
 
 // Security middleware
 app.use(helmet())
@@ -90,8 +104,8 @@ app.use(errorHandler)
 // Export app for testing
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`Backend API running on port ${PORT}`)
-    console.log(`API documentation available at http://localhost:${PORT}/api/docs`)
+    logger.info({ port: PORT }, 'Backend API started')
+    logger.info(`API documentation available at http://localhost:${PORT}/api/docs`)
   })
 }
 
