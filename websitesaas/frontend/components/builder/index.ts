@@ -1,6 +1,0 @@
-export { PageBuilder } from './page-builder'
-export { ComponentPalette } from './component-palette'
-export { ComponentPreview } from './component-preview'
-export { ComponentProperties } from './component-properties'
-export { COMPONENT_TEMPLATES, createComponent } from './types'
-export type { BuilderComponent, ComponentType, ComponentTemplate } from './types'

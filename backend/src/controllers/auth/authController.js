@@ -168,12 +168,23 @@ exports.requestPasswordReset = async (req, res) => {
       });
     }
 
-    // TODO: Implement actual password reset token generation and email sending
-    // For now, we'll just return success
-    
+    // Generate reset token (in production, save to DB and send via email)
+    const resetToken = jwt.sign(
+      { userId: user.id, email: user.email, purpose: 'password_reset' },
+      JWT_SECRET,
+      { expiresIn: '1h' } // Token expires in 1 hour
+    );
+
+    // In a real application, you would send this token via email
+    // For now, we'll return it in the response for demonstration purposes
+    // REMOVE THIS LINE IN PRODUCTION AND SEND VIA EMAIL INSTEAD
+    console.log(`Password reset token for ${email}: ${resetToken}`);
+
     res.status(200).json({
       success: true,
       message: 'If the email exists, you will receive a reset link'
+      // In development, you might want to include the token:
+      // resetToken: resetToken 
     });
   } catch (error) {
     console.error('Password reset request error:', error);
@@ -199,15 +210,48 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    // TODO: Implement actual token validation and password reset
-    // For now, we'll just return success
+    // Verify token
+    const decoded = jwt.verify(token, JWT_SECRET);
     
+    // Check if token is for password reset purpose
+    if (decoded.purpose !== 'password_reset') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid token for password reset' 
+      });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    // Update user's password
+    await prisma.user.update({
+      where: { id: decoded.userId },
+      data: { passwordHash }
+    });
+
     res.status(200).json({
       success: true,
       message: 'Password has been reset successfully'
     });
   } catch (error) {
     console.error('Password reset error:', error);
+    
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Reset token has expired' 
+      });
+    }
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid reset token' 
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: 'Internal server error'

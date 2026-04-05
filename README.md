@@ -42,6 +42,7 @@ Our goal is to replace WordPress, Wix, and Webflow with something faster, smarte
 | [Roadmap](ROADMAP.md) | Phased development plan |
 | [Business Model](BUSINESS.md) | Revenue model, target users, and strategy |
 | [Infrastructure](INFRASTRUCTURE.md) | Docker setup, deployment, and hosting |
+| [Database Setup](docs/DATABASE.md) | PostgreSQL configuration and management |
 
 ---
 
