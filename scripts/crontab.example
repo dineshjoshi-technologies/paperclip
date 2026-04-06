@@ -1,0 +1,5 @@
+# Database backup - every 6 hours
+0 */6 * * * /opt/dj-platform/scripts/backup-db.sh /var/backups/dj-platform/postgres >> /var/log/db-backup.log 2>&1
+
+# Log rotation - daily
+0 0 * * * /opt/dj-platform/scripts/rotate-logs.sh /var/log/nginx 30 >> /var/log/nginx-rotate.log 2>&1

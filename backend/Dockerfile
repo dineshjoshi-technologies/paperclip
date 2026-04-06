@@ -15,7 +15,7 @@ FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/src/generated/prisma ./src/generated/prisma
 COPY . .
 
