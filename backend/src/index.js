@@ -84,12 +84,14 @@ const websiteRoutes = require('./routes/websites')
 const pageRoutes = require('./routes/pages')
 const templateRoutes = require('./routes/templates')
 const userRoutes = require('./routes/users')
+const paymentRoutes = require('./routes/payments')
 
 app.use('/api/auth', authRoutes)
 app.use('/api/websites', websiteRoutes)
 app.use('/api/pages', pageRoutes)
 app.use('/api/templates', templateRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/payments', paymentRoutes)
 
 app.use((_req, res) => {
   res.status(404).json({

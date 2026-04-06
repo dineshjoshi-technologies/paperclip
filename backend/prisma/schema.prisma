@@ -26,6 +26,8 @@ model User {
   refreshTokens     RefreshToken[]
   apiKeys           ApiKey[]
   passwordResetTokens PasswordResetToken[]
+  subscriptions     Subscription[]
+  payments         Payment[]
   createdAt         DateTime            @default(now()) @map("created_at")
   updatedAt         DateTime            @updatedAt @map("updated_at")
 
@@ -139,6 +141,7 @@ enum Role {
   DEVELOPER
   DESIGNER
   SUPPORT
+  SUPER_ADMIN
 }
 
 enum WebsiteStatus {
@@ -187,9 +190,88 @@ enum EmailStatus {
 model UserOnboardingMilestone {
   id            String    @id @default(uuid())
   userId        String    @map("user_id")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   milestone     String    // e.g., "first_website", "first_template", "first_publish"
   awardedAt     DateTime  @default(now()) @map("awarded_at")
 
   @@unique([userId, milestone])
   @@map("user_onboarding_milestones")
+}
+
+model Subscription {
+  id                    String            @id @default(uuid())
+  userId                String            @map("user_id")
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                  SubscriptionPlan  @default(BASIC)
+  provider              String            @default("razorpay") // "razorpay" or "stripe"
+  providerSubscriptionId String?           @unique @map("provider_subscription_id")
+  providerCustomerId    String?           @map("provider_customer_id")
+  status                SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime          @map("current_period_start")
+  currentPeriodEnd     DateTime          @map("current_period_end")
+  cancelAtPeriodEnd    Boolean           @default(false) @map("cancel_at_period_end")
+  createdAt            DateTime          @default(now()) @map("created_at")
+  updatedAt            DateTime          @updatedAt @map("updated_at")
+
+  @@map("subscriptions")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  userId            String        @map("user_id")
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptionId    String?       @map("subscription_id")
+  subscription      Subscription? @relation(fields: [subscriptionId], references: [id])
+  amount            Int           @default(0) // in paise/cents
+  currency          String        @default("INR")
+  provider          String        @default("razorpay")
+  providerPaymentId String?       @unique @map("provider_payment_id")
+  status            PaymentStatus @default(PENDING)
+  method            String?       // "card", "upi", "netbanking", etc.
+  email             String?
+  contact          String?
+  description       String?
+  errorCode         String?       @map("error_code")
+  errorMessage      String?       @map("error_message")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  @@map("payments")
+}
+
+model PaymentGateway {
+  id            String    @id @default(uuid())
+  provider      String    @unique // "razorpay" or "stripe"
+  enabled       Boolean  @default(true)
+  keyId         String?   @map("key_id")
+  keySecret     String?   @map("key_secret")
+  webhookSecret String?   @map("webhook_secret")
+  testMode      Boolean  @default(true) @map("test_mode")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("payment_gateways")
+}
+
+enum SubscriptionPlan {
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  UNPAID
+  TRIALING
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
 }
