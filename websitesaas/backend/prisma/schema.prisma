@@ -17,7 +17,14 @@ model User {
   name          String?
   avatar        String?
   role          Role      @default(USER)
+  onboardingCompleted Boolean @default(false) @map("onboarding_completed")
+  onboardingStep     Int      @default(1) @map("onboarding_step")
+  roleSelection     String?  @map("role_selection")
   websites      Website[]
+  emailLogs        EmailLog[]
+  emailPreferences EmailPreference[]
+  passwordResets   PasswordReset[]
+  emailVerifications EmailVerification[]
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
@@ -77,6 +84,7 @@ model Component {
   page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
   type      String    // e.g., "hero", "features", "pricing", "footer"
   config    Json?     // Component-specific configuration
+  style     Json?     // Component styling (colors, typography, spacing, borders)
   position  Int       @default(0)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -94,4 +102,78 @@ enum WebsiteStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model EmailTemplate {
+  id          String    @id @default(uuid())
+  name        String    @unique // welcome, password-reset, website-published, etc.
+  subject     String
+  bodyHtml    String    @map("body_html")
+  bodyText    String?   @map("body_text")
+  variables   Json?     // available template variables
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("email_templates")
+}
+
+model EmailLog {
+  id            String        @id @default(uuid())
+  userId        String?       @map("user_id")
+  user          User?         @relation(fields: [userId], references: [id])
+  email         String        // recipient email
+  templateName  String        @map("template_name")
+  subject       String
+  status        EmailStatus   @default(PENDING)
+  errorMessage  String?       @map("error_message")
+  retryCount    Int           @default(0) @map("retry_count")
+  sentAt        DateTime?     @map("sent_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  @@map("email_logs")
+}
+
+model EmailPreference {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailType     String    @map("email_type") // welcome, payment, etc.
+  isEnabled     Boolean   @default(true) @map("is_enabled")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@unique([userId, emailType])
+  @@map("email_preferences")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("password_resets")
+}
+
+model EmailVerification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  verifiedAt DateTime? @map("verified_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("email_verifications")
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  RETRYING
 }
