@@ -1,0 +1,184 @@
+[
+  {
+    "name": "News Header",
+    "slug": "news-header",
+    "type": "HEADER",
+    "description": "News magazine header with breaking bar",
+    "sortOrder": 0,
+    "html": "<div class=\"breaking-bar\"><div class=\"container\"><span class=\"breaking-label\">BREAKING</span><span class=\"breaking-text\">{{breakingText}}</span></div></div><header class=\"header\"><div class=\"container\"><div class=\"header-inner\"><div class=\"logo\"><a href=\"/\">{{logo}}</a></div><nav class=\"nav\"><ul class=\"nav-links\">{{#each navLinks}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></nav><div class=\"header-actions\"><a href=\"/subscribe\" class=\"btn btn-primary\">{{ctaText}}</a></div></div></div></header>",
+    "css": ".breaking-bar { background: #b91c1c; color: #fff; padding: 0.5rem 0; font-size: 0.875rem; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .breaking-label { font-weight: 700; margin-right: 0.5rem; } .header { padding: 1rem 0; background: #fff; border-bottom: 3px solid #111827; } .header-inner { display: flex; align-items: center; justify-content: space-between; } .logo a { font-size: 2rem; font-weight: 900; color: #111827; text-decoration: none; letter-spacing: -0.02em; } .nav-links { display: flex; list-style: none; gap: 1.5rem; margin: 0; padding: 0; } .nav-links a { color: #374151; text-decoration: none; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.2s; } .nav-links a:hover { color: #b91c1c; } .header-actions { display: flex; align-items: center; } .btn-primary { background: #b91c1c; color: #fff; padding: 0.5rem 1rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; } @media (max-width: 1024px) { .nav { display: none; } } @media (max-width: 768px) { .logo a { font-size: 1.5rem; } }",
+    "props": {
+      "breakingText": { "type": "string", "default": "Tech industry sees major shifts in AI regulation — Full story inside" },
+      "logo": { "type": "string", "default": "THE DAILY PULSE" },
+      "navLinks": {
+        "type": "array",
+        "default": [
+          { "label": "World", "url": "/world" },
+          { "label": "Tech", "url": "/tech" },
+          { "label": "Business", "url": "/business" },
+          { "label": "Opinion", "url": "/opinion" },
+          { "label": "Culture", "url": "/culture" }
+        ]
+      },
+      "ctaText": { "type": "string", "default": "Subscribe" }
+    }
+  },
+  {
+    "name": "News Hero",
+    "slug": "news-hero",
+    "type": "HERO",
+    "description": "Featured story hero section",
+    "sortOrder": 1,
+    "html": "<section class=\"hero\"><div class=\"container\"><div class=\"hero-grid\"><div class=\"hero-main\"><a href=\"{{mainStory.link}}\" class=\"hero-story\"><div class=\"hero-image\" style=\"background: {{mainStory.color}};\"><span class=\"hero-placeholder\">{{mainStory.title}}</span></div><div class=\"hero-story-content\"><span class=\"story-category\">{{mainStory.category}}</span><h1 class=\"hero-story-title\">{{mainStory.title}}</h1><p class=\"hero-story-excerpt\">{{mainStory.excerpt}}</p></div></a></div><div class=\"hero-side\">{{#each sideStories}}<a href=\"{{link}}\" class=\"side-story\"><span class=\"story-category\">{{category}}</span><h3 class=\"side-story-title\">{{title}}</h3></a>{{/each}}</div></div></div></section>",
+    "css": ".hero { padding: 2rem 0; background: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; } .hero-story { text-decoration: none; color: inherit; display: block; } .hero-image { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; } .hero-placeholder { font-size: 1.5rem; font-weight: 700; color: rgba(255,255,255,0.5); } .story-category { display: inline-block; font-size: 0.75rem; font-weight: 700; color: #b91c1c; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; } .hero-story-title { font-size: 2rem; font-weight: 800; color: #111827; line-height: 1.2; margin-bottom: 0.75rem; } .hero-story-excerpt { color: #6b7280; line-height: 1.6; } .hero-side { display: flex; flex-direction: column; gap: 1.5rem; } .side-story { text-decoration: none; color: inherit; padding: 1rem; border-left: 3px solid #e5e7eb; transition: border-color 0.2s; } .side-story:hover { border-color: #b91c1c; } .side-story-title { font-size: 1.125rem; font-weight: 700; color: #111827; line-height: 1.3; margin-top: 0.5rem; } @media (max-width: 1024px) { .hero-grid { grid-template-columns: 1fr; } .hero-side { flex-direction: row; flex-wrap: wrap; } .side-story { flex: 1; min-width: 200px; } } @media (max-width: 768px) { .hero-story-title { font-size: 1.5rem; } } @media (max-width: 320px) { .hero-story-title { font-size: 1.25rem; } }",
+    "props": {
+      "mainStory": {
+        "type": "object",
+        "default": {
+          "title": "Global Summit Reaches Historic Agreement on Climate Action",
+          "excerpt": "World leaders have agreed to unprecedented measures to reduce carbon emissions by 2030, marking a turning point in international climate policy.",
+          "category": "World",
+          "color": "#1e3a5f",
+          "link": "/article/climate-summit"
+        }
+      },
+      "sideStories": {
+        "type": "array",
+        "default": [
+          { "title": "Tech Giants Report Record Quarterly Earnings", "category": "Business", "link": "/article/tech-earnings" },
+          { "title": "New Study Reveals Benefits of Remote Work", "category": "Health", "link": "/article/remote-work" },
+          { "title": "Championship Finals Set Viewership Record", "category": "Sports", "link": "/article/finals" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "News Sections",
+    "slug": "news-sections",
+    "type": "FEATURES",
+    "description": "News category sections with article grids",
+    "sortOrder": 2,
+    "html": "<section class=\"news-sections\"><div class=\"container\">{{#each sections}}<div class=\"news-category\"><div class=\"category-header\"><h2 class=\"category-title\">{{title}}</h2><a href=\"{{link}}\" class=\"category-more\">View all →</a></div><div class=\"category-grid\">{{#each articles}}<article class=\"article-card\"><a href=\"{{link}}\" class=\"article-link\"><div class=\"article-image\" style=\"background: {{color}};\"></div><div class=\"article-content\"><h3 class=\"article-title\">{{title}}</h3><p class=\"article-excerpt\">{{excerpt}}</p><span class=\"article-meta\">{{date}}</span></div></a></article>{{/each}}</div></div>{{/each}}</div></section>",
+    "css": ".news-sections { padding: 3rem 0; background: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .news-category { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid #e5e7eb; } .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; } .category-title { font-size: 1.5rem; font-weight: 800; color: #111827; border-left: 4px solid #b91c1c; padding-left: 0.75rem; } .category-more { color: #b91c1c; text-decoration: none; font-weight: 600; } .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .article-link { text-decoration: none; color: inherit; display: block; } .article-image { aspect-ratio: 16/9; margin-bottom: 0.75rem; } .article-title { font-size: 1.125rem; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 0.5rem; } .article-excerpt { color: #6b7280; font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem; } .article-meta { font-size: 0.75rem; color: #9ca3af; } @media (max-width: 1024px) { .category-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .category-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "sections": {
+        "type": "array",
+        "default": [
+          {
+            "title": "Technology",
+            "link": "/tech",
+            "articles": [
+              { "title": "AI Regulation Framework Takes Shape in Europe", "excerpt": "The European Union has unveiled comprehensive guidelines for AI development and deployment.", "color": "#3b82f6", "date": "2 hours ago", "link": "/article/ai-regulation" },
+              { "title": "Quantum Computing Breakthrough Announced", "excerpt": "Researchers achieve new milestone in quantum error correction.", "color": "#8b5cf6", "date": "4 hours ago", "link": "/article/quantum" },
+              { "title": "The Rise of Edge Computing in 2026", "excerpt": "How edge computing is transforming real-time data processing.", "color": "#10b981", "date": "6 hours ago", "link": "/article/edge" }
+            ]
+          },
+          {
+            "title": "Business",
+            "link": "/business",
+            "articles": [
+              { "title": "Startup Funding Rebounds After Two-Year Slump", "excerpt": "Venture capital investments show signs of recovery in Q1.", "color": "#f59e0b", "date": "3 hours ago", "link": "/article/funding" },
+              { "title": "Remote Work Policies Reshape Commercial Real Estate", "excerpt": "Office vacancy rates hit record highs as companies adapt.", "color": "#ef4444", "date": "5 hours ago", "link": "/article/real-estate" },
+              { "title": "Supply Chain Innovations Reduce Delivery Times", "excerpt": "New logistics tech promises same-day delivery nationwide.", "color": "#06b6d4", "date": "8 hours ago", "link": "/article/supply-chain" }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "News Newsletter",
+    "slug": "news-newsletter",
+    "type": "CARD",
+    "description": "Newsletter signup for daily digest",
+    "sortOrder": 3,
+    "html": "<section class=\"newsletter\"><div class=\"container\"><div class=\"newsletter-card\"><div class=\"newsletter-content\"><h2 class=\"newsletter-title\">{{title}}</h2><p class=\"newsletter-desc\">{{description}}</p></div><form class=\"newsletter-form\">{{#each fields}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/each}}<button type=\"submit\" class=\"btn btn-primary\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".newsletter { padding: 3rem 0; background: #f3f4f6; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .newsletter-card { background: #111827; padding: 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; } .newsletter-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; } .newsletter-desc { color: #9ca3af; } .newsletter-form { display: flex; gap: 0.75rem; flex-shrink: 0; } .form-input { padding: 0.75rem 1rem; border: 1px solid #374151; background: #1f2937; color: #fff; border-radius: 0; font-size: 1rem; width: 250px; } .form-input:focus { outline: none; border-color: #b91c1c; } .btn-primary { background: #b91c1c; color: #fff; padding: 0.75rem 1.25rem; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.875rem; white-space: nowrap; } @media (max-width: 768px) { .newsletter-card { flex-direction: column; text-align: center; } .newsletter-form { width: 100%; flex-direction: column; } .form-input { width: 100%; } }",
+    "props": {
+      "title": { "type": "string", "default": "The Daily Briefing" },
+      "description": { "type": "string", "default": "Get the most important stories delivered to your inbox every morning." },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "email", "required": true, "placeholder": "Enter your email" }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Subscribe" }
+    }
+  },
+  {
+    "name": "News Opinion Section",
+    "slug": "news-opinion",
+    "type": "TESTIMONIALS",
+    "description": "Opinion pieces and editorial column",
+    "sortOrder": 4,
+    "html": "<section class=\"opinion\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"opinion-grid\">{{#each opinions}}<article class=\"opinion-card\"><div class=\"opinion-author\"><div class=\"author-avatar\" style=\"background: {{avatarColor}};\"><span>{{initials}}</span></div><div class=\"author-info\"><strong class=\"author-name\">{{name}}</strong><span class=\"author-role\">{{role}}</span></div></div><h3 class=\"opinion-title\">{{title}}</h3><p class=\"opinion-excerpt\">{{excerpt}}</p><a href=\"{{link}}\" class=\"opinion-link\">Read more →</a></article>{{/each}}</div></div></section>",
+    "css": ".opinion { padding: 3rem 0; background: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { margin-bottom: 2rem; } .section-title { font-size: 1.5rem; font-weight: 800; color: #111827; border-left: 4px solid #b91c1c; padding-left: 0.75rem; } .opinion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .opinion-card { padding: 1.5rem; border: 1px solid #e5e7eb; } .opinion-author { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; } .author-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.875rem; } .author-name { color: #111827; display: block; font-size: 0.875rem; } .author-role { color: #6b7280; font-size: 0.75rem; } .opinion-title { font-size: 1.125rem; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 0.5rem; } .opinion-excerpt { color: #6b7280; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem; } .opinion-link { color: #b91c1c; text-decoration: none; font-weight: 600; font-size: 0.875rem; } @media (max-width: 1024px) { .opinion-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .opinion-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Opinion & Analysis" },
+      "opinions": {
+        "type": "array",
+        "default": [
+          { "name": "Sarah Mitchell", "role": "Senior Editor", "initials": "SM", "avatarColor": "#b91c1c", "title": "Why AI Regulation Can't Wait", "excerpt": "The pace of AI development has outstripped our regulatory frameworks. Here's what needs to change.", "link": "/opinion/ai-regulation" },
+          { "name": "James Park", "role": "Technology Correspondent", "initials": "JP", "avatarColor": "#1d4ed8", "title": "The Hidden Cost of Free Social Media", "excerpt": "We've been paying for 'free' platforms with our data and attention. It's time for a reckoning.", "link": "/opinion/social-media" },
+          { "name": "Maria Santos", "role": "Economics Editor", "initials": "MS", "avatarColor": "#059669", "title": "The Future of Work Is Already Here", "excerpt": "Remote work isn't a trend — it's a fundamental shift in how we think about employment.", "link": "/opinion/future-work" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "News Contact Form",
+    "slug": "news-contact-form",
+    "type": "FORM",
+    "description": "Tip submission form for news tips",
+    "sortOrder": 5,
+    "html": "<section class=\"contact-form\"><div class=\"container\"><div class=\"form-wrapper\"><h2 class=\"form-title\">{{title}}</h2><form class=\"form\">{{#each fields}}<div class=\"form-group\"><label class=\"form-label\">{{label}}</label>{{#if type='textarea'}}<textarea class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}}></textarea>{{else}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/if}}</div>{{/each}}<button type=\"submit\" class=\"btn btn-primary btn-block\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".contact-form { padding: 3rem 0; background: #f3f4f6; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .form-wrapper { max-width: 500px; margin: 0 auto; } .form-title { font-size: 1.75rem; font-weight: 800; color: #111827; margin-bottom: 1.5rem; } .form-group { margin-bottom: 1.25rem; } .form-label { display: block; font-weight: 600; color: #374151; margin-bottom: 0.5rem; } .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0; font-size: 1rem; } .form-input:focus { outline: none; border-color: #b91c1c; } textarea.form-input { min-height: 120px; resize: vertical; } .btn-block { width: 100%; text-align: center; border: none; cursor: pointer; } .btn-primary { background: #b91c1c; color: #fff; padding: 0.75rem; font-weight: 700; text-transform: uppercase; font-size: 0.875rem; }",
+    "props": {
+      "title": { "type": "string", "default": "Submit a Tip" },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "text", "label": "Name (optional)", "required": false, "placeholder": "Your name" },
+          { "type": "email", "label": "Email", "required": true, "placeholder": "your@email.com" },
+          { "type": "textarea", "label": "Your Tip", "required": true, "placeholder": "Share what you know..." }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Submit Tip" }
+    }
+  },
+  {
+    "name": "News Footer",
+    "slug": "news-footer",
+    "type": "FOOTER",
+    "description": "News magazine footer",
+    "sortOrder": 6,
+    "html": "<footer class=\"footer\"><div class=\"container\"><div class=\"footer-grid\"><div class=\"footer-brand\"><h3 class=\"footer-logo\">{{logo}}</h3><p class=\"footer-desc\">{{description}}</p></div>{{#each columns}}<div class=\"footer-col\"><h4 class=\"footer-col-title\">{{title}}</h4><ul class=\"footer-links\">{{#each links}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></div>{{/each}}</div><div class=\"footer-bottom\"><p class=\"copyright\">{{copyright}}</p></div></div></footer>",
+    "css": ".footer { padding: 3rem 0 2rem; background: #111827; color: #9ca3af; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; } .footer-logo { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 1rem; letter-spacing: -0.02em; } .footer-desc { line-height: 1.6; } .footer-col-title { color: #fff; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; } .footer-links { list-style: none; padding: 0; margin: 0; } .footer-links li { margin-bottom: 0.5rem; } .footer-links a { color: #9ca3af; text-decoration: none; transition: color 0.2s; } .footer-links a:hover { color: #fff; } .footer-bottom { border-top: 1px solid #374151; padding-top: 2rem; text-align: center; } .copyright { font-size: 0.875rem; } @media (max-width: 1024px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "logo": { "type": "string", "default": "THE DAILY PULSE" },
+      "description": { "type": "string", "default": "Independent journalism that matters. Reporting the stories that shape our world." },
+      "columns": {
+        "type": "array",
+        "default": [
+          { "title": "Sections", "links": [
+            { "label": "World", "url": "/world" },
+            { "label": "Technology", "url": "/tech" },
+            { "label": "Business", "url": "/business" }
+          ]},
+          { "title": "Company", "links": [
+            { "label": "About Us", "url": "/about" },
+            { "label": "Careers", "url": "/careers" },
+            { "label": "Contact", "url": "/contact" }
+          ]},
+          { "title": "Legal", "links": [
+            { "label": "Privacy Policy", "url": "/privacy" },
+            { "label": "Terms of Use", "url": "/terms" },
+            { "label": "Cookie Policy", "url": "/cookies" }
+          ]}
+        ]
+      },
+      "copyright": { "type": "string", "default": "© 2026 The Daily Pulse. All rights reserved." }
+    }
+  }
+]

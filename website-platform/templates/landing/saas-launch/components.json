@@ -1,0 +1,182 @@
+[
+  {
+    "name": "SaaS Header",
+    "slug": "saas-header",
+    "type": "HEADER",
+    "description": "SaaS product header with login and signup",
+    "sortOrder": 0,
+    "html": "<header class=\"header\"><div class=\"container\"><div class=\"header-inner\"><div class=\"logo\"><a href=\"/\">{{logo}}</a></div><nav class=\"nav\"><ul class=\"nav-links\">{{#each navLinks}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></nav><div class=\"header-actions\"><a href=\"/login\" class=\"btn btn-ghost\">{{loginText}}</a><a href=\"/signup\" class=\"btn btn-primary\">{{ctaText}}</a></div></div></div></header>",
+    "css": ".header { padding: 1rem 0; background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #e2e8f0; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .header-inner { display: flex; align-items: center; justify-content: space-between; } .logo a { font-size: 1.5rem; font-weight: 800; color: #0ea5e9; text-decoration: none; } .nav-links { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; } .nav-links a { color: #64748b; text-decoration: none; font-weight: 500; transition: color 0.2s; } .nav-links a:hover { color: #0ea5e9; } .header-actions { display: flex; align-items: center; gap: 1rem; } .btn-ghost { color: #0c4a6e; text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; } .btn-primary { background: #0ea5e9; color: #fff; padding: 0.625rem 1.25rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; } @media (max-width: 768px) { .nav { display: none; } }",
+    "props": {
+      "logo": { "type": "string", "default": "LaunchPad" },
+      "navLinks": {
+        "type": "array",
+        "default": [
+          { "label": "Features", "url": "#features" },
+          { "label": "Pricing", "url": "#pricing" },
+          { "label": "Docs", "url": "/docs" },
+          { "label": "Blog", "url": "/blog" }
+        ]
+      },
+      "loginText": { "type": "string", "default": "Log in" },
+      "ctaText": { "type": "string", "default": "Start Free" }
+    }
+  },
+  {
+    "name": "SaaS Hero",
+    "slug": "saas-hero",
+    "type": "HERO",
+    "description": "SaaS hero with value proposition and signup CTA",
+    "sortOrder": 1,
+    "html": "<section class=\"hero\"><div class=\"container\"><div class=\"hero-content\"><div class=\"hero-badge\">{{badge}}</div><h1 class=\"hero-title\">{{title}}</h1><p class=\"hero-subtitle\">{{subtitle}}</p><div class=\"hero-form\"><form class=\"email-form\">{{#each fields}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/each}}<button type=\"submit\" class=\"btn btn-primary\">{{ctaText}}</button></form></div><p class=\"hero-note\">{{note}}</p></div></div></section>",
+    "css": ".hero { padding: 6rem 0; background: linear-gradient(180deg, #f0f9ff 0%, #fff 100%); } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .hero-content { max-width: 700px; margin: 0 auto; text-align: center; } .hero-badge { display: inline-block; background: #e0f2fe; color: #0284c7; padding: 0.375rem 1rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; } .hero-title { font-size: 3.75rem; font-weight: 800; color: #0c4a6e; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.02em; } .hero-subtitle { font-size: 1.25rem; color: #64748b; margin-bottom: 2.5rem; line-height: 1.6; } .hero-form { margin-bottom: 1rem; } .email-form { display: flex; gap: 0.75rem; max-width: 500px; margin: 0 auto; } .form-input { flex: 1; padding: 0.875rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 1rem; } .form-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.1); } .btn-primary { background: #0ea5e9; color: #fff; padding: 0.875rem 1.5rem; border: none; border-radius: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; } .hero-note { font-size: 0.875rem; color: #94a3b8; } @media (max-width: 768px) { .hero { padding: 4rem 0; } .hero-title { font-size: 2.5rem; } .email-form { flex-direction: column; } } @media (max-width: 320px) { .hero-title { font-size: 1.75rem; } }",
+    "props": {
+      "badge": { "type": "string", "default": "Now in Public Beta" },
+      "title": { "type": "string", "default": "Build, Ship, and Scale Your SaaS Faster" },
+      "subtitle": { "type": "string", "default": "The all-in-one platform that handles authentication, billing, analytics, and deployment so you can focus on what makes your product unique." },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "email", "required": true, "placeholder": "Enter your email" }
+        ]
+      },
+      "ctaText": { "type": "string", "default": "Get Started Free" },
+      "note": { "type": "string", "default": "Free forever for individuals. No credit card required." }
+    }
+  },
+  {
+    "name": "SaaS Features",
+    "slug": "saas-features",
+    "type": "FEATURES",
+    "description": "Product features grid with icons",
+    "sortOrder": 2,
+    "html": "<section class=\"features\" id=\"features\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2><p class=\"section-desc\">{{description}}</p></div><div class=\"features-grid\">{{#each features}}<div class=\"feature-card\"><div class=\"feature-icon\">{{icon}}</div><h3 class=\"feature-title\">{{title}}</h3><p class=\"feature-desc\">{{description}}</p></div>{{/each}}</div></div></section>",
+    "css": ".features { padding: 5rem 0; background: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0c4a6e; margin-bottom: 1rem; } .section-desc { font-size: 1.125rem; color: #64748b; max-width: 600px; margin: 0 auto; } .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; } .feature-card { padding: 2rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; transition: box-shadow 0.2s; } .feature-card:hover { box-shadow: 0 8px 24px rgba(14,165,233,0.1); } .feature-icon { font-size: 2rem; margin-bottom: 1rem; } .feature-title { font-size: 1.125rem; font-weight: 600; color: #0c4a6e; margin-bottom: 0.5rem; } .feature-desc { color: #64748b; line-height: 1.6; } @media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Everything You Need to Launch" },
+      "description": { "type": "string", "default": "Powerful features that handle the complexity so you can focus on your product" },
+      "features": {
+        "type": "array",
+        "default": [
+          { "icon": "🔐", "title": "Authentication", "description": "SSO, OAuth, and magic links out of the box. Secure by default." },
+          { "icon": "💳", "title": "Billing & Payments", "description": "Stripe integration with subscription management and invoicing." },
+          { "icon": "📊", "title": "Analytics Dashboard", "description": "Real-time metrics, user behavior tracking, and custom reports." },
+          { "icon": "🚀", "title": "One-Click Deploy", "description": "Deploy to any cloud provider with zero configuration." },
+          { "icon": "🔌", "title": "API-First", "description": "RESTful API with GraphQL support. Full SDK for popular languages." },
+          { "icon": "🛡️", "title": "SOC 2 Compliant", "description": "Enterprise-grade security with audit logs and role-based access." }
+        ]
+      }
+    }
+  },
+  {
+    "name": "SaaS Pricing",
+    "slug": "saas-pricing",
+    "type": "CARD",
+    "description": "Pricing tiers comparison table",
+    "sortOrder": 3,
+    "html": "<section class=\"pricing\" id=\"pricing\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2><p class=\"section-desc\">{{description}}</p></div><div class=\"pricing-grid\">{{#each plans}}<div class=\"pricing-card {{#if featured}}featured{{/if}}\"><div class=\"plan-badge\">{{#if featured}}Most Popular{{/if}}</div><h3 class=\"plan-name\">{{name}}</h3><div class=\"plan-price\">{{price}}<span class=\"plan-period\">/{{period}}</span></div><p class=\"plan-desc\">{{description}}</p><ul class=\"plan-features\">{{#each features}}<li>{{.}}</li>{{/each}}</ul><a href=\"{{link}}\" class=\"btn {{#if featured}}btn-primary{{else}}btn-outline{{/if}}\">{{ctaText}}</a></div>{{/each}}</div></div></section>",
+    "css": ".pricing { padding: 5rem 0; background: #f0f9ff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0c4a6e; margin-bottom: 1rem; } .section-desc { font-size: 1.125rem; color: #64748b; max-width: 600px; margin: 0 auto; } .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; } .pricing-card { background: #fff; padding: 2rem; border-radius: 0.75rem; border: 1px solid #e2e8f0; position: relative; } .pricing-card.featured { border-color: #0ea5e9; box-shadow: 0 8px 24px rgba(14,165,233,0.15); } .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0ea5e9; color: #fff; padding: 0.25rem 1rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; } .plan-name { font-size: 1.25rem; font-weight: 600; color: #0c4a6e; margin-bottom: 0.5rem; } .plan-price { font-size: 3rem; font-weight: 800; color: #0c4a6e; margin-bottom: 0.5rem; } .plan-period { font-size: 1rem; font-weight: 400; color: #64748b; } .plan-desc { color: #64748b; margin-bottom: 1.5rem; } .plan-features { list-style: none; padding: 0; margin: 0 0 1.5rem; } .plan-features li { padding: 0.5rem 0; color: #475569; font-size: 0.95rem; } .plan-features li::before { content: '✓'; color: #0ea5e9; font-weight: 700; margin-right: 0.5rem; } .btn { display: block; text-align: center; padding: 0.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; } .btn-primary { background: #0ea5e9; color: #fff; } .btn-outline { background: transparent; color: #0ea5e9; border: 2px solid #0ea5e9; } @media (max-width: 1024px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }",
+    "props": {
+      "title": { "type": "string", "default": "Simple, Transparent Pricing" },
+      "description": { "type": "string", "default": "Start free and scale as you grow. No hidden fees." },
+      "plans": {
+        "type": "array",
+        "default": [
+          { "name": "Starter", "price": "$0", "period": "mo", "description": "Perfect for side projects and experiments", "features": ["Up to 100 users", "Basic analytics", "Community support", "1 team member"], "ctaText": "Get Started", "link": "/signup", "featured": false },
+          { "name": "Pro", "price": "$49", "period": "mo", "description": "For growing products and teams", "features": ["Up to 10,000 users", "Advanced analytics", "Priority support", "5 team members", "Custom domains", "API access"], "ctaText": "Start Free Trial", "link": "/signup", "featured": true },
+          { "name": "Enterprise", "price": "$199", "period": "mo", "description": "For large-scale applications", "features": ["Unlimited users", "Custom analytics", "Dedicated support", "Unlimited team members", "SLA guarantee", "SSO & SAML", "Custom integrations"], "ctaText": "Contact Sales", "link": "/contact", "featured": false }
+        ]
+      }
+    }
+  },
+  {
+    "name": "SaaS Testimonials",
+    "slug": "saas-testimonials",
+    "type": "TESTIMONIALS",
+    "description": "Customer testimonials with logos",
+    "sortOrder": 4,
+    "html": "<section class=\"testimonials\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"testimonials-grid\">{{#each testimonials}}<div class=\"testimonial-card\"><blockquote class=\"testimonial-text\">\"{{text}}\"</blockquote><div class=\"testimonial-author\"><strong class=\"author-name\">{{name}}</strong><span class=\"author-role\">{{role}}</span></div></div>{{/each}}</div></div></section>",
+    "css": ".testimonials { padding: 5rem 0; background: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0c4a6e; } .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .testimonial-card { background: #f0f9ff; padding: 1.5rem; border-radius: 0.75rem; } .testimonial-text { color: #334155; line-height: 1.6; margin-bottom: 1rem; font-style: italic; } .author-name { color: #0c4a6e; display: block; } .author-role { color: #64748b; font-size: 0.875rem; } @media (max-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Loved by Developers" },
+      "testimonials": {
+        "type": "array",
+        "default": [
+          { "text": "LaunchPad cut our time-to-market by 60%. We went from idea to production in just 2 weeks.", "name": "Sarah Chen", "role": "CTO, DevFlow" },
+          { "text": "The authentication and billing integrations alone are worth the price. Saved us months of dev work.", "name": "Marcus Johnson", "role": "Founder, CloudBase" },
+          { "text": "Best developer experience I've encountered. The docs are excellent and the API is intuitive.", "name": "Elena Rodriguez", "role": "Lead Engineer, ScaleUp" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "SaaS CTA",
+    "slug": "saas-cta",
+    "type": "CTA",
+    "description": "Final conversion CTA section",
+    "sortOrder": 5,
+    "html": "<section class=\"cta\"><div class=\"container\"><div class=\"cta-content\"><h2 class=\"cta-title\">{{title}}</h2><p class=\"cta-desc\">{{description}}</p><div class=\"cta-actions\"><a href=\"/signup\" class=\"btn btn-primary\">{{buttonText}}</a></div></div></div></section>",
+    "css": ".cta { padding: 5rem 0; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .cta-content { text-align: center; max-width: 600px; margin: 0 auto; } .cta-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; } .cta-desc { font-size: 1.125rem; opacity: 0.9; margin-bottom: 2rem; } .btn-primary { background: #fff; color: #0ea5e9; padding: 1rem 2rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; display: inline-block; font-size: 1.125rem; } @media (max-width: 768px) { .cta { padding: 3rem 0; } .cta-title { font-size: 2rem; } } @media (max-width: 320px) { .cta-title { font-size: 1.5rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Start Building Today" },
+      "description": { "type": "string", "default": "Join thousands of developers shipping faster with LaunchPad." },
+      "buttonText": { "type": "string", "default": "Get Started Free" }
+    }
+  },
+  {
+    "name": "SaaS Contact Form",
+    "slug": "saas-contact-form",
+    "type": "FORM",
+    "description": "Contact form for sales inquiries",
+    "sortOrder": 6,
+    "html": "<section class=\"contact-form\"><div class=\"container\"><div class=\"form-wrapper\"><h2 class=\"form-title\">{{title}}</h2><form class=\"form\">{{#each fields}}<div class=\"form-group\"><label class=\"form-label\">{{label}}</label>{{#if type='textarea'}}<textarea class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}}></textarea>{{else}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/if}}</div>{{/each}}<button type=\"submit\" class=\"btn btn-primary btn-block\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".contact-form { padding: 5rem 0; background: #f0f9ff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .form-wrapper { max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); } .form-title { font-size: 1.75rem; font-weight: 700; color: #0c4a6e; margin-bottom: 1.5rem; text-align: center; } .form-group { margin-bottom: 1.25rem; } .form-label { display: block; font-weight: 500; color: #475569; margin-bottom: 0.5rem; } .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 1rem; } .form-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.1); } textarea.form-input { min-height: 100px; resize: vertical; } .btn-block { width: 100%; text-align: center; border: none; cursor: pointer; } .btn-primary { background: #0ea5e9; color: #fff; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; } @media (max-width: 768px) { .form-wrapper { padding: 1.5rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Talk to Sales" },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "text", "label": "Name", "required": true, "placeholder": "Your name" },
+          { "type": "email", "label": "Work Email", "required": true, "placeholder": "you@company.com" },
+          { "type": "text", "label": "Company", "required": false, "placeholder": "Company name" },
+          { "type": "textarea", "label": "How can we help?", "required": true, "placeholder": "Tell us about your needs..." }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Send Message" }
+    }
+  },
+  {
+    "name": "SaaS Footer",
+    "slug": "saas-footer",
+    "type": "FOOTER",
+    "description": "SaaS product footer",
+    "sortOrder": 7,
+    "html": "<footer class=\"footer\"><div class=\"container\"><div class=\"footer-grid\"><div class=\"footer-brand\"><h3 class=\"footer-logo\">{{logo}}</h3><p class=\"footer-desc\">{{description}}</p></div>{{#each columns}}<div class=\"footer-col\"><h4 class=\"footer-col-title\">{{title}}</h4><ul class=\"footer-links\">{{#each links}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></div>{{/each}}</div><div class=\"footer-bottom\"><p class=\"copyright\">{{copyright}}</p></div></div></footer>",
+    "css": ".footer { padding: 4rem 0 2rem; background: #0c4a6e; color: #94a3b8; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; } .footer-logo { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 1rem; } .footer-desc { line-height: 1.6; } .footer-col-title { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 1rem; } .footer-links { list-style: none; padding: 0; margin: 0; } .footer-links li { margin-bottom: 0.5rem; } .footer-links a { color: #94a3b8; text-decoration: none; transition: color 0.2s; } .footer-links a:hover { color: #0ea5e9; } .footer-bottom { border-top: 1px solid #164e63; padding-top: 2rem; text-align: center; } .copyright { font-size: 0.875rem; } @media (max-width: 1024px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "logo": { "type": "string", "default": "LaunchPad" },
+      "description": { "type": "string", "default": "The fastest way to build, ship, and scale your SaaS product." },
+      "columns": {
+        "type": "array",
+        "default": [
+          { "title": "Product", "links": [
+            { "label": "Features", "url": "#features" },
+            { "label": "Pricing", "url": "#pricing" },
+            { "label": "Changelog", "url": "/changelog" }
+          ]},
+          { "title": "Resources", "links": [
+            { "label": "Documentation", "url": "/docs" },
+            { "label": "API Reference", "url": "/api" },
+            { "label": "Blog", "url": "/blog" }
+          ]},
+          { "title": "Company", "links": [
+            { "label": "About", "url": "/about" },
+            { "label": "Privacy", "url": "/privacy" },
+            { "label": "Terms", "url": "/terms" }
+          ]}
+        ]
+      },
+      "copyright": { "type": "string", "default": "© 2026 LaunchPad. All rights reserved." }
+    }
+  }
+]

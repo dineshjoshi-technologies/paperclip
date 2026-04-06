@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+.site-root {
+  all: initial;
+  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: #171717;
+  background: #ffffff;
+}
+
+.site-root *,
+.site-root *::before,
+.site-root *::after {
+  box-sizing: border-box;
+}
+
+.site-root img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.site-root h1,
+.site-root h2,
+.site-root h3,
+.site-root h4,
+.site-root h5,
+.site-root h6 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.site-root p {
+  margin: 0;
+}
+
+.site-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-root button {
+  font-family: inherit;
+}
+
+.site-root input,
+.site-root textarea,
+.site-root select {
+  font-family: inherit;
+  font-size: inherit;
+}

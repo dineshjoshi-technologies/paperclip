@@ -1,0 +1,27 @@
+{
+  "name": "Lens & Light",
+  "slug": "lens-and-light",
+  "description": "An elegant photography portfolio template with full-screen imagery, minimal UI, and gallery-focused layouts. Perfect for photographers and visual artists.",
+  "category": "PORTFOLIO",
+  "tags": ["photography", "portfolio", "gallery", "minimal", "visual"],
+  "isPublic": true,
+  "isFeatured": false,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#111111",
+      "secondary": "#333333",
+      "accent": "#c9a96e",
+      "background": "#ffffff",
+      "surface": "#fafafa",
+      "text": "#111111",
+      "textMuted": "#666666"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0",
+    "spacing": "1.5rem"
+  }
+}

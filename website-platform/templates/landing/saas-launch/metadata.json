@@ -1,0 +1,27 @@
+{
+  "name": "SaaS Launch",
+  "slug": "saas-launch",
+  "description": "A high-converting SaaS product landing page template with feature highlights, pricing tables, social proof, and clear CTAs. Built for software product launches.",
+  "category": "LANDING_PAGE",
+  "tags": ["saas", "software", "product", "launch", "conversion"],
+  "isPublic": true,
+  "isFeatured": true,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#0ea5e9",
+      "secondary": "#0284c7",
+      "accent": "#8b5cf6",
+      "background": "#ffffff",
+      "surface": "#f0f9ff",
+      "text": "#0c4a6e",
+      "textMuted": "#64748b"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0.75rem",
+    "spacing": "1.5rem"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Digital Vault",
+  "slug": "digital-vault",
+  "description": "A sleek digital products storefront template for selling courses, templates, software, and digital downloads. Optimized for conversions with trust signals.",
+  "category": "ECOMMERCE",
+  "tags": ["digital", "downloads", "courses", "templates", "software"],
+  "isPublic": true,
+  "isFeatured": false,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#6366f1",
+      "secondary": "#4f46e5",
+      "accent": "#14b8a6",
+      "background": "#ffffff",
+      "surface": "#f5f3ff",
+      "text": "#1e1b4b",
+      "textMuted": "#6b7280"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0.75rem",
+    "spacing": "1.5rem"
+  }
+}

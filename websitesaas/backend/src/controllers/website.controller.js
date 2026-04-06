@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const emailService = require('./email.controller')
 
 exports.getAll = async (req, res) => {
   try {
@@ -95,7 +96,8 @@ exports.delete = async (req, res) => {
 exports.publish = async (req, res) => {
   try {
     const website = await prisma.website.findUnique({
-      where: { id: req.params.id }
+      where: { id: req.params.id },
+      include: { user: true }
     })
     if (!website || website.userId !== req.userId) {
       return res.status(404).json({ error: 'Website not found' })
@@ -105,6 +107,9 @@ exports.publish = async (req, res) => {
       where: { id: req.params.id },
       data: { status: 'PUBLISHED' }
     })
+
+    emailService.sendWebsitePublishedEmail(website.user, website)
+
     res.json(updated)
   } catch (error) {
     res.status(500).json({ error: 'Failed to publish website' })

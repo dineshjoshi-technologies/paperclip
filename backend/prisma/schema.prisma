@@ -7,20 +7,69 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url = "postgresql://postgres:postgres@localhost:5432/dj_tech"
 }
 
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  passwordHash  String    @map("password_hash")
-  name          String?
-  avatar        String?
-  role          Role      @default(USER)
-  websites      Website[]
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id                String              @id @default(uuid())
+  email             String              @unique
+  passwordHash      String              @map("password_hash")
+  name              String?
+  avatar            String?
+  role              Role                @default(USER)
+  emailVerified     Boolean             @default(false) @map("email_verified")
+  verificationToken String?             @map("verification_token")
+  onboardingStep    Int                 @default(0) @map("onboarding_step")
+  onboardingStartedAt DateTime?         @map("onboarding_started_at")
+  onboardingCompletedAt DateTime?       @map("onboarding_completed_at")
+  websites          Website[]
+  refreshTokens     RefreshToken[]
+  apiKeys           ApiKey[]
+  passwordResetTokens PasswordResetToken[]
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime  @map("expires_at")
+  revoked     Boolean   @default(false)
+  replacedBy  String?   @map("replaced_by")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("refresh_tokens")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  keyHash     String    @map("key_hash")
+  name        String
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime? @map("expires_at")
+  lastUsedAt  DateTime? @map("last_used_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("api_keys")
+}
+
+model PasswordResetToken {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime  @map("expires_at")
+  used        Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("password_reset_tokens")
 }
 
 model Website {
@@ -87,10 +136,60 @@ enum Role {
   USER
   ADMIN
   AGENCY
+  DEVELOPER
+  DESIGNER
+  SUPPORT
 }
 
 enum WebsiteStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model EmailLog {
+  id            String        @id @default(uuid())
+  userId        String?       @map("user_id")
+  user          User?         @relation(fields: [userId], references: [id])
+  emailType     EmailType     @map("email_type")
+  recipient     String
+  subject       String
+  status        EmailStatus   @default(PENDING) @map("status")
+  errorMessage  String?       @map("error_message")
+  attempts      Int           @default(0) @map("attempts")
+  sentAt        DateTime?     @map("sent_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@map("email_logs")
+}
+
+enum EmailType {
+  WELCOME
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  WEBSITE_PUBLISHED
+  PAYMENT_CONFIRMATION
+  PAYMENT_FAILED
+  SUBSCRIPTION_EXPIRED
+  ADMIN_NEW_USER
+  ADMIN_ABUSE_REPORT
+  ADMIN_SUPPORT_TICKET
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  RETRYING
+}
+
+model UserOnboardingMilestone {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  milestone     String    // e.g., "first_website", "first_template", "first_publish"
+  awardedAt     DateTime  @default(now()) @map("awarded_at")
+
+  @@unique([userId, milestone])
+  @@map("user_onboarding_milestones")
 }

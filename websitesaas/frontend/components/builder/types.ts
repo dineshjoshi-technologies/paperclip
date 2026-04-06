@@ -1,181 +1,279 @@
+import {
+  Type,
+  Image,
+  Square,
+  AlignLeft,
+  Video,
+  Minus,
+  ArrowDownUp,
+  FormInput,
+  LayoutGrid,
+  Heading1,
+  MousePointerClick,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+export interface BuilderStyle {
+  backgroundColor?: string
+  textColor?: string
+  fontSize?: string
+  fontWeight?: string
+  textAlign?: 'left' | 'center' | 'right'
+  padding?: string
+  margin?: string
+  borderRadius?: string
+  borderWidth?: string
+  borderColor?: string
+  borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none'
+  width?: string
+  height?: string
+  opacity?: number
+  lineHeight?: string
+}
+
 export interface BuilderComponent {
   id: string
   type: ComponentType
   config: Record<string, unknown>
+  style: BuilderStyle
   position: number
 }
 
 export type ComponentType =
-  | 'hero'
-  | 'features'
-  | 'pricing'
-  | 'testimonial'
-  | 'cta'
-  | 'footer'
-  | 'navbar'
-  | 'gallery'
   | 'text'
   | 'image'
-  | 'form'
+  | 'button'
+  | 'container'
+  | 'heading'
+  | 'paragraph'
+  | 'video'
+  | 'divider'
   | 'spacer'
+  | 'form'
+
+export interface ComponentCategory {
+  label: string
+  types: ComponentType[]
+}
+
+export const COMPONENT_CATEGORIES: ComponentCategory[] = [
+  {
+    label: 'Basic',
+    types: ['text', 'heading', 'paragraph', 'image', 'button'],
+  },
+  {
+    label: 'Layout',
+    types: ['container', 'divider', 'spacer'],
+  },
+  {
+    label: 'Media',
+    types: ['video'],
+  },
+  {
+    label: 'Forms',
+    types: ['form'],
+  },
+]
 
 export interface ComponentTemplate {
   type: ComponentType
   label: string
-  icon: string
+  icon: LucideIcon
+  description: string
   defaultConfig: Record<string, unknown>
+  defaultStyle: BuilderStyle
 }
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
-    type: 'navbar',
-    label: 'Navigation Bar',
-    icon: '☰',
+    type: 'heading',
+    label: 'Heading',
+    icon: Heading1,
+    description: 'Section heading text',
     defaultConfig: {
-      brand: 'My Brand',
-      links: [
-        { label: 'Home', href: '#' },
-        { label: 'About', href: '#about' },
-        { label: 'Contact', href: '#contact' },
-      ],
+      content: 'Add Your Heading',
+      level: 'h2',
+    },
+    defaultStyle: {
+      fontSize: '2rem',
+      fontWeight: '700',
+      textAlign: 'left',
+      textColor: '#0f172a',
+      padding: '1rem 2rem',
     },
   },
   {
-    type: 'hero',
-    label: 'Hero Section',
-    icon: '🏠',
+    type: 'paragraph',
+    label: 'Paragraph',
+    icon: AlignLeft,
+    description: 'Body text paragraph',
     defaultConfig: {
-      title: 'Welcome to Our Platform',
-      subtitle: 'Build something amazing today',
-      ctaText: 'Get Started',
-      ctaLink: '#',
-      backgroundImage: '',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
-  },
-  {
-    type: 'features',
-    label: 'Features Grid',
-    icon: '✨',
-    defaultConfig: {
-      title: 'Our Features',
-      items: [
-        { icon: '🚀', title: 'Fast', description: 'Lightning fast performance' },
-        { icon: '🔒', title: 'Secure', description: 'Enterprise-grade security' },
-        { icon: '📱', title: 'Responsive', description: 'Works on all devices' },
-      ],
-    },
-  },
-  {
-    type: 'pricing',
-    label: 'Pricing Table',
-    icon: '💰',
-    defaultConfig: {
-      title: 'Simple Pricing',
-      plans: [
-        { name: 'Starter', price: '$9/mo', features: ['Feature 1', 'Feature 2'], highlighted: false },
-        { name: 'Pro', price: '$29/mo', features: ['All Starter', 'Feature 3', 'Feature 4'], highlighted: true },
-      ],
-    },
-  },
-  {
-    type: 'testimonial',
-    label: 'Testimonial',
-    icon: '💬',
-    defaultConfig: {
-      quote: 'This product changed our workflow completely.',
-      author: 'Jane Doe',
-      role: 'CEO, Company',
-      avatar: '',
-    },
-  },
-  {
-    type: 'cta',
-    label: 'Call to Action',
-    icon: '📢',
-    defaultConfig: {
-      title: 'Ready to get started?',
-      subtitle: 'Join thousands of happy users today',
-      buttonText: 'Sign Up Now',
-      buttonLink: '#',
+    defaultStyle: {
+      fontSize: '1rem',
+      fontWeight: '400',
+      textAlign: 'left',
+      textColor: '#475569',
+      padding: '0.5rem 2rem',
+      lineHeight: '1.75',
     },
   },
   {
     type: 'text',
     label: 'Text Block',
-    icon: '📝',
+    icon: Type,
+    description: 'Editable text block',
     defaultConfig: {
       content: 'Edit this text to add your content.',
-      alignment: 'left' as 'left' | 'center' | 'right',
+    },
+    defaultStyle: {
+      fontSize: '1rem',
+      fontWeight: '400',
+      textAlign: 'left',
+      textColor: '#334155',
+      padding: '0.5rem 2rem',
     },
   },
   {
     type: 'image',
     label: 'Image',
-    icon: '🖼️',
+    icon: Image,
+    description: 'Image with alt text',
     defaultConfig: {
       src: '',
       alt: 'Image description',
+      objectFit: 'cover',
+    },
+    defaultStyle: {
+      padding: '1rem 2rem',
+      borderRadius: '0.5rem',
       width: '100%',
     },
   },
   {
-    type: 'form',
-    label: 'Contact Form',
-    icon: '📧',
+    type: 'button',
+    label: 'Button',
+    icon: MousePointerClick,
+    description: 'Clickable button',
     defaultConfig: {
-      title: 'Contact Us',
-      fields: [
-        { type: 'text', label: 'Name', required: true },
-        { type: 'email', label: 'Email', required: true },
-        { type: 'textarea', label: 'Message', required: true },
-      ],
+      label: 'Click Me',
+      href: '#',
+      variant: 'primary',
+    },
+    defaultStyle: {
+      padding: '0.75rem 1.5rem',
+      textAlign: 'left',
+      borderRadius: '0.5rem',
+      backgroundColor: '#0f172a',
+      textColor: '#ffffff',
+      fontSize: '1rem',
+      fontWeight: '500',
     },
   },
   {
-    type: 'gallery',
-    label: 'Image Gallery',
-    icon: '🎨',
+    type: 'container',
+    label: 'Container',
+    icon: LayoutGrid,
+    description: 'Flexible container box',
     defaultConfig: {
-      images: [
-        { src: '', alt: 'Gallery image 1' },
-        { src: '', alt: 'Gallery image 2' },
-        { src: '', alt: 'Gallery image 3' },
-      ],
-      columns: 3,
+      children: [],
+      minHeight: '200px',
+    },
+    defaultStyle: {
+      padding: '2rem',
+      backgroundColor: '#f8fafc',
+      borderRadius: '0.5rem',
+      borderWidth: '1px',
+      borderColor: '#e2e8f0',
+      borderStyle: 'solid',
+      margin: '1rem 0',
     },
   },
   {
-    type: 'footer',
-    label: 'Footer',
-    icon: '📄',
+    type: 'video',
+    label: 'Video',
+    icon: Video,
+    description: 'Embedded video player',
     defaultConfig: {
-      brand: 'My Brand',
-      description: 'Building the future of digital creation.',
-      links: [
-        { label: 'Privacy', href: '#' },
-        { label: 'Terms', href: '#' },
-      ],
-      copyright: '© 2026 My Brand',
+      src: '',
+      poster: '',
+      autoplay: false,
+      controls: true,
+    },
+    defaultStyle: {
+      padding: '1rem 2rem',
+      borderRadius: '0.5rem',
+      width: '100%',
+    },
+  },
+  {
+    type: 'divider',
+    label: 'Divider',
+    icon: Minus,
+    description: 'Horizontal line separator',
+    defaultConfig: {
+      style: 'solid',
+    },
+    defaultStyle: {
+      padding: '1rem 2rem',
+      borderColor: '#e2e8f0',
+      borderWidth: '1px',
     },
   },
   {
     type: 'spacer',
     label: 'Spacer',
-    icon: '↕️',
+    icon: ArrowDownUp,
+    description: 'Vertical spacing',
     defaultConfig: {
       height: 64,
+    },
+    defaultStyle: {},
+  },
+  {
+    type: 'form',
+    label: 'Form',
+    icon: FormInput,
+    description: 'Contact form',
+    defaultConfig: {
+      title: 'Contact Us',
+      fields: [
+        { type: 'text', label: 'Name', required: true, placeholder: 'Your name' },
+        { type: 'email', label: 'Email', required: true, placeholder: 'you@example.com' },
+        { type: 'textarea', label: 'Message', required: true, placeholder: 'Your message' },
+      ],
+      submitLabel: 'Send Message',
+    },
+    defaultStyle: {
+      padding: '2rem',
+      backgroundColor: '#ffffff',
+      borderRadius: '0.5rem',
+      borderWidth: '1px',
+      borderColor: '#e2e8f0',
+      borderStyle: 'solid',
     },
   },
 ]
 
-export function createComponent(type: ComponentType): BuilderComponent {
-  const template = COMPONENT_TEMPLATES.find((t) => t.type === type)
+const templateMap = new Map<ComponentType, ComponentTemplate>()
+COMPONENT_TEMPLATES.forEach((t) => templateMap.set(t.type, t))
+
+export function getTemplate(type: ComponentType): ComponentTemplate {
+  const template = templateMap.get(type)
   if (!template) throw new Error(`Unknown component type: ${type}`)
+  return template
+}
+
+export function createComponent(type: ComponentType): BuilderComponent {
+  const template = getTemplate(type)
 
   return {
     id: crypto.randomUUID(),
     type,
     config: { ...template.defaultConfig },
+    style: { ...template.defaultStyle },
     position: 0,
   }
 }

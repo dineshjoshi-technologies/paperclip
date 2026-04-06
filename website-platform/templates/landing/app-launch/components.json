@@ -1,0 +1,174 @@
+[
+  {
+    "name": "App Header",
+    "slug": "app-header",
+    "type": "HEADER",
+    "description": "Minimal app landing header",
+    "sortOrder": 0,
+    "html": "<header class=\"header\"><div class=\"container\"><div class=\"header-inner\"><div class=\"logo\"><a href=\"/\">{{logo}}</a></div><nav class=\"nav\"><ul class=\"nav-links\">{{#each navLinks}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></nav><a href=\"#download\" class=\"btn btn-primary\">{{ctaText}}</a></div></div></header>",
+    "css": ".header { padding: 1rem 0; background: transparent; position: absolute; top: 0; left: 0; right: 0; z-index: 100; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .header-inner { display: flex; align-items: center; justify-content: space-between; } .logo a { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; } .nav-links { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; } .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; transition: color 0.2s; } .nav-links a:hover { color: #fff; } .btn-primary { background: #7c3aed; color: #fff; padding: 0.625rem 1.25rem; border-radius: 1rem; text-decoration: none; font-weight: 600; } @media (max-width: 768px) { .nav { display: none; } }",
+    "props": {
+      "logo": { "type": "string", "default": "AppFlow" },
+      "navLinks": {
+        "type": "array",
+        "default": [
+          { "label": "Features", "url": "#features" },
+          { "label": "Screenshots", "url": "#screenshots" },
+          { "label": "Reviews", "url": "#reviews" }
+        ]
+      },
+      "ctaText": { "type": "string", "default": "Download" }
+    }
+  },
+  {
+    "name": "App Hero",
+    "slug": "app-hero",
+    "type": "HERO",
+    "description": "App hero with phone mockup and download buttons",
+    "sortOrder": 1,
+    "html": "<section class=\"hero\"><div class=\"container\"><div class=\"hero-content\"><h1 class=\"hero-title\">{{title}}</h1><p class=\"hero-subtitle\">{{subtitle}}</p><div class=\"download-buttons\">{{#each buttons}}<a href=\"{{url}}\" class=\"store-btn\"><span class=\"store-label\">{{label}}</span><span class=\"store-name\">{{name}}</span></a>{{/each}}</div><p class=\"hero-stats\">{{stats}}</p></div></div></section>",
+    "css": ".hero { padding: 8rem 0 4rem; background: #0a0a0a; color: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .hero-content { max-width: 600px; text-align: center; margin: 0 auto; } .hero-title { font-size: 4rem; font-weight: 900; line-height: 1; margin-bottom: 1.5rem; letter-spacing: -0.03em; } .hero-title span { background: linear-gradient(135deg, #7c3aed, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } .hero-subtitle { font-size: 1.25rem; color: #a3a3a3; margin-bottom: 2.5rem; line-height: 1.6; } .download-buttons { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; } .store-btn { display: flex; align-items: center; gap: 0.75rem; background: #171717; border: 1px solid #333; padding: 0.75rem 1.5rem; border-radius: 0.75rem; text-decoration: none; color: #fff; transition: border-color 0.2s; } .store-btn:hover { border-color: #7c3aed; } .store-label { font-size: 0.75rem; color: #a3a3a3; } .store-name { font-size: 1.125rem; font-weight: 600; } .hero-stats { font-size: 0.875rem; color: #a3a3a3; } @media (max-width: 768px) { .hero { padding: 6rem 0 3rem; } .hero-title { font-size: 2.5rem; } } @media (max-width: 320px) { .hero-title { font-size: 1.75rem; } .download-buttons { flex-direction: column; align-items: center; } }",
+    "props": {
+      "title": { "type": "string", "default": "Your Life, <span>Simplified</span>" },
+      "subtitle": { "type": "string", "default": "The all-in-one app that helps you organize, track, and achieve your goals. Available on iOS and Android." },
+      "buttons": {
+        "type": "array",
+        "default": [
+          { "label": "Download on the", "name": "App Store", "url": "#" },
+          { "label": "Get it on", "name": "Google Play", "url": "#" }
+        ]
+      },
+      "stats": { "type": "string", "default": "4.9 ★ on the App Store · 100K+ downloads" }
+    }
+  },
+  {
+    "name": "App Features",
+    "slug": "app-features",
+    "type": "FEATURES",
+    "description": "App features showcase",
+    "sortOrder": 2,
+    "html": "<section class=\"features\" id=\"features\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2><p class=\"section-desc\">{{description}}</p></div><div class=\"features-grid\">{{#each features}}<div class=\"feature-card\"><div class=\"feature-icon\">{{icon}}</div><h3 class=\"feature-title\">{{title}}</h3><p class=\"feature-desc\">{{description}}</p></div>{{/each}}</div></div></section>",
+    "css": ".features { padding: 5rem 0; background: #171717; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 1rem; } .section-desc { font-size: 1.125rem; color: #a3a3a3; max-width: 600px; margin: 0 auto; } .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .feature-card { background: #0a0a0a; padding: 2rem; border-radius: 1rem; border: 1px solid #262626; transition: border-color 0.2s; } .feature-card:hover { border-color: #7c3aed; } .feature-icon { font-size: 2rem; margin-bottom: 1rem; } .feature-title { font-size: 1.125rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; } .feature-desc { color: #a3a3a3; line-height: 1.6; } @media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Why You'll Love AppFlow" },
+      "description": { "type": "string", "default": "Powerful features designed to make your daily life easier" },
+      "features": {
+        "type": "array",
+        "default": [
+          { "icon": "⚡", "title": "Lightning Fast", "description": "Optimized for speed. Every interaction feels instant." },
+          { "icon": "🔒", "title": "Private by Default", "description": "End-to-end encryption. Your data stays yours." },
+          { "icon": "🔄", "title": "Sync Everywhere", "description": "Seamless sync across all your devices in real-time." },
+          { "icon": "🎨", "title": "Beautiful Design", "description": "Crafted with attention to every pixel and interaction." },
+          { "icon": "🤖", "title": "AI-Powered", "description": "Smart suggestions that learn from your habits." },
+          { "icon": "🌙", "title": "Dark Mode", "description": "Easy on the eyes with a gorgeous dark theme." }
+        ]
+      }
+    }
+  },
+  {
+    "name": "App Screenshots",
+    "slug": "app-screenshots",
+    "type": "GALLERY",
+    "description": "App screenshot showcase",
+    "sortOrder": 3,
+    "html": "<section class=\"screenshots\" id=\"screenshots\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"screenshots-grid\">{{#each screenshots}}<div class=\"screenshot-item\"><div class=\"screenshot-image\" style=\"background: {{color}};\"><span class=\"screenshot-placeholder\">{{title}}</span></div></div>{{/each}}</div></div></section>",
+    "css": ".screenshots { padding: 5rem 0; background: #0a0a0a; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 800; color: #fff; } .screenshots-grid { display: flex; gap: 1.5rem; justify-content: center; overflow-x: auto; padding-bottom: 1rem; } .screenshot-item { flex-shrink: 0; width: 220px; } .screenshot-image { aspect-ratio: 9/16; border-radius: 1rem; display: flex; align-items: center; justify-content: center; border: 1px solid #262626; } .screenshot-placeholder { font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.4); } @media (max-width: 768px) { .screenshots-grid { gap: 1rem; } .screenshot-item { width: 160px; } }",
+    "props": {
+      "title": { "type": "string", "default": "See It in Action" },
+      "screenshots": {
+        "type": "array",
+        "default": [
+          { "title": "Home Screen", "color": "#7c3aed" },
+          { "title": "Dashboard", "color": "#6d28d9" },
+          { "title": "Tasks View", "color": "#f472b6" },
+          { "title": "Analytics", "color": "#3b82f6" },
+          { "title": "Settings", "color": "#10b981" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "App Testimonials",
+    "slug": "app-testimonials",
+    "type": "TESTIMONIALS",
+    "description": "App store reviews",
+    "sortOrder": 4,
+    "html": "<section class=\"testimonials\" id=\"reviews\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"testimonials-grid\">{{#each testimonials}}<div class=\"testimonial-card\"><div class=\"testimonial-rating\">{{rating}}</div><blockquote class=\"testimonial-text\">\"{{text}}\"</blockquote><div class=\"testimonial-author\"><strong class=\"author-name\">{{name}}</strong></div></div>{{/each}}</div></div></section>",
+    "css": ".testimonials { padding: 5rem 0; background: #171717; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 800; color: #fff; } .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .testimonial-card { background: #0a0a0a; padding: 1.5rem; border-radius: 1rem; border: 1px solid #262626; } .testimonial-rating { color: #f59e0b; margin-bottom: 0.75rem; } .testimonial-text { color: #d4d4d4; line-height: 1.6; margin-bottom: 1rem; } .author-name { color: #fff; font-size: 0.875rem; } @media (max-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "What Users Say" },
+      "testimonials": {
+        "type": "array",
+        "default": [
+          { "rating": "★★★★★", "text": "This app completely changed how I organize my day. Absolutely love it!", "name": "Jessica M." },
+          { "rating": "★★★★★", "text": "Clean, fast, and intuitive. The best productivity app I've ever used.", "name": "Ryan K." },
+          { "rating": "★★★★★", "text": "The AI suggestions are scary accurate. It's like it reads my mind.", "name": "Aisha P." }
+        ]
+      }
+    }
+  },
+  {
+    "name": "App CTA",
+    "slug": "app-cta",
+    "type": "CTA",
+    "description": "Download app CTA",
+    "sortOrder": 5,
+    "html": "<section class=\"cta\" id=\"download\"><div class=\"container\"><div class=\"cta-content\"><h2 class=\"cta-title\">{{title}}</h2><p class=\"cta-desc\">{{description}}</p><div class=\"cta-actions\">{{#each buttons}}<a href=\"{{url}}\" class=\"store-btn\"><span class=\"store-label\">{{label}}</span><span class=\"store-name\">{{name}}</span></a>{{/each}}</div></div></div></section>",
+    "css": ".cta { padding: 5rem 0; background: linear-gradient(135deg, #7c3aed 0%, #f472b6 100%); color: #fff; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .cta-content { text-align: center; max-width: 600px; margin: 0 auto; } .cta-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; } .cta-desc { font-size: 1.125rem; opacity: 0.9; margin-bottom: 2rem; } .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; } .store-btn { display: flex; align-items: center; gap: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); padding: 0.75rem 1.5rem; border-radius: 0.75rem; text-decoration: none; color: #fff; transition: background 0.2s; } .store-btn:hover { background: rgba(0,0,0,0.5); } .store-label { font-size: 0.75rem; opacity: 0.8; } .store-name { font-size: 1.125rem; font-weight: 600; } @media (max-width: 768px) { .cta { padding: 3rem 0; } .cta-title { font-size: 2rem; } } @media (max-width: 320px) { .cta-title { font-size: 1.5rem; } .cta-actions { flex-direction: column; align-items: center; } }",
+    "props": {
+      "title": { "type": "string", "default": "Download AppFlow Today" },
+      "description": { "type": "string", "default": "Available for free on iOS and Android. Start organizing your life." },
+      "buttons": {
+        "type": "array",
+        "default": [
+          { "label": "Download on the", "name": "App Store", "url": "#" },
+          { "label": "Get it on", "name": "Google Play", "url": "#" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "App Contact Form",
+    "slug": "app-contact-form",
+    "type": "FORM",
+    "description": "Contact form for app support",
+    "sortOrder": 6,
+    "html": "<section class=\"contact-form\"><div class=\"container\"><div class=\"form-wrapper\"><h2 class=\"form-title\">{{title}}</h2><form class=\"form\">{{#each fields}}<div class=\"form-group\"><label class=\"form-label\">{{label}}</label>{{#if type='textarea'}}<textarea class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}}></textarea>{{else}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/if}}</div>{{/each}}<button type=\"submit\" class=\"btn btn-primary btn-block\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".contact-form { padding: 5rem 0; background: #0a0a0a; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .form-wrapper { max-width: 500px; margin: 0 auto; } .form-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 1.5rem; text-align: center; } .form-group { margin-bottom: 1.25rem; } .form-label { display: block; font-weight: 500; color: #a3a3a3; margin-bottom: 0.5rem; } .form-input { width: 100%; padding: 0.75rem 1rem; background: #171717; border: 1px solid #333; border-radius: 0.75rem; color: #fff; font-size: 1rem; } .form-input:focus { outline: none; border-color: #7c3aed; } textarea.form-input { min-height: 100px; resize: vertical; } .btn-block { width: 100%; text-align: center; border: none; cursor: pointer; } .btn-primary { background: #7c3aed; color: #fff; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; }",
+    "props": {
+      "title": { "type": "string", "default": "Need Help?" },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "text", "label": "Name", "required": true, "placeholder": "Your name" },
+          { "type": "email", "label": "Email", "required": true, "placeholder": "you@example.com" },
+          { "type": "textarea", "label": "Message", "required": true, "placeholder": "How can we help?" }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Send Message" }
+    }
+  },
+  {
+    "name": "App Footer",
+    "slug": "app-footer",
+    "type": "FOOTER",
+    "description": "App landing footer",
+    "sortOrder": 7,
+    "html": "<footer class=\"footer\"><div class=\"container\"><div class=\"footer-inner\"><div class=\"footer-brand\"><h3 class=\"footer-logo\">{{logo}}</h3><p class=\"footer-desc\">{{description}}</p></div><div class=\"footer-links\"><ul class=\"footer-nav\">{{#each links}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></div></div><div class=\"footer-bottom\"><p class=\"copyright\">{{copyright}}</p></div></div></footer>",
+    "css": ".footer { padding: 3rem 0; background: #0a0a0a; border-top: 1px solid #262626; color: #737373; } .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; } .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; } .footer-logo { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; } .footer-desc { font-size: 0.875rem; max-width: 250px; line-height: 1.6; } .footer-nav { display: flex; list-style: none; gap: 1.5rem; margin: 0; padding: 0; } .footer-nav a { color: #737373; text-decoration: none; font-size: 0.875rem; transition: color 0.2s; } .footer-nav a:hover { color: #7c3aed; } .footer-bottom { text-align: center; font-size: 0.75rem; } @media (max-width: 768px) { .footer-inner { flex-direction: column; gap: 1.5rem; } .footer-nav { flex-wrap: wrap; } }",
+    "props": {
+      "logo": { "type": "string", "default": "AppFlow" },
+      "description": { "type": "string", "default": "Your life, simplified. Available on iOS and Android." },
+      "links": {
+        "type": "array",
+        "default": [
+          { "label": "Features", "url": "#features" },
+          { "label": "Privacy", "url": "/privacy" },
+          { "label": "Terms", "url": "/terms" },
+          { "label": "Support", "url": "/support" }
+        ]
+      },
+      "copyright": { "type": "string", "default": "© 2026 AppFlow. All rights reserved." }
+    }
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "name": "ShopFront",
+  "slug": "shopfront",
+  "description": "A modern e-commerce product showcase template with clean product grids, featured collections, and conversion-optimized layouts. Perfect for physical product brands.",
+  "category": "ECOMMERCE",
+  "tags": ["ecommerce", "shop", "products", "retail", "store"],
+  "isPublic": true,
+  "isFeatured": true,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#0f172a",
+      "secondary": "#334155",
+      "accent": "#f97316",
+      "background": "#ffffff",
+      "surface": "#f8fafc",
+      "text": "#0f172a",
+      "textMuted": "#64748b"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0.5rem",
+    "spacing": "1.5rem"
+  }
+}

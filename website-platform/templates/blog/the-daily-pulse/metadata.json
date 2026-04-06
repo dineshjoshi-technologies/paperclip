@@ -1,0 +1,27 @@
+{
+  "name": "The Daily Pulse",
+  "slug": "the-daily-pulse",
+  "description": "A modern news magazine template with featured stories, category sections, and editorial layouts. Ideal for digital publications and news sites.",
+  "category": "BLOG",
+  "tags": ["news", "magazine", "editorial", "publication", "media"],
+  "isPublic": true,
+  "isFeatured": false,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#b91c1c",
+      "secondary": "#991b1b",
+      "accent": "#1d4ed8",
+      "background": "#ffffff",
+      "surface": "#f3f4f6",
+      "text": "#111827",
+      "textMuted": "#6b7280"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0",
+    "spacing": "1.5rem"
+  }
+}

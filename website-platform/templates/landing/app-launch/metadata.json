@@ -1,0 +1,27 @@
+{
+  "name": "AppLaunch",
+  "slug": "app-launch",
+  "description": "A sleek mobile app landing page template with app showcase sections, feature highlights, download CTAs, and app store badges. Perfect for mobile app launches.",
+  "category": "LANDING_PAGE",
+  "tags": ["app", "mobile", "launch", "download", "ios", "android"],
+  "isPublic": true,
+  "isFeatured": false,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#7c3aed",
+      "secondary": "#6d28d9",
+      "accent": "#f472b6",
+      "background": "#0a0a0a",
+      "surface": "#171717",
+      "text": "#ffffff",
+      "textMuted": "#a3a3a3"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "1rem",
+    "spacing": "1.5rem"
+  }
+}

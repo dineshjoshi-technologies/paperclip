@@ -91,3 +91,32 @@ exports.refreshToken = async (req, res) => {
 exports.logout = async (req, res) => {
   res.json({ message: 'Logged out successfully' })
 }
+
+exports.completeOnboarding = async (req, res) => {
+  try {
+    const userId = req.userId
+    const { role, onboardingStep, onboardingCompleted } = req.body
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        roleSelection: role,
+        onboardingStep: onboardingStep || 5,
+        onboardingCompleted: onboardingCompleted || true
+      }
+    })
+
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        onboardingCompleted: user.onboardingCompleted,
+        onboardingStep: user.onboardingStep
+      }
+    })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to complete onboarding' })
+  }
+}

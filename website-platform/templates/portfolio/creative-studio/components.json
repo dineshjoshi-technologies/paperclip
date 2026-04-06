@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Creative Header",
+    "slug": "creative-header",
+    "type": "HEADER",
+    "description": "Minimal dark header with navigation",
+    "sortOrder": 0,
+    "html": "<header class=\"header\"><div class=\"container\"><div class=\"header-inner\"><div class=\"logo\"><a href=\"/\">{{logo}}</a></div><nav class=\"nav\"><ul class=\"nav-links\">{{#each navLinks}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></nav></div></div></header>",
+    "css": ".header { padding: 1.5rem 0; background: transparent; position: absolute; top: 0; left: 0; right: 0; z-index: 100; } .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; } .header-inner { display: flex; align-items: center; justify-content: space-between; } .logo a { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em; } .nav-links { display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0; } .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; text-transform: uppercase; letter-spacing: 0.05em; } .nav-links a:hover { color: #ec4899; } @media (max-width: 768px) { .nav { display: none; } }",
+    "props": {
+      "logo": { "type": "string", "default": "STUDIO" },
+      "navLinks": {
+        "type": "array",
+        "default": [
+          { "label": "Work", "url": "/work" },
+          { "label": "About", "url": "/about" },
+          { "label": "Services", "url": "/services" },
+          { "label": "Contact", "url": "/contact" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Creative Hero",
+    "slug": "creative-hero",
+    "type": "HERO",
+    "description": "Bold hero with large typography",
+    "sortOrder": 1,
+    "html": "<section class=\"hero\"><div class=\"container\"><div class=\"hero-content\"><h1 class=\"hero-title\">{{title}}</h1><p class=\"hero-subtitle\">{{subtitle}}</p><div class=\"hero-actions\"><a href=\"/work\" class=\"btn btn-primary\">{{ctaPrimary}}</a><a href=\"/about\" class=\"btn btn-outline\">{{ctaSecondary}}</a></div></div></div></section>",
+    "css": ".hero { padding: 10rem 0 6rem; background: #0f0f0f; color: #fff; } .hero-content { max-width: 900px; } .hero-title { font-size: 5rem; font-weight: 900; line-height: 1; margin-bottom: 1.5rem; letter-spacing: -0.03em; } .hero-title span { color: #ec4899; } .hero-subtitle { font-size: 1.25rem; color: #a0a0a0; margin-bottom: 2.5rem; line-height: 1.6; max-width: 600px; } .hero-actions { display: flex; gap: 1rem; } .btn { padding: 1rem 2rem; font-size: 1rem; font-weight: 600; text-decoration: none; border-radius: 0; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; } .btn-primary { background: #ec4899; color: #fff; border: none; } .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.3); } @media (max-width: 1024px) { .hero-title { font-size: 3.5rem; } } @media (max-width: 768px) { .hero { padding: 8rem 0 4rem; } .hero-title { font-size: 2.5rem; } } @media (max-width: 320px) { .hero-title { font-size: 1.75rem; } .hero-actions { flex-direction: column; } }",
+    "props": {
+      "title": { "type": "string", "default": "We Create Digital <span>Experiences</span>" },
+      "subtitle": { "type": "string", "default": "A multidisciplinary design studio crafting bold brands, immersive websites, and unforgettable digital products." },
+      "ctaPrimary": { "type": "string", "default": "View Our Work" },
+      "ctaSecondary": { "type": "string", "default": "About Us" }
+    }
+  },
+  {
+    "name": "Portfolio Gallery",
+    "slug": "portfolio-gallery",
+    "type": "GALLERY",
+    "description": "Masonry-style project showcase gallery",
+    "sortOrder": 2,
+    "html": "<section class=\"gallery\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2><p class=\"section-desc\">{{description}}</p></div><div class=\"gallery-grid\">{{#each projects}}<a href=\"{{link}}\" class=\"gallery-item\"><div class=\"gallery-image\" style=\"background: {{color}};\"><span class=\"gallery-placeholder\">{{title}}</span></div><div class=\"gallery-info\"><h3 class=\"gallery-title\">{{title}}</h3><span class=\"gallery-category\">{{category}}</span></div></a>{{/each}}</div></div></section>",
+    "css": ".gallery { padding: 5rem 0; background: #0f0f0f; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 1rem; letter-spacing: -0.02em; } .section-desc { font-size: 1.125rem; color: #a0a0a0; } .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .gallery-item { display: block; text-decoration: none; color: inherit; transition: transform 0.3s; } .gallery-item:hover { transform: translateY(-4px); } .gallery-image { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; } .gallery-placeholder { font-size: 1.5rem; font-weight: 700; color: rgba(255,255,255,0.3); } .gallery-info { padding: 1rem 0; } .gallery-title { font-size: 1.125rem; font-weight: 600; color: #fff; margin: 0 0 0.25rem; } .gallery-category { font-size: 0.875rem; color: #ec4899; text-transform: uppercase; letter-spacing: 0.05em; } @media (max-width: 1024px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr; } .section-title { font-size: 2rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Selected Work" },
+      "description": { "type": "string", "default": "A curated collection of our best projects" },
+      "projects": {
+        "type": "array",
+        "default": [
+          { "title": "Luxe Brand Identity", "category": "Branding", "color": "#7c3aed", "link": "/work/luxe" },
+          { "title": "Nebula App Design", "category": "UI/UX", "color": "#ec4899", "link": "/work/nebula" },
+          { "title": "Vertex Website", "category": "Web Design", "color": "#3b82f6", "link": "/work/vertex" },
+          { "title": "Pulse Campaign", "category": "Marketing", "color": "#f59e0b", "link": "/work/pulse" },
+          { "title": "Aura Dashboard", "category": "Product Design", "color": "#10b981", "link": "/work/aura" },
+          { "title": "Echo Motion Graphics", "category": "Animation", "color": "#ef4444", "link": "/work/echo" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Creative Services",
+    "slug": "creative-services",
+    "type": "FEATURES",
+    "description": "Creative service offerings list",
+    "sortOrder": 3,
+    "html": "<section class=\"services\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"services-list\">{{#each services}}<div class=\"service-item\"><div class=\"service-number\">{{number}}</div><div class=\"service-content\"><h3 class=\"service-title\">{{title}}</h3><p class=\"service-desc\">{{description}}</p></div></div>{{/each}}</div></div></section>",
+    "css": ".services { padding: 5rem 0; background: #1a1a1a; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 3rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; } .services-list { max-width: 800px; margin: 0 auto; } .service-item { display: flex; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); align-items: flex-start; } .service-number { font-size: 1.5rem; font-weight: 800; color: #ec4899; min-width: 40px; } .service-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; } .service-desc { color: #a0a0a0; line-height: 1.6; } @media (max-width: 768px) { .service-item { flex-direction: column; gap: 0.5rem; } .section-title { font-size: 2rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "What We Do" },
+      "services": {
+        "type": "array",
+        "default": [
+          { "number": "01", "title": "Brand Identity", "description": "Logos, visual systems, and brand guidelines that make a lasting impression." },
+          { "number": "02", "title": "Web Design & Development", "description": "Custom websites that combine stunning design with flawless functionality." },
+          { "number": "03", "title": "UI/UX Design", "description": "Intuitive interfaces and seamless user experiences for digital products." },
+          { "number": "04", "title": "Motion & Animation", "description": "Captivating animations and video content that bring your brand to life." }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Creative Testimonials",
+    "slug": "creative-testimonials",
+    "type": "TESTIMONIALS",
+    "description": "Client testimonials for creative work",
+    "sortOrder": 4,
+    "html": "<section class=\"testimonials\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"testimonials-grid\">{{#each testimonials}}<div class=\"testimonial-card\"><blockquote class=\"testimonial-text\">\"{{text}}\"</blockquote><div class=\"testimonial-author\"><strong class=\"author-name\">{{name}}</strong><span class=\"author-role\">{{role}}</span></div></div>{{/each}}</div></div></section>",
+    "css": ".testimonials { padding: 5rem 0; background: #0f0f0f; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 3rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; } .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; } .testimonial-card { background: #1a1a1a; padding: 2.5rem; border: 1px solid rgba(255,255,255,0.1); } .testimonial-text { font-size: 1.125rem; color: #fff; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; } .author-name { color: #ec4899; display: block; } .author-role { color: #a0a0a0; font-size: 0.875rem; } @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } .section-title { font-size: 2rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Kind Words" },
+      "testimonials": {
+        "type": "array",
+        "default": [
+          { "text": "Studio completely reinvented our brand. The result was beyond anything we imagined — bold, modern, and authentically us.", "name": "Alex Rivera", "role": "Founder, Luxe Fashion" },
+          { "text": "Their design sensibility is unmatched. Every pixel was intentional, every interaction delightful. Truly world-class work.", "name": "Maya Chen", "role": "Product Lead, Nebula Tech" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Creative CTA",
+    "slug": "creative-cta",
+    "type": "CTA",
+    "description": "Bold call-to-action section",
+    "sortOrder": 5,
+    "html": "<section class=\"cta\"><div class=\"container\"><div class=\"cta-content\"><h2 class=\"cta-title\">{{title}}</h2><p class=\"cta-desc\">{{description}}</p><div class=\"cta-actions\"><a href=\"/contact\" class=\"btn btn-primary\">{{buttonText}}</a></div></div></div></section>",
+    "css": ".cta { padding: 6rem 0; background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%); color: #fff; } .cta-content { text-align: center; max-width: 700px; margin: 0 auto; } .cta-title { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.03em; } .cta-desc { font-size: 1.25rem; opacity: 0.9; margin-bottom: 2rem; } .btn { padding: 1rem 2rem; font-size: 1rem; font-weight: 600; text-decoration: none; border-radius: 0; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; } .btn-primary { background: #fff; color: #7c3aed; border: none; } @media (max-width: 768px) { .cta { padding: 4rem 0; } .cta-title { font-size: 2.5rem; } } @media (max-width: 320px) { .cta-title { font-size: 1.75rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Let's Create Something Amazing" },
+      "description": { "type": "string", "default": "Have a project in mind? We'd love to hear about it." },
+      "buttonText": { "type": "string", "default": "Start a Project" }
+    }
+  },
+  {
+    "name": "Creative Contact Form",
+    "slug": "creative-contact-form",
+    "type": "FORM",
+    "description": "Minimal contact form for project inquiries",
+    "sortOrder": 6,
+    "html": "<section class=\"contact-form\"><div class=\"container\"><div class=\"form-wrapper\"><h2 class=\"form-title\">{{title}}</h2><form class=\"form\">{{#each fields}}<div class=\"form-group\"><label class=\"form-label\">{{label}}</label>{{#if type='textarea'}}<textarea class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}}></textarea>{{else}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/if}}</div>{{/each}}<button type=\"submit\" class=\"btn btn-primary btn-block\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".contact-form { padding: 5rem 0; background: #1a1a1a; } .form-wrapper { max-width: 600px; margin: 0 auto; } .form-title { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 2rem; letter-spacing: -0.02em; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; font-weight: 500; color: #a0a0a0; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em; } .form-input { width: 100%; padding: 1rem; background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; transition: border-color 0.2s; } .form-input:focus { outline: none; border-color: #ec4899; } textarea.form-input { min-height: 120px; resize: vertical; } .btn-block { width: 100%; text-align: center; border: none; cursor: pointer; border-radius: 0; } .btn-primary { background: #ec4899; color: #fff; padding: 1rem 2rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 1rem; text-decoration: none; } @media (max-width: 768px) { .form-title { font-size: 2rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Get in Touch" },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "text", "label": "Name", "required": true, "placeholder": "Your name" },
+          { "type": "email", "label": "Email", "required": true, "placeholder": "hello@example.com" },
+          { "type": "text", "label": "Project Type", "required": false, "placeholder": "e.g., Branding, Web Design" },
+          { "type": "textarea", "label": "Tell us about your project", "required": true, "placeholder": "What are you looking to create?" }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Send Message" }
+    }
+  },
+  {
+    "name": "Creative Footer",
+    "slug": "creative-footer",
+    "type": "FOOTER",
+    "description": "Minimal dark footer",
+    "sortOrder": 7,
+    "html": "<footer class=\"footer\"><div class=\"container\"><div class=\"footer-inner\"><div class=\"footer-brand\"><h3 class=\"footer-logo\">{{logo}}</h3><p class=\"footer-desc\">{{description}}</p></div><div class=\"footer-links\"><ul class=\"footer-nav\">{{#each links}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></div></div><div class=\"footer-bottom\"><p class=\"copyright\">{{copyright}}</p></div></div></footer>",
+    "css": ".footer { padding: 4rem 0 2rem; background: #0f0f0f; color: #a0a0a0; border-top: 1px solid rgba(255,255,255,0.1); } .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; } .footer-logo { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 1rem; letter-spacing: -0.02em; } .footer-desc { max-width: 300px; line-height: 1.6; } .footer-nav { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; } .footer-nav a { color: #a0a0a0; text-decoration: none; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em; transition: color 0.2s; } .footer-nav a:hover { color: #ec4899; } .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center; } .copyright { font-size: 0.875rem; } @media (max-width: 768px) { .footer-inner { flex-direction: column; gap: 2rem; } .footer-nav { flex-wrap: wrap; } }",
+    "props": {
+      "logo": { "type": "string", "default": "STUDIO" },
+      "description": { "type": "string", "default": "A multidisciplinary design studio creating bold digital experiences." },
+      "links": {
+        "type": "array",
+        "default": [
+          { "label": "Work", "url": "/work" },
+          { "label": "About", "url": "/about" },
+          { "label": "Services", "url": "/services" },
+          { "label": "Contact", "url": "/contact" },
+          { "label": "Instagram", "url": "https://instagram.com" }
+        ]
+      },
+      "copyright": { "type": "string", "default": "© 2026 Studio. All rights reserved." }
+    }
+  }
+]

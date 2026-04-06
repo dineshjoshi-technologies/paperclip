@@ -1,0 +1,27 @@
+{
+  "name": "Corporate Elite",
+  "slug": "corporate-elite",
+  "description": "A premium corporate website template with bold typography, clean layouts, and professional design elements. Perfect for established businesses and enterprises.",
+  "category": "BUSINESS",
+  "tags": ["corporate", "enterprise", "professional", "business", "modern"],
+  "isPublic": true,
+  "isFeatured": true,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#1e3a5f",
+      "secondary": "#2c5282",
+      "accent": "#d69e2e",
+      "background": "#ffffff",
+      "surface": "#f7fafc",
+      "text": "#1a202c",
+      "textMuted": "#718096"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0.5rem",
+    "spacing": "1.5rem"
+  }
+}

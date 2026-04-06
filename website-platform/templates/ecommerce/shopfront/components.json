@@ -1,0 +1,169 @@
+[
+  {
+    "name": "E-commerce Header",
+    "slug": "ecommerce-header",
+    "type": "HEADER",
+    "description": "Store header with navigation and cart",
+    "sortOrder": 0,
+    "html": "<header class=\"header\"><div class=\"container\"><div class=\"header-inner\"><div class=\"logo\"><a href=\"/\">{{logo}}</a></div><nav class=\"nav\"><ul class=\"nav-links\">{{#each navLinks}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></nav><div class=\"header-actions\"><a href=\"/cart\" class=\"cart-icon\">{{cartText}}</a><a href=\"/contact\" class=\"btn btn-primary\">{{ctaText}}</a></div></div></div></header>",
+    "css": ".header { padding: 1rem 0; background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .header-inner { display: flex; align-items: center; justify-content: space-between; } .logo a { font-size: 1.5rem; font-weight: 700; color: #0f172a; text-decoration: none; } .nav-links { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; } .nav-links a { color: #475569; text-decoration: none; font-weight: 500; transition: color 0.2s; } .nav-links a:hover { color: #0f172a; } .header-actions { display: flex; align-items: center; gap: 1.5rem; } .cart-icon { color: #0f172a; text-decoration: none; font-weight: 500; } .btn-primary { background: #0f172a; color: #fff; padding: 0.625rem 1.25rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; } @media (max-width: 768px) { .nav { display: none; } }",
+    "props": {
+      "logo": { "type": "string", "default": "ShopFront" },
+      "navLinks": {
+        "type": "array",
+        "default": [
+          { "label": "Shop", "url": "/shop" },
+          { "label": "Collections", "url": "/collections" },
+          { "label": "About", "url": "/about" }
+        ]
+      },
+      "cartText": { "type": "string", "default": "Cart (0)" },
+      "ctaText": { "type": "string", "default": "Contact Us" }
+    }
+  },
+  {
+    "name": "E-commerce Hero",
+    "slug": "ecommerce-hero",
+    "type": "HERO",
+    "description": "Hero banner with featured product promotion",
+    "sortOrder": 1,
+    "html": "<section class=\"hero\"><div class=\"container\"><div class=\"hero-content\"><div class=\"hero-badge\">{{badge}}</div><h1 class=\"hero-title\">{{title}}</h1><p class=\"hero-subtitle\">{{subtitle}}</p><div class=\"hero-actions\"><a href=\"/shop\" class=\"btn btn-primary btn-lg\">{{ctaPrimary}}</a><a href=\"/collections\" class=\"btn btn-outline btn-lg\">{{ctaSecondary}}</a></div></div></div></section>",
+    "css": ".hero { padding: 5rem 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .hero-content { max-width: 600px; } .hero-badge { display: inline-block; background: #f97316; color: #fff; padding: 0.375rem 1rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; } .hero-title { font-size: 3.5rem; font-weight: 800; color: #0f172a; line-height: 1.1; margin-bottom: 1.5rem; } .hero-subtitle { font-size: 1.125rem; color: #64748b; margin-bottom: 2rem; line-height: 1.6; } .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; } .btn-lg { padding: 1rem 2rem; font-size: 1.125rem; } .btn-primary { background: #0f172a; color: #fff; border: none; border-radius: 0.5rem; text-decoration: none; font-weight: 600; display: inline-block; } .btn-outline { background: transparent; color: #0f172a; border: 2px solid #0f172a; border-radius: 0.5rem; text-decoration: none; font-weight: 600; display: inline-block; } @media (max-width: 768px) { .hero { padding: 3rem 0; } .hero-title { font-size: 2.25rem; } } @media (max-width: 320px) { .hero-title { font-size: 1.75rem; } .hero-actions { flex-direction: column; } }",
+    "props": {
+      "badge": { "type": "string", "default": "New Collection Available" },
+      "title": { "type": "string", "default": "Discover Premium Quality Products" },
+      "subtitle": { "type": "string", "default": "Curated collections of beautifully crafted goods designed to elevate your everyday life." },
+      "ctaPrimary": { "type": "string", "default": "Shop Now" },
+      "ctaSecondary": { "type": "string", "default": "View Collections" }
+    }
+  },
+  {
+    "name": "Featured Products",
+    "slug": "featured-products",
+    "type": "FEATURES",
+    "description": "Featured product grid with pricing",
+    "sortOrder": 2,
+    "html": "<section class=\"products\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2><p class=\"section-desc\">{{description}}</p></div><div class=\"products-grid\">{{#each products}}<div class=\"product-card\"><div class=\"product-image\" style=\"background: {{color}};\"><span class=\"product-placeholder\">{{title}}</span></div><div class=\"product-info\"><h3 class=\"product-title\">{{title}}</h3><span class=\"product-price\">{{price}}</span><a href=\"{{link}}\" class=\"btn btn-sm\">View Details</a></div></div>{{/each}}</div></div></section>",
+    "css": ".products { padding: 5rem 0; background: #fff; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; } .section-desc { font-size: 1.125rem; color: #64748b; max-width: 600px; margin: 0 auto; } .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; } .product-card { border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; transition: box-shadow 0.2s; } .product-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); } .product-image { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; } .product-placeholder { font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.6); } .product-info { padding: 1.25rem; } .product-title { font-size: 1rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem; } .product-price { display: block; font-size: 1.125rem; font-weight: 700; color: #f97316; margin-bottom: 1rem; } .btn-sm { display: inline-block; padding: 0.5rem 1rem; background: #0f172a; color: #fff; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; font-weight: 500; } @media (max-width: 1280px) { .products-grid { grid-template-columns: repeat(3, 1fr); } } @media (max-width: 1024px) { .products-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2, 1fr); } .section-title { font-size: 2rem; } } @media (max-width: 320px) { .products-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Featured Products" },
+      "description": { "type": "string", "default": "Handpicked favorites from our latest collection" },
+      "products": {
+        "type": "array",
+        "default": [
+          { "title": "Classic Leather Wallet", "price": "$49.00", "color": "#92400e", "link": "/product/wallet" },
+          { "title": "Minimalist Watch", "price": "$129.00", "color": "#1e293b", "link": "/product/watch" },
+          { "title": "Canvas Backpack", "price": "$89.00", "color": "#065f46", "link": "/product/backpack" },
+          { "title": "Ceramic Mug Set", "price": "$34.00", "color": "#7c3aed", "link": "/product/mugs" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "E-commerce Categories",
+    "slug": "ecommerce-categories",
+    "type": "CARD",
+    "description": "Product category showcase",
+    "sortOrder": 3,
+    "html": "<section class=\"categories\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"categories-grid\">{{#each categories}}<a href=\"{{link}}\" class=\"category-card\"><div class=\"category-image\" style=\"background: {{color}};\"><span class=\"category-placeholder\">{{title}}</span></div><div class=\"category-info\"><h3 class=\"category-title\">{{title}}</h3><span class=\"category-count\">{{count}} products</span></div></a>{{/each}}</div></div></section>",
+    "css": ".categories { padding: 5rem 0; background: #f8fafc; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0f172a; } .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .category-card { display: block; text-decoration: none; color: inherit; border-radius: 0.5rem; overflow: hidden; transition: transform 0.2s; } .category-card:hover { transform: translateY(-4px); } .category-image { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; } .category-placeholder { font-size: 1.25rem; font-weight: 600; color: rgba(255,255,255,0.6); } .category-info { padding: 1.25rem; background: #fff; } .category-title { font-size: 1.125rem; font-weight: 600; color: #0f172a; margin-bottom: 0.25rem; } .category-count { font-size: 0.875rem; color: #64748b; } @media (max-width: 1024px) { .categories-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .categories-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "Shop by Category" },
+      "categories": {
+        "type": "array",
+        "default": [
+          { "title": "Accessories", "count": "24", "color": "#f97316", "link": "/collections/accessories" },
+          { "title": "Apparel", "count": "36", "color": "#3b82f6", "link": "/collections/apparel" },
+          { "title": "Home & Living", "count": "18", "color": "#10b981", "link": "/collections/home" }
+        ]
+      }
+    }
+  },
+  {
+    "name": "E-commerce Testimonials",
+    "slug": "ecommerce-testimonials",
+    "type": "TESTIMONIALS",
+    "description": "Customer reviews and ratings",
+    "sortOrder": 4,
+    "html": "<section class=\"testimonials\"><div class=\"container\"><div class=\"section-header\"><h2 class=\"section-title\">{{title}}</h2></div><div class=\"testimonials-grid\">{{#each testimonials}}<div class=\"testimonial-card\"><div class=\"testimonial-rating\">{{rating}}</div><blockquote class=\"testimonial-text\">\"{{text}}\"</blockquote><div class=\"testimonial-author\"><strong class=\"author-name\">{{name}}</strong><span class=\"author-role\">Verified Buyer</span></div></div>{{/each}}</div></div></section>",
+    "css": ".testimonials { padding: 5rem 0; background: #fff; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .section-header { text-align: center; margin-bottom: 3rem; } .section-title { font-size: 2.5rem; font-weight: 700; color: #0f172a; } .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .testimonial-card { background: #f8fafc; padding: 1.5rem; border-radius: 0.5rem; } .testimonial-rating { color: #f97316; margin-bottom: 0.75rem; font-size: 1.125rem; } .testimonial-text { color: #475569; line-height: 1.6; margin-bottom: 1rem; font-style: italic; } .author-name { color: #0f172a; display: block; } .author-role { color: #64748b; font-size: 0.75rem; } @media (max-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "title": { "type": "string", "default": "What Our Customers Say" },
+      "testimonials": {
+        "type": "array",
+        "default": [
+          { "rating": "★★★★★", "text": "Exceptional quality and fast shipping. The leather wallet is even better in person!", "name": "Emma S." },
+          { "rating": "★★★★★", "text": "Beautiful packaging and premium products. Will definitely be ordering again.", "name": "David L." },
+          { "rating": "★★★★★", "text": "Customer service was outstanding when I needed to exchange a size. Highly recommend!", "name": "Sarah K." }
+        ]
+      }
+    }
+  },
+  {
+    "name": "E-commerce CTA",
+    "slug": "ecommerce-cta",
+    "type": "CTA",
+    "description": "Newsletter signup and promotional CTA",
+    "sortOrder": 5,
+    "html": "<section class=\"cta\"><div class=\"container\"><div class=\"cta-content\"><h2 class=\"cta-title\">{{title}}</h2><p class=\"cta-desc\">{{description}}</p><div class=\"cta-actions\"><a href=\"/shop\" class=\"btn btn-primary\">{{buttonText}}</a></div></div></div></section>",
+    "css": ".cta { padding: 5rem 0; background: #0f172a; color: #fff; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .cta-content { text-align: center; max-width: 600px; margin: 0 auto; } .cta-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; } .cta-desc { font-size: 1.125rem; opacity: 0.8; margin-bottom: 2rem; } .btn-primary { background: #f97316; color: #fff; padding: 1rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; display: inline-block; font-size: 1.125rem; } @media (max-width: 768px) { .cta { padding: 3rem 0; } .cta-title { font-size: 2rem; } } @media (max-width: 320px) { .cta-title { font-size: 1.5rem; } }",
+    "props": {
+      "title": { "type": "string", "default": "Get 15% Off Your First Order" },
+      "description": { "type": "string", "default": "Join our mailing list for exclusive deals, new arrivals, and style inspiration." },
+      "buttonText": { "type": "string", "default": "Shop Now" }
+    }
+  },
+  {
+    "name": "E-commerce Newsletter Form",
+    "slug": "ecommerce-newsletter-form",
+    "type": "FORM",
+    "description": "Newsletter signup form",
+    "sortOrder": 6,
+    "html": "<section class=\"newsletter\"><div class=\"container\"><div class=\"newsletter-wrapper\"><h2 class=\"newsletter-title\">{{title}}</h2><form class=\"newsletter-form\">{{#each fields}}<div class=\"form-group\">{{#if type='textarea'}}<textarea class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}}></textarea>{{else}}<input type=\"{{type}}\" class=\"form-input\" placeholder=\"{{placeholder}}\" {{#if required}}required{{/if}} />{{/if}}</div>{{/each}}<button type=\"submit\" class=\"btn btn-primary\">{{submitLabel}}</button></form></div></div></section>",
+    "css": ".newsletter { padding: 4rem 0; background: #f8fafc; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .newsletter-wrapper { max-width: 500px; margin: 0 auto; text-align: center; } .newsletter-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1.5rem; } .newsletter-form { display: flex; gap: 0.75rem; } .form-group { flex: 1; } .form-input { width: 100%; padding: 0.875rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 1rem; } .form-input:focus { outline: none; border-color: #0f172a; } .btn-primary { background: #0f172a; color: #fff; padding: 0.875rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; white-space: nowrap; } @media (max-width: 768px) { .newsletter-form { flex-direction: column; } }",
+    "props": {
+      "title": { "type": "string", "default": "Stay in the Loop" },
+      "fields": {
+        "type": "array",
+        "default": [
+          { "type": "email", "required": true, "placeholder": "Enter your email address" }
+        ]
+      },
+      "submitLabel": { "type": "string", "default": "Subscribe" }
+    }
+  },
+  {
+    "name": "E-commerce Footer",
+    "slug": "ecommerce-footer",
+    "type": "FOOTER",
+    "description": "Store footer with links and policies",
+    "sortOrder": 7,
+    "html": "<footer class=\"footer\"><div class=\"container\"><div class=\"footer-grid\"><div class=\"footer-brand\"><h3 class=\"footer-logo\">{{logo}}</h3><p class=\"footer-desc\">{{description}}</p></div>{{#each columns}}<div class=\"footer-col\"><h4 class=\"footer-col-title\">{{title}}</h4><ul class=\"footer-links\">{{#each links}}<li><a href=\"{{url}}\">{{label}}</a></li>{{/each}}</ul></div>{{/each}}</div><div class=\"footer-bottom\"><p class=\"copyright\">{{copyright}}</p></div></div></footer>",
+    "css": ".footer { padding: 4rem 0 2rem; background: #0f172a; color: #94a3b8; } .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; } .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; } .footer-logo { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 1rem; } .footer-desc { line-height: 1.6; } .footer-col-title { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 1rem; } .footer-links { list-style: none; padding: 0; margin: 0; } .footer-links li { margin-bottom: 0.5rem; } .footer-links a { color: #94a3b8; text-decoration: none; transition: color 0.2s; } .footer-links a:hover { color: #f97316; } .footer-bottom { border-top: 1px solid #334155; padding-top: 2rem; text-align: center; } .copyright { font-size: 0.875rem; } @media (max-width: 1024px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; } }",
+    "props": {
+      "logo": { "type": "string", "default": "ShopFront" },
+      "description": { "type": "string", "default": "Premium curated goods for modern living. Free shipping on orders over $50." },
+      "columns": {
+        "type": "array",
+        "default": [
+          { "title": "Shop", "links": [
+            { "label": "All Products", "url": "/shop" },
+            { "label": "New Arrivals", "url": "/new" },
+            { "label": "Best Sellers", "url": "/best-sellers" }
+          ]},
+          { "title": "Support", "links": [
+            { "label": "Contact Us", "url": "/contact" },
+            { "label": "Shipping Info", "url": "/shipping" },
+            { "label": "Returns", "url": "/returns" }
+          ]},
+          { "title": "Company", "links": [
+            { "label": "About Us", "url": "/about" },
+            { "label": "Privacy Policy", "url": "/privacy" },
+            { "label": "Terms of Service", "url": "/terms" }
+          ]}
+        ]
+      },
+      "copyright": { "type": "string", "default": "© 2026 ShopFront. All rights reserved." }
+    }
+  }
+]

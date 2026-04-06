@@ -1,0 +1,27 @@
+{
+  "name": "Ink & Thought",
+  "slug": "ink-and-thought",
+  "description": "A clean, typography-focused personal blog template with excellent readability, post listings, and author bio sections. Perfect for writers and thought leaders.",
+  "category": "BLOG",
+  "tags": ["blog", "personal", "writing", "typography", "minimal"],
+  "isPublic": true,
+  "isFeatured": true,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#1f2937",
+      "secondary": "#374151",
+      "accent": "#dc2626",
+      "background": "#ffffff",
+      "surface": "#f9fafb",
+      "text": "#111827",
+      "textMuted": "#6b7280"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0.375rem",
+    "spacing": "1.5rem"
+  }
+}

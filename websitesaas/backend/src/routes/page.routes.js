@@ -54,6 +54,7 @@ router.get('/:websiteId/pages/:pageId', authenticate, async (req, res) => {
         id: c.id,
         type: c.type,
         config: c.config,
+        style: c.style || {},
         position: c.position,
       })),
     })
@@ -89,6 +90,7 @@ router.post('/:websiteId/pages', authenticate, async (req, res) => {
           create: content.map((c, i) => ({
             type: c.type,
             config: c.config || {},
+            style: c.style || {},
             position: i,
           })),
         },
@@ -145,6 +147,7 @@ router.put('/:websiteId/pages/:pageId', authenticate, async (req, res) => {
             pageId: req.params.pageId,
             type: c.type,
             config: c.config || {},
+            style: c.style || {},
             position: i,
           })),
         })

@@ -120,6 +120,10 @@ model User {
   avatarUrl     String?
   role          Role      @default(USER)
   emailVerified Boolean   @default(false)
+  verificationToken String?
+  onboardingStep Int      @default(0)
+  onboardingStartedAt DateTime?
+  onboardingCompletedAt DateTime?
   phone         String?
   lastLoginAt   DateTime?
   createdAt     DateTime  @default(now())
@@ -136,6 +140,7 @@ model User {
   auditLogs         AuditLog[]
   resetTokens       PasswordResetToken[]
   apiKeys           ApiKey[]
+  milestones        UserOnboardingMilestone[]
 
   @@index([email])
   @@index([role])
@@ -451,4 +456,17 @@ model AuditLog {
   @@index([createdAt])
   @@index([action])
   @@map("audit_logs")
+}
+
+model UserOnboardingMilestone {
+  id        String   @id @default(uuid())
+  userId    String
+  milestone String
+  awardedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, milestone])
+  @@index([userId])
+  @@map("user_onboarding_milestones")
 }

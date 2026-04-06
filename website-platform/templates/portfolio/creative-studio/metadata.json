@@ -1,0 +1,27 @@
+{
+  "name": "Creative Studio",
+  "slug": "creative-studio",
+  "description": "A bold, visually striking portfolio template for creative professionals. Features large imagery, dynamic layouts, and artistic typography.",
+  "category": "PORTFOLIO",
+  "tags": ["creative", "portfolio", "design", "artistic", "showcase"],
+  "isPublic": true,
+  "isFeatured": true,
+  "price": 0,
+  "config": {
+    "colors": {
+      "primary": "#7c3aed",
+      "secondary": "#5b21b6",
+      "accent": "#ec4899",
+      "background": "#0f0f0f",
+      "surface": "#1a1a1a",
+      "text": "#ffffff",
+      "textMuted": "#a0a0a0"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "borderRadius": "0",
+    "spacing": "2rem"
+  }
+}
