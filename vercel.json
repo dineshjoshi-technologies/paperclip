@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd website-platform && npm install && npm run build",
+  "outputDirectory": "website-platform/.next",
+  "installCommand": "cd website-platform && npm install"
+}
