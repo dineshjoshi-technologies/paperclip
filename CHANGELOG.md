@@ -8,21 +8,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial project setup with Next.js frontend and Express.js backend
-- Docker-based development environment
-- Nginx reverse proxy with SSL support
-- PostgreSQL database integration
-- CI/CD pipeline with GitHub Actions
-- Health checks for all services
-- Project documentation (README, PLATFORM, BUSINESS, INFRASTRUCTURE, ROADMAP)
+- Authentication system with user registration, login, JWT, and password reset
+- Onboarding wizard UI and API for new user flows
+- Page builder with drag-and-drop capabilities
+- Website management CRUD APIs
+- Template management system with categories and previews
+- User profile and settings management
+- Payment controller endpoints
+- Full test suite for authentication middleware and controller
+- Token service with unit tests
+- Rate limiting on auth endpoints
+- Request validation middleware
+- API documentation (OpenAPI/Swagger)
+- 8 pre-built website templates (business, portfolio, blogging, landing)
+- CI/CD pipeline improvements with permissions and permissions fix
 
 ### Changed
-
-### Deprecated
+- Updated .env.example with payment routes
+- Enhanced authentication API contract
+- Improved Prisma schema and generation in Dockerfile
+- Updated project documentation across all files
+- Added production logging and error handling
 
 ### Removed
+- Removed npm cache from CI/CD to resolve GitHub Actions build error
 
 ### Fixed
+- CI/CD pipeline failures and workflow permissions
+- Corrected globals.css import path in layout
+- Resolved database migration issues
 
 ### Security
 
