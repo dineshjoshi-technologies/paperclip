@@ -237,8 +237,8 @@ describe('Payment Service', () => {
     it('should handle payment.captured event', async () => {
       process.env.RAZORPAY_WEBHOOK_SECRET = 'whsec_test_secret';
       loadWithEnv({});
+      mockPrisma.payment.findFirst.resolves(null);
       mockPrisma.payment.updateMany.resolves({ count: 1 });
-      mockPrisma.payment.updateMany.resetHistory();
 
       const body = JSON.stringify({ event: 'payment.captured', payload: { payment: { entity: { order_id: 'order_abc', method: 'card', contact: '+919876543210' } } } });
       const signature = crypto.createHmac('sha256', 'whsec_test_secret').update(body).digest('hex');
@@ -314,6 +314,7 @@ describe('Payment Service', () => {
     it('should return error when webhook processing fails', async () => {
       process.env.RAZORPAY_WEBHOOK_SECRET = 'whsec_test_secret';
       loadWithEnv({});
+      mockPrisma.payment.findFirst.resolves(null);
       mockPrisma.payment.updateMany.rejects(new Error('DB connection lost'));
 
       const body = JSON.stringify({ event: 'payment.captured', payload: { payment: { entity: { order_id: 'order_x' } } } });
