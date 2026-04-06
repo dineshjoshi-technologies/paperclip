@@ -3,6 +3,8 @@ const express = require('express')
 const helmet = require('helmet')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
+const { initEmailService } = require('./services/email.service')
+const { logger, httpLogger } = require('./services/logger')
 
 const authRoutes = require('./routes/auth.routes')
 const websiteRoutes = require('./routes/website.routes')
@@ -10,8 +12,7 @@ const templateRoutes = require('./routes/template.routes')
 const pageRoutes = require('./routes/page.routes')
 const publicRoutes = require('./routes/public.routes')
 const emailRoutes = require('./routes/email.routes')
-
-const { initEmailService } = require('./services/email.service')
+const paymentRoutes = require('./routes/payments')
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -23,10 +24,13 @@ app.use(cors({
   credentials: true
 }))
 
+// HTTP request logging
+app.use(httpLogger)
+
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.'
 })
 app.use('/api/', limiter)
@@ -47,22 +51,35 @@ app.use('/api/templates', templateRoutes)
 app.use('/api/websites', pageRoutes)
 app.use('/api', publicRoutes)
 app.use('/api/email', emailRoutes)
+app.use('/api/payments', paymentRoutes)
 
 // 404 handler
-app.use((_req, res) => {
-  res.status(404).json({ error: 'Route not found' })
+app.use((req, _res, next) => {
+  logger.warn({ url: req.url, method: req.method }, 'Route not found')
+  next({ status: 404, message: 'Route not found' })
 })
 
 // Error handler
 app.use((err, _req, res, _next) => {
-  console.error(err.stack)
-  res.status(500).json({ error: 'Internal server error' })
+  const status = err.status || err.statusCode || 500
+  const message = err.message || 'Internal server error'
+
+  if (status >= 500) {
+    logger.error({ err, status }, message)
+  } else {
+    logger.warn({ err, status }, message)
+  }
+
+  res.status(status).json({
+    error: status === 500 ? 'Internal server error' : message,
+    ...(status !== 500 && process.env.NODE_ENV !== 'production' && { stack: err.stack })
+  })
 })
 
 initEmailService()
 
 app.listen(PORT, () => {
-  console.log(`Backend API running on port ${PORT}`)
+  logger.info(`Backend API running on port ${PORT}`)
 })
 
 module.exports = app
