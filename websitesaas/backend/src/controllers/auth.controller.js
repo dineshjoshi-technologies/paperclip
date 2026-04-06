@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
 const { generateTokens, verifyRefreshToken } = require('../utils/jwt')
+const emailService = require('./email.controller')
 
 const prisma = new PrismaClient()
 
@@ -21,8 +22,18 @@ exports.register = async (req, res) => {
 
     const { accessToken, refreshToken } = generateTokens(user.id)
 
+    emailService.sendWelcomeEmail(user)
+    emailService.sendAdminNewUserAlert(user)
+
     res.status(201).json({
-      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        role: user.role,
+        onboardingCompleted: user.onboardingCompleted,
+        onboardingStep: user.onboardingStep
+      },
       accessToken,
       refreshToken
     })
