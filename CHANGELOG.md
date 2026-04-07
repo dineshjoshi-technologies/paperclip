@@ -22,6 +22,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API documentation (OpenAPI/Swagger)
 - 8 pre-built website templates (business, portfolio, blogging, landing)
 - CI/CD pipeline improvements with permissions and permissions fix
+- AI content generation panel with 300+ line enhancement for AI copy generation
+- Canvas component with drag-and-drop, viewport switching, and SEO meta support
+- Admin dashboard with user management, subscription overview, revenue charts, and platform health monitoring
+- AI service integration with Ollama service for local AI model support
+- Payment routes with webhook handling for Stripe integration
+- Email controller with security improvements and logging
+- Logger service for structured application logging
+- Admin guard component for route protection
+- Admin header and sidebar components
+- Dashboard analytics page with activity charts
+- Theme context and dark mode support
+- QA reports and deployment runbook documentation
 
 ### Changed
 - Updated .env.example with payment routes
@@ -29,6 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved Prisma schema and generation in Dockerfile
 - Updated project documentation across all files
 - Added production logging and error handling
+- Overhauled admin page with comprehensive management interface (549 lines changed)
+- Enhanced dashboard page with analytics and real-time metrics (291 lines changed)
+- Rebuilt page builder component with AI integration and improved UX (293 lines changed)
+- Updated dashboard header with theme toggle and user menu
+- Standardized admin authentication middleware
+- Updated global styles with new theme variables
+- Enhanced TypeScript configuration for new components
 
 ### Removed
 - Removed npm cache from CI/CD to resolve GitHub Actions build error
@@ -37,8 +56,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline failures and workflow permissions
 - Corrected globals.css import path in layout
 - Resolved database migration issues
+- Mass assignment vulnerability in website controller (SEC-001)
+- JWT token payload mismatch between auth and tests (BUG-002)
+- Email controller test mocking issues
+- Missing Prisma model mocks (emailLog, emailTemplate, refreshToken)
+- Test suite now passing 84/84 tests (was 81/84)
 
 ### Security
+- Added field whitelisting to template controller create/update operations
+- Standardized JWT payload to use userId claim across all auth code
+- Improved email controller security headers
+- Added admin authentication middleware enhancements
 
 ---
 
