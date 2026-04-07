@@ -276,6 +276,37 @@ async function sendSubscriptionExpiredEmail(email, name, plan) {
   });
 }
 
+async function sendOnboardingStepEmail(email, name, step, stepName) {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+  return sendEmail({
+    to: email,
+    subject: `Step ${step} Complete: ${stepName}`,
+    emailType: 'ONBOARDING',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #1e293b;">Great progress${name ? `, ${name}` : ''}!</h2>
+        <p style="color: #475569; font-size: 16px;">You've completed <strong>Step ${step}: ${stepName}</strong>.</p>
+        <p style="color: #475569;">Keep going! Here's what to do next:</p>
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 16px 0;">
+          <p style="margin: 0; color: #166534;"><strong>Next step:</strong> ${step < 5 ? `Step ${step + 1}` : 'Explore advanced features'}</p>
+        </div>
+        <a href="${frontendUrl}/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 16px 0;">Continue Building</a>
+        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
+        <p style="color: #94a3b8; font-size: 12px;">DJ Technologies - Building the future of web creation</p>
+      </body>
+      </html>
+    `,
+    text: `Great progress${name ? `, ${name}` : ''}!\n\nYou've completed Step ${step}: ${stepName}.\n\nKeep going!\n\nVisit ${frontendUrl}/dashboard to continue.`,
+  });
+}
+
 async function sendAdminAlertEmail(type, data) {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@djtechnologies.com';
 
@@ -310,6 +341,10 @@ module.exports = {
   sendPaymentConfirmationEmail,
   sendPaymentFailedEmail,
   sendSubscriptionExpiredEmail,
+  sendOnboardingStepEmail,
   sendAdminAlertEmail,
+  sendEmail,
+  logEmail,
+  updateEmailStatus,
   getTransporter,
 };

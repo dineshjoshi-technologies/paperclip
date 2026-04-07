@@ -324,6 +324,51 @@ describe('Payment Service', () => {
       assert.strictEqual(result.success, false);
       assert(result.error.includes('DB connection lost'));
     });
+
+    it('should skip already processed events (idempotency)', async () => {
+      process.env.RAZORPAY_WEBHOOK_SECRET = 'whsec_test_secret';
+      loadWithEnv({});
+      
+      const body = JSON.stringify({ event: 'payment.captured', payload: { payment: { entity: { id: 'pay_idempotent', order_id: 'order_idem', method: 'card' } } } });
+      const signature = crypto.createHmac('sha256', 'whsec_test_secret').update(body).digest('hex');
+      const payload = JSON.parse(body);
+      
+      // First call processes normally
+      mockPrisma.payment.findFirst.resolves(null);
+      mockPrisma.payment.updateMany.resolves({ count: 1 });
+      
+      const result1 = await paymentService.handleWebhook(payload, signature);
+      assert.strictEqual(result1.success, true);
+      
+      // Reset stub call count for second run
+      mockPrisma.payment.updateMany.resetHistory();
+      
+      // Second call with same event_id should be skipped (idempotency)
+      const result2 = await paymentService.handleWebhook(payload, signature);
+      assert.strictEqual(result2.success, true);
+      assert.strictEqual(result2.message, 'Already processed');
+      assert(mockPrisma.payment.updateMany.notCalled, 'Duplicate event should not trigger database update');
+    });
+
+    it('should handle string payload by parsing JSON', async () => {
+      process.env.RAZORPAY_WEBHOOK_SECRET = 'whsec_test_secret';
+      loadWithEnv({});
+      mockPrisma.payment.findFirst.resolves(null);
+      mockPrisma.payment.updateMany.resolves({ count: 1 });
+
+      const body = JSON.stringify({ event: 'payment.captured', payload: { payment: { entity: { id: 'pay_string_parse', order_id: 'order_str', method: 'card' } } } });
+      const signature = crypto.createHmac('sha256', 'whsec_test_secret').update(body).digest('hex');
+
+      const result = await paymentService.handleWebhook(body, signature);
+      assert.strictEqual(result.success, true);
+    });
+
+    it('should return error for invalid JSON string payload', async () => {
+      loadWithEnv({});
+      const result = await paymentService.handleWebhook('not-json', 'sig');
+      assert.strictEqual(result.success, false);
+      assert.strictEqual(result.error, 'Invalid JSON payload');
+    });
   });
 
   describe('getPaymentHistory', () => {

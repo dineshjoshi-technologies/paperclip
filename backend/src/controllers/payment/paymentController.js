@@ -40,7 +40,7 @@ exports.verifyPayment = async (req, res) => {
       });
     }
 
-    const isValid = paymentService.verifyPaymentSignature(
+    const isValid = await paymentService.verifyPaymentSignature(
       { razorpay_order_id: razorpayOrderId, razorpay_payment_id: razorpayPaymentId, razorpay_signature: razorpaySignature },
       razorpaySignature
     );
@@ -191,7 +191,8 @@ exports.cancelSubscription = async (req, res) => {
 exports.handleWebhook = async (req, res) => {
   try {
     const signature = req.headers['x-razorpay-signature'];
-    const result = await paymentService.handleWebhook(req.body, signature);
+    const rawBody = req.rawBody || JSON.stringify(req.body);
+    const result = await paymentService.handleWebhook(rawBody, signature, req.body);
 
     if (result.success) {
       res.status(200).json({ received: true });

@@ -38,10 +38,9 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }))
+app.use('/api/payments/webhook', express.json({ limit: '10mb', verify: function captureRawBody(req, res, buf) { req.rawBody = buf } }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
-
-const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
@@ -85,6 +84,8 @@ const pageRoutes = require('./routes/pages')
 const templateRoutes = require('./routes/templates')
 const userRoutes = require('./routes/users')
 const paymentRoutes = require('./routes/payments')
+const invoiceRoutes = require('./routes/invoices')
+const subscriptionRoutes = require('./routes/subscriptions')
 
 app.use('/api/auth', authRoutes)
 app.use('/api/websites', websiteRoutes)
@@ -92,6 +93,8 @@ app.use('/api/pages', pageRoutes)
 app.use('/api/templates', templateRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/payments', paymentRoutes)
+app.use('/api/invoices', invoiceRoutes)
+app.use('/api/subscriptions', subscriptionRoutes)
 
 app.use((_req, res) => {
   res.status(404).json({

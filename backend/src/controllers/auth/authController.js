@@ -660,24 +660,20 @@ exports.updateOnboardingStep = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.user.userId;
-    const { firstName, lastName, name } = req.body;
+    const { name, avatar } = req.body;
 
     const updateData = {};
-    if (firstName !== undefined) updateData.firstName = firstName;
-    if (lastName !== undefined) updateData.lastName = lastName;
-    if (name !== undefined) updateData.name = name;
+    if (name !== undefined) updateData.name = name || null;
+    if (avatar !== undefined) updateData.avatar = avatar || null;
 
     const user = await prisma.user.update({
-      where: { id: userId },
+      where: { id: req.user.userId },
       data: updateData,
       select: {
         id: true,
         email: true,
-        firstName: true,
-        lastName: true,
         name: true,
-        role: true,
+        avatar: true,
         createdAt: true,
       },
     });

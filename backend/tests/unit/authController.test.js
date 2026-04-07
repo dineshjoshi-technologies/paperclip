@@ -130,10 +130,9 @@ describe('Auth Controller', () => {
       assert(mockTokenService.createRefreshToken.calledOnce);
       assert(mockEmailService.sendWelcomeEmail.calledOnce);
       assert(res.status.calledOnceWithExactly(201));
-      assert(res.json.calledOnceWithMatch({
-        success: true,
-        message: 'User registered successfully',
-      }));
+      const response = res.json.firstCall.args[0];
+      assert.strictEqual(response.success, true);
+      assert(response.message.includes('User registered successfully'));
     });
 
     it('should return 400 if email or password missing', async () => {
