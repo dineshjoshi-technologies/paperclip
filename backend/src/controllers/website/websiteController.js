@@ -106,7 +106,21 @@ exports.getById = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, templateId, config, status } = req.body;
+    const ALLOWED_FIELDS = ['name', 'templateId', 'config'];
+    const updateData = {};
+
+    for (const field of ALLOWED_FIELDS) {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No valid fields to update',
+      });
+    }
 
     const existing = await prisma.website.findFirst({
       where: { id, userId: req.user.userId },
@@ -121,12 +135,7 @@ exports.update = async (req, res) => {
 
     const website = await prisma.website.update({
       where: { id },
-      data: {
-        ...(name && { name }),
-        ...(templateId !== undefined && { templateId }),
-        ...(config && { config }),
-        ...(status && { status }),
-      },
+      data: updateData,
       include: { template: true },
     });
 

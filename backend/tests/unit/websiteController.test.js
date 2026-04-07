@@ -178,6 +178,7 @@ describe('Website Controller', () => {
     });
 
     it('should return 500 on database error', async () => {
+      req = createMockReq({ name: 'Updated' }, { id: 'web-1' }, {}, { userId: 'user-123' });
       mockPrisma.website.findFirst.rejects(new Error('DB error'));
 
       await websiteController.update(req, res);
