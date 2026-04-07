@@ -41,6 +41,7 @@ app.use(cors({
 app.use('/api/payments/webhook', express.json({ limit: '10mb', verify: function captureRawBody(req, res, buf) { req.rawBody = buf } }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
+const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
