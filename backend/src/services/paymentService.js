@@ -1,8 +1,10 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const prisma = require('../config/prisma');
+const emailService = require('./emailService');
 
 let razorpay = null;
+const processedWebhookEvents = new Map();
 
 function getRazorpay() {
   if (razorpay) return razorpay;
@@ -24,7 +26,7 @@ function getRazorpay() {
 }
 
 const PLANS = {
-  BASIC: { name: 'Basic', price: 199, interval: 'monthly' }, // ₹199/month
+  BASIC: { name: 'Basic', price: 199, interval: 'monthly' },
   PRO: { name: 'Pro', price: 499, interval: 'monthly' },
   ENTERPRISE: { name: 'Enterprise', price: 999, interval: 'monthly' },
 };
@@ -49,7 +51,7 @@ async function createCustomer(user) {
 async function createSubscription(userId, plan, customerId = null) {
   const rp = getRazorpay();
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  
+
   if (!user) throw new Error('User not found');
 
   let customer = customerId;
@@ -66,7 +68,7 @@ async function createSubscription(userId, plan, customerId = null) {
     if (rp && customer) {
       subscription = await rp.subscription.create({
         customer,
-        plan_id: `plan_${plan.toLowerCase()}`, // Would need to create plans in Razorpay dashboard
+        plan_id: `plan_${plan.toLowerCase()}`,
         quantity: 1,
         billing_start: Math.floor(Date.now() / 1000),
       });
@@ -155,8 +157,39 @@ async function verifyPaymentSignature(payload, signature) {
   );
 }
 
+function isEventProcessed(eventId) {
+  return processedWebhookEvents.has(eventId);
+}
+
+function markEventProcessed(eventId, metadata = {}) {
+  processedWebhookEvents.set(eventId, {
+    processedAt: new Date(),
+    metadata,
+  });
+}
+
+function resetProcessedEvents() {
+  processedWebhookEvents.clear();
+}
+
 async function handleWebhook(payload, signature) {
+  if (typeof payload === 'string') {
+    try {
+      payload = JSON.parse(payload);
+    } catch (e) {
+      return { success: false, error: 'Invalid JSON payload' };
+    }
+  }
+
   const event = payload.event;
+  const eventId = payload.payload?.payment?.entity?.id
+    || payload.payload?.subscription?.entity?.id;
+
+  if (eventId && isEventProcessed(eventId)) {
+    console.log(`Webhook event ${eventId} already processed, skipping`);
+    return { success: true, message: 'Already processed' };
+  }
+
   const validSignature = await verifyPaymentSignature(payload, signature);
 
   if (!validSignature) {
@@ -185,6 +218,10 @@ async function handleWebhook(payload, signature) {
         console.log(`Unhandled webhook event: ${event}`);
     }
 
+    if (eventId) {
+      markEventProcessed(eventId, { event });
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Webhook processing failed:', error);
@@ -193,6 +230,11 @@ async function handleWebhook(payload, signature) {
 }
 
 async function handlePaymentSuccess(paymentEntity) {
+  const payment = await prisma.payment.findFirst({
+    where: { providerPaymentId: paymentEntity.order_id },
+    include: { user: true },
+  });
+
   await prisma.payment.updateMany({
     where: { providerPaymentId: paymentEntity.order_id },
     data: {
@@ -201,6 +243,17 @@ async function handlePaymentSuccess(paymentEntity) {
       contact: paymentEntity.contact,
     },
   });
+
+  if (payment?.user) {
+    const amount = `${payment.amount / 100} ${payment.currency}`;
+    await emailService.sendPaymentConfirmationEmail(
+      payment.user.email,
+      payment.user.name,
+      amount,
+      payment.provider || 'One-time Payment',
+      paymentEntity.id
+    );
+  }
 }
 
 async function handlePaymentFailure(paymentEntity) {
@@ -217,6 +270,7 @@ async function handlePaymentFailure(paymentEntity) {
 async function handleSubscriptionActivated(subscriptionEntity) {
   const sub = await prisma.subscription.findFirst({
     where: { providerSubscriptionId: subscriptionEntity.id },
+    include: { user: true },
   });
 
   if (sub) {
@@ -228,6 +282,14 @@ async function handleSubscriptionActivated(subscriptionEntity) {
         currentPeriodEnd: new Date(subscriptionEntity.billing_end * 1000),
       },
     });
+
+    if (sub.user) {
+      await emailService.sendWelcomeEmail(
+        sub.user.email,
+        sub.user.name,
+        null
+      );
+    }
   }
 }
 
@@ -307,8 +369,16 @@ module.exports = {
   createPaymentOrder,
   verifyPaymentSignature,
   handleWebhook,
+  handlePaymentSuccess,
+  handlePaymentFailure,
+  handleSubscriptionActivated,
+  handleSubscriptionCancelled,
+  handleSubscriptionRenewed,
   getPaymentHistory,
   getSubscription,
   cancelSubscription,
   getRazorpay,
+  isEventProcessed,
+  markEventProcessed,
+  resetProcessedEvents,
 };

@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:postgres@localhost:5432/dj_tech"
 }
 
 model User {
@@ -27,7 +26,10 @@ model User {
   apiKeys           ApiKey[]
   passwordResetTokens PasswordResetToken[]
   subscriptions     Subscription[]
-  payments         Payment[]
+  payments          Payment[]
+  invoices          Invoice[]
+  emailLogs         EmailLog[]
+  onboardingMilestones UserOnboardingMilestone[]
   createdAt         DateTime            @default(now()) @map("created_at")
   updatedAt         DateTime            @updatedAt @map("updated_at")
 
@@ -88,6 +90,9 @@ model Website {
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
 
+  @@index([userId])
+  @@index([templateId])
+  @@index([status])
   @@map("websites")
 }
 
@@ -102,6 +107,8 @@ model Template {
   websites    Website[]
   createdAt   DateTime  @default(now()) @map("created_at")
 
+  @@index([category])
+  @@index([isPremium])
   @@map("templates")
 }
 
@@ -164,6 +171,10 @@ model EmailLog {
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
 
+  @@index([userId])
+  @@index([emailType])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
   @@map("email_logs")
 }
 
@@ -178,6 +189,9 @@ enum EmailType {
   ADMIN_NEW_USER
   ADMIN_ABUSE_REPORT
   ADMIN_SUPPORT_TICKET
+  ONBOARDING
+  SUBSCRIPTION_ACTIVATED
+  SUBSCRIPTION_CANCELLED
 }
 
 enum EmailStatus {
@@ -210,9 +224,15 @@ model Subscription {
   currentPeriodStart   DateTime          @map("current_period_start")
   currentPeriodEnd     DateTime          @map("current_period_end")
   cancelAtPeriodEnd    Boolean           @default(false) @map("cancel_at_period_end")
+  payments             Payment[]
+  invoices             Invoice[]
   createdAt            DateTime          @default(now()) @map("created_at")
   updatedAt            DateTime          @updatedAt @map("updated_at")
 
+  @@index([userId])
+  @@index([status])
+  @@index([providerSubscriptionId])
+  @@index([currentPeriodEnd])
   @@map("subscriptions")
 }
 
@@ -235,8 +255,44 @@ model Payment {
   errorMessage      String?       @map("error_message")
   createdAt        DateTime      @default(now()) @map("created_at")
   updatedAt        DateTime      @updatedAt @map("updated_at")
+  invoices          Invoice[]
 
+  @@index([userId])
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([providerPaymentId])
   @@map("payments")
+}
+
+model Invoice {
+  id                String        @id @default(uuid())
+  invoiceNumber     String        @unique @map("invoice_number")
+  userId            String        @map("user_id")
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptionId    String?       @map("subscription_id")
+  subscription      Subscription? @relation(fields: [subscriptionId], references: [id])
+  paymentId         String?       @unique @map("payment_id")
+  payment           Payment?      @relation(fields: [paymentId], references: [id])
+  amount            Int           // in paise/cents
+  tax               Int           @default(0) // in paise/cents
+  total             Int           // amount + tax
+  currency          String        @default("INR")
+  status            InvoiceStatus @default(DRAFT)
+  dueDate           DateTime      @map("due_date")
+  issuedAt          DateTime      @default(now()) @map("issued_at")
+  paidAt            DateTime?     @map("paid_at")
+  lineItems         Json?         @map("line_items") // [{description, amount, quantity}]
+  notes             String?
+  metadata          Json?
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([invoiceNumber])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("invoices")
 }
 
 model PaymentGateway {
@@ -274,4 +330,13 @@ enum PaymentStatus {
   FAILED
   REFUNDED
   PARTIALLY_REFUNDED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  OVERDUE
+  CANCELLED
+  REFUNDED
 }
