@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned — Phase 0: Bug Squash (Week of April 7, 2026)
+- Fix runtime crash from missing `cn()` import in dashboard
+- Standardize JWT payload claims across all test helpers
+- Add field whitelisting to website controller update operations
+- Fix webhook body parsing order for payment signature verification
+- Replace Module.prototype.require test mocking with proper dependency injection
+- Fix all 11 failing tests in websitesaas backend
+- Enforce JWT secrets in production environment
+- Consolidate duplicate email/auth route endpoints
+
+### Planned — Phase 1: MVP Completion (Weeks of April 14-25, 2026)
+- Connect onboarding wizard to backend APIs
+- Add 3 starter templates with preview functionality
+- Implement section-based page editor with text and image editing
+- Build one-click website deployment pipeline
+- Replace hardcoded dashboard data with real API calls
+- Integrate Razorpay payment gateway with webhook verification
+- Implement self-serve signup flow with subscription management
+- Add basic prompt-to-website AI generation
+- Full responsive QA across all pages
+
+### Planned — Phase 2: Launch Prep (Week of April 28, 2026)
+- Landing page with live AI demo
+- Pricing page (₹199/mo single tier at launch)
+- Centralized error handling and structured logging
+- User onboarding flow with tutorial
+- Performance audit and optimization
+- Complete OpenAPI documentation
+- Waitlist to signup migration infrastructure
+
 ### Added
 - Authentication system with user registration, login, JWT, and password reset
 - Onboarding wizard UI and API for new user flows

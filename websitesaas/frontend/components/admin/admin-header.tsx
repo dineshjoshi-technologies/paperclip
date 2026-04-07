@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useAuth } from '@/lib/auth-context'
 import { LogOut } from 'lucide-react'
 
@@ -15,6 +18,7 @@ export function AdminHeader() {
           </h1>
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggle size="sm" />
           {user && (
             <span className="text-sm text-zinc-500 dark:text-zinc-400 hidden sm:inline">
               {user.name}

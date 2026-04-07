@@ -172,7 +172,7 @@ exports.sendAdminNewUserAlert = async (newUser) => {
 
 exports.updatePreferences = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.userId
     const preferences = req.body.preferences
     
     await exports.updateEmailPreferences(userId, preferences)
@@ -184,7 +184,7 @@ exports.updatePreferences = async (req, res) => {
 
 exports.getPreferences = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.userId
     const preferences = await exports.getEmailPreferences(userId)
     res.json({ preferences })
   } catch (error) {
@@ -198,6 +198,10 @@ exports.resetPasswordPost = async (req, res) => {
     
     if (!token || !newPassword) {
       return res.status(400).json({ error: 'Token and new password required' })
+    }
+
+    if (typeof newPassword !== 'string' || newPassword.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters' })
     }
     
     const result = await exports.resetPassword(token, newPassword)

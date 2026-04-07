@@ -12,6 +12,7 @@ import {
   DragStartEvent,
   DragOverlay,
   defaultDropAnimationSideEffects,
+  MeasuringStrategy,
 } from '@dnd-kit/core'
 import {
   arrayMove,
@@ -37,13 +38,20 @@ import {
   X,
   Globe,
   GripVertical,
+  PanelLeft,
+  PanelRight,
+  Plus,
+  Sparkles,
+  ChevronRight,
 } from 'lucide-react'
 import { type BuilderComponent, ComponentType, createComponent } from './types'
 import { ComponentPalette } from './component-palette'
 import { ComponentPreview } from './component-preview'
 import { ComponentProperties } from './component-properties'
+import { AIContentPanel } from './ai-content-panel'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { aiService, type GeneratedSection } from '@/lib/ai-service'
 
 interface PageBuilderProps {
   initialComponents?: BuilderComponent[]
@@ -52,7 +60,6 @@ interface PageBuilderProps {
   pageName?: string
 }
 
-const GRID_SNAP_THRESHOLD = 20
 const AUTO_SAVE_INTERVAL = 30000
 
 const dropAnimation = {
@@ -63,6 +70,12 @@ const dropAnimation = {
       },
     },
   }),
+}
+
+const touchMeasuring: Parameters<typeof DndContext>[0]['measuring'] = {
+  droppable: {
+    strategy: MeasuringStrategy.Always,
+  },
 }
 
 function SortableComponent({
@@ -109,9 +122,9 @@ function SortableComponent({
       <div
         {...attributes}
         {...listeners}
-        className="absolute left-0 top-0 bottom-0 w-6 flex items-center justify-center cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-20"
+        className="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity z-20"
       >
-        <GripVertical className="h-4 w-4 text-zinc-400" />
+        <GripVertical className="h-5 w-5 text-zinc-400" />
       </div>
 
       <ComponentPreview
@@ -125,25 +138,25 @@ function SortableComponent({
           <button
             onClick={(e) => { e.stopPropagation(); onMove('up') }}
             disabled={index === 0}
-            className="h-6 w-6 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="h-7 w-7 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Move up"
           >
-            <ArrowUp className="h-3 w-3 text-zinc-600 dark:text-zinc-400" />
+            <ArrowUp className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); onMove('down') }}
             disabled={index === totalComponents - 1}
-            className="h-6 w-6 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="h-7 w-7 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Move down"
           >
-            <ArrowDown className="h-3 w-3 text-zinc-600 dark:text-zinc-400" />
+            <ArrowDown className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); onDelete() }}
-            className="h-6 w-6 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+            className="h-7 w-7 flex items-center justify-center rounded bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
             aria-label="Delete component"
           >
-            <Trash2 className="h-3 w-3 text-red-500" />
+            <Trash2 className="h-4 w-4 text-red-500" />
           </button>
         </div>
       )}
@@ -152,6 +165,7 @@ function SortableComponent({
 }
 
 type ViewportMode = 'desktop' | 'tablet' | 'mobile'
+type MobilePanel = 'none' | 'palette' | 'properties' | 'ai'
 
 const VIEWPORT_WIDTHS: Record<ViewportMode, string> = {
   desktop: '100%',
@@ -170,6 +184,8 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [mobilePanel, setMobilePanel] = useState<MobilePanel>('none')
+  const [showAIPanel, setShowAIPanel] = useState(false)
 
   const [history, setHistory] = useState<BuilderComponent[][]>([[]])
   const [historyIndex, setHistoryIndex] = useState(0)
@@ -191,7 +207,7 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
 
     setHistory((prev) => {
       const truncated = prev.slice(0, historyIndex + 1)
-      const snapshot = newComponents.map((c) => ({ ...c }))
+      const snapshot = newComponents.map(c => ({ ...c }))
       const newHistory = [...truncated, snapshot]
       if (newHistory.length > 50) {
         return newHistory.slice(-50)
@@ -206,7 +222,7 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
     const newIndex = historyIndex - 1
     setHistoryIndex(newIndex)
     isHistoryPaused.current = true
-    setComponents(history[newIndex].map((c) => ({ ...c })))
+    setComponents(history[newIndex].map(c => ({ ...c })))
     setTimeout(() => { isHistoryPaused.current = false }, 0)
   }, [historyIndex, history])
 
@@ -215,7 +231,7 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
     const newIndex = historyIndex + 1
     setHistoryIndex(newIndex)
     isHistoryPaused.current = true
-    setComponents(history[newIndex].map((c) => ({ ...c })))
+    setComponents(history[newIndex].map(c => ({ ...c })))
     setTimeout(() => { isHistoryPaused.current = false }, 0)
   }, [historyIndex, history])
 
@@ -277,33 +293,34 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
     setComponents(newComponents)
     setSelectedId(newComponent.id)
     pushToHistory(newComponents)
+    setMobilePanel('none')
   }, [components, pushToHistory])
 
   const handleUpdateConfig = useCallback((config: Record<string, unknown>) => {
     if (!selectedId) return
-    const newComponents = components.map((c) =>
+    const newComponents = components.map(c =>
       c.id === selectedId ? { ...c, config } : c
     )
     setComponents(newComponents)
   }, [selectedId, components])
 
-  const handleUpdateStyle = useCallback((style: Record<string, unknown>) => {
+  const handleUpdateStyle = useCallback((style: any) => {
     if (!selectedId) return
-    const newComponents = components.map((c) =>
+    const newComponents = components.map(c =>
       c.id === selectedId ? { ...c, style: style as BuilderComponent['style'] } : c
     )
     setComponents(newComponents)
   }, [selectedId, components])
 
   const handleDeleteComponent = useCallback((id: string) => {
-    const newComponents = components.filter((c) => c.id !== id)
+    const newComponents = components.filter(c => c.id !== id)
     setComponents(newComponents)
     if (selectedId === id) setSelectedId(null)
     pushToHistory(newComponents)
   }, [components, selectedId, pushToHistory])
 
   const handleMoveComponent = useCallback((id: string, direction: 'up' | 'down') => {
-    const idx = components.findIndex((c) => c.id === id)
+    const idx = components.findIndex(c => c.id === id)
     if (idx === -1) return
     const swapIdx = direction === 'up' ? idx - 1 : idx + 1
     if (swapIdx < 0 || swapIdx >= components.length) return
@@ -324,8 +341,8 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
     setActiveId(null)
 
     if (!over || active.id !== over.id) {
-      const oldIndex = components.findIndex((c) => c.id === active.id)
-      const newIndex = components.findIndex((c) => c.id === over?.id)
+      const oldIndex = components.findIndex(c => c.id === active.id)
+      const newIndex = components.findIndex(c => c.id === over?.id)
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const newComponents = arrayMove(components, oldIndex, newIndex).map(
@@ -351,29 +368,139 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
     }
   }, [components, onSave, pushToHistory])
 
-  const selectedComponent = components.find((c) => c.id === selectedId) || null
-  const activeComponent = components.find((c) => c.id === activeId) || null
+  const selectedComponent = components.find(c => c.id === selectedId) || null
+  const activeComponent = components.find(c => c.id === activeId) || null
 
   const viewportWidth = VIEWPORT_WIDTHS[viewport]
 
+  const handleAIInsertSection = useCallback((section: GeneratedSection) => {
+    const convertToBuilderComponent = (sectionData: any, position: number): BuilderComponent => {
+      const id = `${sectionData.type}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+      return {
+        id,
+        type: sectionData.type as ComponentType,
+        config: sectionData.config || {},
+        style: {},
+        position,
+      }
+    }
+
+    const newComponent = convertToBuilderComponent(section, components.length)
+    const newComponents = [...components, newComponent]
+    setComponents(newComponents)
+    setSelectedId(newComponent.id)
+    pushToHistory(newComponents)
+  }, [components, pushToHistory])
+
+  const handleAIApplyCopy = useCallback((config: Record<string, unknown>) => {
+    if (!selectedId) return
+    const newComponents = components.map(c =>
+      c.id === selectedId ? { ...c, config } : c
+    )
+    setComponents(newComponents)
+    pushToHistory(newComponents)
+  }, [selectedId, components, pushToHistory])
+
   return (
-    <div className="flex h-[calc(100vh-3.5rem)]">
+    <div className="flex h-[calc(100vh-3.5rem)] relative">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        measuring={touchMeasuring}
       >
-        {/* Left: Component Palette */}
-        <div className="w-64 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex-shrink-0">
+        {/* Mobile Panel Overlay */}
+        {mobilePanel !== 'none' && (
+          <div className="lg:hidden fixed inset-0 z-30">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setMobilePanel('none')} />
+            <div className={cn(
+              'absolute top-0 bottom-0 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 shadow-xl transition-transform duration-200',
+              mobilePanel === 'palette'
+                ? 'left-0 w-72 border-r'
+                : 'right-0 w-72 border-l',
+            )}>
+              {mobilePanel === 'palette' ? (
+                <>
+                  <div className="flex items-center justify-between p-3 border-b border-zinc-200 dark:border-zinc-800">
+                    <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Components</span>
+                    <button onClick={() => setMobilePanel('none')} className="h-7 w-7 flex items-center justify-center rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" aria-label="Close">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <ComponentPalette onAddComponent={handleAddComponent} />
+                </>
+              ) : mobilePanel === 'ai' ? (
+                <>
+                  <div className="flex items-center justify-between p-3 border-b border-zinc-200 dark:border-zinc-800">
+                    <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-purple-600" />
+                      AI Assistant
+                    </span>
+                    <button onClick={() => setMobilePanel('none')} className="h-7 w-7 flex items-center justify-center rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" aria-label="Close">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <AIContentPanel
+                    selectedComponent={selectedComponent}
+                    onInsertSection={handleAIInsertSection}
+                    onApplyCopy={handleAIApplyCopy}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between p-3 border-b border-zinc-200 dark:border-zinc-800">
+                    <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Properties</span>
+                    <button onClick={() => setMobilePanel('none')} className="h-7 w-7 flex items-center justify-center rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" aria-label="Close">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <ComponentProperties
+                    component={selectedComponent}
+                    onUpdateConfig={handleUpdateConfig}
+                    onUpdateStyle={handleUpdateStyle}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Left: Component Palette (Desktop) */}
+        <div className="hidden lg:block w-64 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex-shrink-0">
           <ComponentPalette onAddComponent={handleAddComponent} />
         </div>
 
         {/* Center: Canvas */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Toolbar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 gap-2">
             <div className="flex items-center gap-2">
+              {/* Mobile Palette Toggle */}
+              <button
+                onClick={() => setMobilePanel(mobilePanel === 'palette' ? 'none' : 'palette')}
+                className="lg:hidden h-8 w-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                aria-label="Open component palette"
+              >
+                <PanelLeft className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
+              </button>
+
+              {/* AI Panel Toggle */}
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                    setMobilePanel(mobilePanel === 'ai' ? 'none' : 'ai')
+                  } else {
+                    setShowAIPanel(!showAIPanel)
+                  }
+                }}
+                className="lg:h-7 lg:w-7 h-8 w-8 flex items-center justify-center rounded border border-purple-200 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                aria-label="Toggle AI assistant"
+                title="AI Assistant"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+              </button>
+
               {/* Undo/Redo */}
               <button
                 onClick={undo}
@@ -394,15 +521,15 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                 <Redo2 className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
               </button>
 
-              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-700 mx-1" />
+              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-700 mx-1 hidden sm:block" />
 
               {/* Viewport Toggle */}
               <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-lg p-0.5">
-                {([
+                {[
                   { mode: 'desktop' as ViewportMode, icon: Monitor, label: 'Desktop' },
                   { mode: 'tablet' as ViewportMode, icon: Tablet, label: 'Tablet' },
                   { mode: 'mobile' as ViewportMode, icon: Smartphone, label: 'Mobile' },
-                ]).map(({ mode, icon: Icon, label }) => (
+                ].map(({ mode, icon: Icon, label }) => (
                   <button
                     key={mode}
                     onClick={() => setViewport(mode)}
@@ -410,7 +537,7 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                       'h-6 w-7 flex items-center justify-center rounded transition-colors',
                       viewport === mode
                         ? 'bg-white dark:bg-zinc-700 shadow-sm'
-                        : 'hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                        : 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
                     )}
                     aria-label={`${label} view`}
                     title={label}
@@ -421,9 +548,9 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* Save Status */}
-              <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center gap-2">
+              {/* Save Status - Hidden on mobile */}
+              <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
                 {isSaving ? (
                   <>
                     <Loader2 className="h-3 w-3 animate-spin" />
@@ -439,17 +566,19 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                 ) : null}
               </div>
 
-              {/* Save Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSave}
-                disabled={isSaving || components.length === 0}
-                className="h-7 px-2 text-xs gap-1"
+              {/* Mobile Properties Toggle */}
+              <button
+                onClick={() => {
+                  if (!selectedId && components.length > 0) {
+                    setSelectedId(components[0].id)
+                  }
+                  setMobilePanel(mobilePanel === 'properties' ? 'none' : 'properties')
+                }}
+                className="lg:hidden h-8 w-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                aria-label="Open properties panel"
               >
-                <Save className="h-3 w-3" />
-                Save
-              </Button>
+                <PanelRight className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
+              </button>
 
               {/* Publish Button */}
               <Button
@@ -459,18 +588,18 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                 disabled={components.length === 0}
                 className="h-7 px-3 text-xs gap-1"
               >
-                <Globe className="h-3 w-3" />
-                Publish
+                <Globe className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline ml-1">Publish</span>
               </Button>
             </div>
           </div>
 
           {/* Canvas Area */}
-          <div className="flex-1 overflow-y-auto bg-zinc-100 dark:bg-zinc-900 p-4">
+          <div className="flex-1 overflow-y-auto bg-zinc-100 dark:bg-zinc-900 p-2 sm:p-4">
             <div
               className={cn(
-                'mx-auto bg-white dark:bg-zinc-950 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800 min-h-[600px] transition-all duration-200',
-                viewport !== 'desktop' && 'border-zinc-300 dark:border-zinc-700'
+                'mx-auto bg-white dark:bg-zinc-950 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800 min-h-[400px] sm:min-h-[600px] transition-all duration-200',
+                viewport !== 'desktop' && 'border-zinc-300 dark:border-zinc-700',
               )}
               style={{
                 width: viewportWidth,
@@ -484,10 +613,17 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                   </svg>
                   <p className="text-sm font-medium">Add components from the left panel</p>
                   <p className="text-xs mt-1 text-zinc-400 dark:text-zinc-600">Drag and drop to reorder</p>
+                  <button
+                    onClick={() => setMobilePanel(mobilePanel === 'palette' ? 'none' : 'palette')}
+                    className="lg:hidden mt-3 h-9 px-4 flex items-center gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm text-zinc-700 dark:text-zinc-300"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Component
+                  </button>
                 </div>
               ) : (
                 <SortableContext
-                  items={components.map((c) => c.id)}
+                  items={components.map(c => c.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   <div className="divide-y divide-zinc-100 dark:divide-zinc-900">
@@ -497,7 +633,9 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
                         component={component}
                         index={index}
                         isSelected={selectedId === component.id}
-                        onClick={() => setSelectedId(component.id)}
+                        onClick={() => {
+                          setSelectedId(component.id)
+                        }}
                         onDelete={() => handleDeleteComponent(component.id)}
                         onMove={(dir) => handleMoveComponent(component.id, dir)}
                         totalComponents={components.length}
@@ -510,13 +648,52 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
           </div>
         </div>
 
-        {/* Right: Properties Panel */}
-        <div className="w-72 border-l border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex-shrink-0">
-          <ComponentProperties
-            component={selectedComponent}
-            onUpdateConfig={handleUpdateConfig}
-            onUpdateStyle={handleUpdateStyle}
-          />
+        {/* Right: Properties/AI Panel (Desktop) */}
+        <div className={cn(
+          'hidden lg:flex flex-col border-l border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex-shrink-0 transition-all duration-200',
+          showAIPanel ? 'w-80' : 'w-72 border-l-0'
+        )}>
+          {showAIPanel ? (
+            <>
+              <div className="flex items-center justify-between p-2 border-b border-zinc-200 dark:border-zinc-800">
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-50 flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-purple-600" />
+                  AI Assistant
+                </span>
+                <button
+                  onClick={() => setShowAIPanel(false)}
+                  className="h-6 w-6 flex items-center justify-center rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                  aria-label="Close AI panel"
+                >
+                  <ChevronRight className="h-4 w-4 text-zinc-500" />
+                </button>
+              </div>
+              <AIContentPanel
+                selectedComponent={selectedComponent}
+                onInsertSection={handleAIInsertSection}
+                onApplyCopy={handleAIApplyCopy}
+              />
+            </>
+          ) : (
+            <>
+              <div className="flex items-center justify-between p-2 border-b border-zinc-200 dark:border-zinc-800">
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-50">Properties</span>
+                <button
+                  onClick={() => setShowAIPanel(true)}
+                  className="h-6 w-6 flex items-center justify-center rounded border border-purple-200 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                  aria-label="Open AI assistant"
+                  title="AI Assistant"
+                >
+                  <Sparkles className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                </button>
+              </div>
+              <ComponentProperties
+                component={selectedComponent}
+                onUpdateConfig={handleUpdateConfig}
+                onUpdateStyle={handleUpdateStyle}
+              />
+            </>
+          )}
         </div>
 
         <DragOverlay dropAnimation={dropAnimation}>
@@ -535,14 +712,14 @@ export function PageBuilder({ initialComponents = [], onSave, websiteName, pageN
       {/* Publish Modal */}
       {showPublishModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={() => setShowPublishModal(false)}
           role="dialog"
           aria-modal="true"
           aria-label="Publish page"
         >
           <div
-            className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 w-full max-w-md mx-4 overflow-hidden"
+            className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 w-full max-w-md overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">

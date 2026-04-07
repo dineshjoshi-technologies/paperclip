@@ -6,13 +6,15 @@ const rateLimit = require('express-rate-limit')
 const { initEmailService } = require('./services/email.service')
 const { logger, httpLogger } = require('./services/logger')
 
+const aiRoutes = require('./routes/ai.routes')
 const authRoutes = require('./routes/auth.routes')
 const websiteRoutes = require('./routes/website.routes')
 const templateRoutes = require('./routes/template.routes')
 const pageRoutes = require('./routes/page.routes')
 const publicRoutes = require('./routes/public.routes')
 const emailRoutes = require('./routes/email.routes')
-const paymentRoutes = require('./routes/payments')
+const paymentRoutes = require('./routes/payments.routes')
+const adminRoutes = require('./routes/admin.routes')
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -45,6 +47,7 @@ app.get('/health', (_req, res) => {
 })
 
 // API routes
+app.use('/api/ai', aiRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/websites', websiteRoutes)
 app.use('/api/templates', templateRoutes)
@@ -52,6 +55,7 @@ app.use('/api/websites', pageRoutes)
 app.use('/api', publicRoutes)
 app.use('/api/email', emailRoutes)
 app.use('/api/payments', paymentRoutes)
+app.use('/api/admin', adminRoutes)
 
 // 404 handler
 app.use((req, _res, next) => {

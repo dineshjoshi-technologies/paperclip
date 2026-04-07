@@ -98,7 +98,7 @@ export function AdminSidebar() {
                 </button>
                 {isSectionExpanded && (
                   <div className="ml-8 mt-1 space-y-1">
-                    {item.children.map((child) => {
+                    {item.children?.map((child) => {
                       const isChildActive = pathname === child.href
                       return (
                         <Link

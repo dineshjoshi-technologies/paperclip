@@ -120,6 +120,7 @@ model Page {
   slug        String
   content     Json?
   isPublished Boolean   @default(false) @map("is_published")
+  position    Int       @default(0)
   components  Component[]
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")

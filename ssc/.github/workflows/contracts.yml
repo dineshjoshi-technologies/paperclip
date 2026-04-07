@@ -1,0 +1,46 @@
+name: Smart Contract CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'contracts/**'
+      - 'scripts/**'
+      - 'test/**'
+      - 'hardhat.config.js'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'contracts/**'
+      - 'scripts/**'
+      - 'test/**'
+      - 'hardhat.config.js'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Run linter
+        run: npx solhint "contracts/**/*.sol"
+
+      - name: Run tests
+        run: npx hardhat test
+
+      - name: Run coverage
+        run: npx hardhat coverage
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096

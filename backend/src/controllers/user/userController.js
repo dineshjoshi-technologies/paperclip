@@ -201,7 +201,7 @@ exports.updateRole = async (req, res) => {
       });
     }
 
-    const validRoles = ['USER', 'ADMIN', 'AGENCY', 'DEVELOPER', 'DESIGNER', 'SUPPORT'];
+    const validRoles = ['USER', 'ADMIN', 'AGENCY', 'DEVELOPER', 'DESIGNER', 'SUPPORT', 'SUPER_ADMIN'];
     if (!validRoles.includes(role)) {
       return res.status(400).json({
         success: false,

@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 app.use('/api/websites', websiteRoutes)
 
 describe('Websites API Contract', () => {
-  const authToken = jwt.sign({ sub: 'test-user-1' }, process.env.JWT_SECRET || 'test-secret', { expiresIn: '15m' })
+  const authToken = jwt.sign({ userId: 'test-user-1' }, process.env.JWT_SECRET || 'test-secret', { expiresIn: '15m' })
 
   test('GET /api/websites - should reject without auth', async () => {
     const res = await request(app)

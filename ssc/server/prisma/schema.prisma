@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  firstName     String?
+  lastName      String?
+  walletAddress String?   @unique
+  role          UserRole  @default(USER)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  refreshToken                 RefreshToken[]
+  transactions                 Transaction[]
+  buybackRequests              BuybackRequest[]
+  profitDistributionRecipients ProfitDistributionRecipient[]
+  auditLogs                    AuditLog[]          @relation("AuditLogActor")
+
+  @@index([email])
+  @@index([walletAddress])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Transaction {
+  id              String        @id @default(uuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  type            TransactionType
+  amountSSC       Decimal       @db.Decimal(20, 8)
+  amountUSDT      Decimal?      @db.Decimal(20, 8)
+  rate            Decimal?      @db.Decimal(20, 8)
+  txHash          String?       @unique
+  blockNumber     Int?
+  status          TransactionStatus @default(PENDING)
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([txHash])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum TransactionType {
+  BUY
+  SELL
+  BUYBACK
+  PROFIT_DISTRIBUTION
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model ProfitDistribution {
+  id                String   @id @default(uuid())
+  distributionPeriod String
+  totalAmount       Decimal  @db.Decimal(20, 8)
+  perTokenAmount    Decimal  @db.Decimal(20, 8)
+  snapshotDate      DateTime
+  status            DistributionStatus @default(PENDING)
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  recipients        ProfitDistributionRecipient[]
+
+  @@index([distributionPeriod])
+  @@index([status])
+}
+
+enum DistributionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model ProfitDistributionRecipient {
+  id                String   @id @default(uuid())
+  distributionId    String
+  distribution      ProfitDistribution @relation(fields: [distributionId], references: [id], onDelete: Cascade)
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  tokenAmount       Decimal  @db.Decimal(20, 8)
+  distributionAmount Decimal @db.Decimal(20, 8)
+  status            DistributionStatus @default(PENDING)
+  createdAt         DateTime @default(now())
+
+  @@unique([distributionId, userId])
+  @@index([userId])
+}
+
+
+model BuybackRequest {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  amountSSC       Decimal  @db.Decimal(20, 8)
+  requestedUSDT   Decimal  @db.Decimal(20, 8)
+  rate            Decimal  @db.Decimal(20, 8)
+  status          BuybackStatus @default(PENDING)
+  txHash          String?
+  processedAt     DateTime?
+  processedBy     String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum BuybackStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String?
+  actor     User?    @relation("AuditLogActor", fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  entityType String
+  entityId  String?
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entityType])
+  @@index([createdAt])
+}

@@ -67,9 +67,17 @@ exports.update = async (req, res) => {
       return res.status(404).json({ error: 'Website not found' })
     }
 
+    const allowedFields = ['name', 'slug', 'templateId', 'config']
+    const data = {}
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        data[field] = req.body[field]
+      }
+    }
+
     const updated = await prisma.website.update({
       where: { id: req.params.id },
-      data: req.body
+      data
     })
     res.json(updated)
   } catch (error) {

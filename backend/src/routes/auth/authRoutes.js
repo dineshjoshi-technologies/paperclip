@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('../../controllers/auth/authController');
 const { authenticate, authorize } = require('../../middleware/authMiddleware');
 const { loginLimiter, passwordResetLimiter, registerLimiter, authLimiter } = require('../../middleware/rateLimiter');
-const { validate, registerSchema, loginSchema, passwordResetRequestSchema, passwordResetConfirmSchema, refreshTokenSchema, createApiKeySchema } = require('../../middleware/validation');
+const { validate, registerSchema, loginSchema, passwordResetRequestSchema, passwordResetConfirmSchema, refreshTokenSchema, createApiKeySchema, resendVerificationSchema } = require('../../middleware/validation');
 
 router.post('/register', registerLimiter, validate(registerSchema), authController.register);
 router.post('/login', loginLimiter, validate(loginSchema), authController.login);

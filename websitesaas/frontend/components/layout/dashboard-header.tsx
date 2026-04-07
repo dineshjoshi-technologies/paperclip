@@ -1,11 +1,18 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { useAuth } from '@/lib/auth-context'
 
 interface DashboardHeaderProps {
   userName?: string
 }
 
 export function DashboardHeader({ userName }: DashboardHeaderProps) {
+  const { user, logout } = useAuth()
+  const displayName = userName || user?.name
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur">
       <div className="flex h-14 items-center justify-between px-6">
@@ -23,12 +30,13 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          {userName && (
+          <ThemeToggle size="sm" />
+          {displayName && (
             <span className="text-sm text-zinc-500 dark:text-zinc-400 hidden sm:inline">
-              {userName}
+              {displayName}
             </span>
           )}
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" onClick={logout} asChild>
             <Link href="/auth/login">Sign Out</Link>
           </Button>
         </div>

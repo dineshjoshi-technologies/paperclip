@@ -1,98 +1,126 @@
 # DJ Technologies — Product Roadmap
 
-## 🚀 Roadmap (Phases)
+> **Last Updated:** 2026-04-07
+> **Source:** MASTER-PLAN.md (supersedes all prior phase definitions)
 
-### 🟢 Phase 1 — Core Foundation
+---
+
+## 🚧 Phase 0 — Bug Squash & Release Blockers
 **Status: In Progress**
+**Timeline:** April 7-11, 2026 (Week 1)
+**Goal:** `websitesaas/` passes QA with 84/84 tests, 0 critical bugs, 0 security issues
 
-- Basic website builder
-- Template system
-- Hosting integration
-- Deployment pipeline
-- Simple UI/UX
+- [ ] Fix missing `cn()` import in dashboard (runtime crash)
+- [ ] Fix JWT payload mismatch in test helpers
+- [ ] Fix mass assignment vulnerability in website controller
+- [ ] Fix webhook body parsing order for payments
+- [ ] Replace test mocking with proper dependency injection
+- [ ] Fix all 11 failing tests
+- [ ] Enforce JWT secrets in production
+- [ ] Consolidate duplicate email/auth routes
 
----
-
-### 🟡 Phase 2 — AI Integration
-**Status: Planned**
-
-- Prompt-to-website
-- AI editing
-- Content generation
-- Smart layout suggestions
+**Deliverable:** Green CI, release-ready codebase
 
 ---
 
-### 🔵 Phase 3 — Automation Engine
+## 🟡 Phase 1 — MVP Completion
 **Status: Planned**
+**Timeline:** April 14-25, 2026 (Weeks 2-3)
+**Goal:** User can sign up → create website → edit → deploy → pay
 
-- Workflow builder
-- Form automation
-- CRM integration
-- Trigger systems
+- [ ] Onboarding wizard connected to backend APIs
+- [ ] 3 starter templates with preview
+- [ ] Section-based page editor (text, image)
+- [ ] One-click website deployment pipeline
+- [ ] Dashboard with real API data
+- [ ] Production SSL + VPS deployment
+- [ ] Razorpay payment integration with webhooks
+- [ ] Self-serve signup flow
+- [ ] Basic prompt-to-website AI generation
+- [ ] Responsive QA across all pages
+
+**Deliverable:** Functional end-to-end user journey
 
 ---
 
-### 🟣 Phase 4 — Advanced UI/UX
+## 🔵 Phase 2 — Launch Prep
 **Status: Planned**
+**Timeline:** April 28 - May 2, 2026 (Week 4)
+**Goal:** Production-ready platform with marketing assets
 
-- Animation engine
-- Interactive components
-- Motion system
-- Advanced design controls
+- [ ] Landing page with live AI demo
+- [ ] Pricing page (₹199/mo single tier)
+- [ ] Centralized error handling + logging
+- [ ] User onboarding flow + tutorial
+- [ ] Performance audit + optimization
+- [ ] Complete API documentation (OpenAPI)
+- [ ] Waitlist → signup migration
+
+**Deliverable:** Launch-ready platform + marketing content
 
 ---
 
-### 🔴 Phase 5 — Productization
+## 🟣 Phase 3 — Post-Launch Growth
 **Status: Planned**
+**Timeline:** May 5-16, 2026 (Weeks 5-6)
+**Goal:** Scale with multi-tier billing, referral program, agency features
 
-- Template marketplace
-- Component library
-- Vertical solutions (business types)
+- [ ] Build & Earn referral program
+- [ ] Multi-tier billing (₹499, ₹999, ₹2,999 plans)
+- [ ] Analytics dashboard with real metrics
+- [ ] Agency management features
+- [ ] Hindi language support
+- [ ] Template marketplace (premium)
+- [ ] Stripe integration for international users
+
+**Deliverable:** Scaled platform with full pricing tiers and marketplace
 
 ---
 
-### ⚫ Phase 6 — Platform Expansion
-**Status: Planned**
+## 🔴 Phase 4 — Platform Expansion
+**Status: Deferred**
+**Goal:** Marketplace, API exposure, white-label
 
-- SaaS ecosystem
-- API exposure
+- Template marketplace with 50+ templates
+- Plugin ecosystem
+- Developer APIs
 - White-label solutions
-- Agency mode
+- Agency partner portal
 
 ---
 
-### 🟠 Phase 7 — Intelligence Layer
-**Status: Planned**
+## 🟠 Phase 5 — Intelligence Layer
+**Status: Deferred**
+**Goal:** Self-optimizing websites, AI recommendations
 
 - Self-optimizing websites
-- AI recommendations
-- Conversion optimization
+- AI-powered conversion optimization
 - Behavior-driven UI changes
+- Predictive content suggestions
 
 ---
 
 ## 🎯 Target Users
 
-- Startups
-- Small businesses
-- Agencies
-- Freelancers
-- Enterprises (future)
+| Segment | Primary Need | Pricing Target |
+|---------|-------------|----------------|
+| Freelancers | Build client sites fast, resell hosting | ₹199/mo per site |
+| Small Businesses | Professional site without agency | ₹199-₹499/mo |
+| Agencies | Scale production, white-label | ₹2,999/mo |
 
 ---
 
-## 🚀 Long-Term Vision
+## 🚀 Launch Strategy
 
-To become the default operating system for building and running websites and digital businesses globally.
+1. **Fix everything** (Phase 0) → **Build MVP** (Phase 1) → **Prepare launch** (Phase 2) → **Go live** → **Scale** (Phase 3)
+2. Single tier (₹199/mo) at launch, multi-tier post-launch
+3. Marketing starts 2 weeks AFTER launch, not before
+4. India-first: UPI, INR pricing, localized content
 
 ---
 
 ## ⚡ Final Note
 
-This is not just a website builder. This is a **platform shift**.
+This roadmap is driven by the Master Plan in MASTER-PLAN.md. All agents must follow task priorities and agent assignments defined there.
 
-From:
-- Manual → Automated
-- Tools → Systems
-- Builders → AI-driven creation
+**Revenue path:** Ship working product → First paying customer → Referral loop → Scale tiers.

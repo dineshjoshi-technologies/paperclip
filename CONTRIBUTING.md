@@ -182,6 +182,36 @@ npm test -- path/to/test.spec.js
 - Add JSDoc/TSDoc comments for public functions
 - Keep INFRASTRUCTURE.md current for deployment changes
 
+## Branch Naming Conventions
+
+We use semantic branch names to track work:
+
+```
+<type>/<short-description>
+
+Examples:
+feat/user-authentication
+fix/website-publishing-bug
+docs/api-reference-update
+refactor/database-queries
+```
+
+**Types:**
+
+- `feat/` — New feature or enhancement
+- `fix/` — Bug fix
+- `docs/` — Documentation changes
+- `refactor/` — Code refactoring
+- `test/` — Test additions or fixes
+- `chore/` — Maintenance tasks
+
+## Git Commit Attribution
+
+All commits must use DJ Technologies attribution:
+
+- Use: `Authored by DJ Technologies <dinesh@djtechnologies.net>`
+- Never use: `Co-Authored-By: Paperclip <noreply@paperclip.ing>`
+
 ## Questions?
 
 Open an issue for questions or reach out to the maintainers.

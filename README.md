@@ -38,6 +38,7 @@ Our goal is to replace WordPress, Wix, and Webflow with something faster, smarte
 
 | Document | Description |
 |----------|-------------|
+| [Master Plan](MASTER-PLAN.md) | Unified execution blueprint, priorities, and agent assignments |
 | [Platform Features](PLATFORM.md) | Core features, architecture, and tech stack |
 | [Roadmap](ROADMAP.md) | Phased development plan |
 | [Business Model](BUSINESS.md) | Revenue model, target users, and strategy |
@@ -127,7 +128,16 @@ See [Roadmap](ROADMAP.md) for complete phased plan.
 
 ## 📌 Status
 
-🚧 Active Development — Phase 1 in progress
+🚧 Active Development — Phase 0: Bug Squash (Release Blockers)
+
+**Latest:** Master plan synthesized. Critical bugs identified and prioritized. See [MASTER-PLAN.md](MASTER-PLAN.md) for full execution blueprint.
+
+| Area | Status |
+|------|--------|
+| Backend (`backend/`) | ✅ 216/216 tests passing |
+| WebsiteSaaS (`websitesaas/`) | 🔴 8 critical bugs blocking release |
+| Website Platform (`website-platform/`) | 🟡 Features exist, consolidation pending |
+| Production readiness | 🚫 NOT READY — P0 fixes required first |
 
 ---
 
