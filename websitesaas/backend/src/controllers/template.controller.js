@@ -34,8 +34,9 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
+    const { name, description, category, isPremium, config, thumbnailUrl } = req.body
     const template = await prisma.template.create({
-      data: req.body
+      data: { name, description, category, isPremium, config, thumbnailUrl }
     })
     res.status(201).json(template)
   } catch (error) {
@@ -45,9 +46,17 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
+    const allowedFields = ['name', 'description', 'category', 'isPremium', 'config', 'thumbnailUrl']
+    const data = {}
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        data[field] = req.body[field]
+      }
+    }
+
     const template = await prisma.template.update({
       where: { id: req.params.id },
-      data: req.body
+      data
     })
     res.json(template)
   } catch (error) {
