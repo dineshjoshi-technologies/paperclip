@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,8 +49,13 @@ export default function Home() {
             <button className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all hover:shadow-lg">
               Get Started
             </button>
+            <Link href="/dashboard" className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+              Dashboard
+            </Link>
           </div>
-
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
+          </div>
           {/* Mobile Menu Button */}
           <button 
             className="md:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -75,6 +82,9 @@ export default function Home() {
               <button className="w-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-5 py-2 rounded-full text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors mt-2">
                 Get Started
               </button>
+              <div className="flex items-center gap-2 pt-2">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         )}
