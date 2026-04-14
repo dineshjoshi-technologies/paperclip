@@ -11,3 +11,6 @@ out/
 .paperclip/worktrees/
 backend/.nyc_output/
 *.tsbuildinfo
+backend/coverage/
+*/coverage/
+.nycrc
