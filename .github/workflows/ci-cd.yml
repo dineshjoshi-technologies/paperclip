@@ -170,7 +170,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ${{ matrix.service.context }}
           file: ${{ matrix.service.dockerfile }}
@@ -229,7 +229,7 @@ jobs:
             type=sha,prefix=staging-
 
       - name: Build and push staging frontend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./website-platform
           file: ./website-platform/Dockerfile
@@ -240,7 +240,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and push staging backend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./backend
           file: ./backend/Dockerfile
