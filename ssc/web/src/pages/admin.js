@@ -1,11 +1,15 @@
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useWallet } from "../contexts/WalletContext";
 import { Container, Layout, Grid } from "../components/Layout";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/Card";
 import { Button } from "../components/Button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../components/Table";
 import { Badge } from "../components/Badge";
+import { WalletButton } from "../components/WalletComponents";
+import { formatAddress } from "../utils/format";
+import { isAdminWallet } from "../utils/access";
 
 const MOCK_USERS = [
   { id: 1, name: "Alice Johnson", email: "alice@example.com", wallet: "0x1234...5678", tokens: "5,000", status: "active", joined: "2024-01-15" },
@@ -25,6 +29,40 @@ const MOCK_AUDIT = [
 ];
 
 export default function Admin() {
+  const { isConnected, account } = useWallet();
+  const hasAdminAccess = isAdminWallet(account);
+
+  if (!isConnected) {
+    return (
+      <Layout>
+        <Head><title>Admin Panel - SSC Platform</title></Head>
+        <Container className="py-16 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Connect Your Wallet</h1>
+          <p className="text-muted-foreground mb-6">Admin panel access requires a connected wallet.</p>
+          <WalletButton />
+        </Container>
+      </Layout>
+    );
+  }
+
+  if (!hasAdminAccess) {
+    return (
+      <Layout>
+        <Head><title>Admin Panel - SSC Platform</title></Head>
+        <Container className="py-16 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Access Restricted</h1>
+          <p className="text-muted-foreground mb-2">
+            Wallet <span className="font-mono text-foreground">{formatAddress(account)}</span> does not have admin privileges.
+          </p>
+          <p className="text-muted-foreground mb-6">
+            Ask the platform owner to add your wallet to `NEXT_PUBLIC_ADMIN_WALLETS`.
+          </p>
+          <Button as={Link} href="/dashboard">Go to Dashboard</Button>
+        </Container>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Head><title>Admin Panel - SSC Platform</title></Head>

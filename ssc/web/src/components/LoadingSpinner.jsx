@@ -25,6 +25,3 @@ export function LoadingSpinner({ size = "md", className = "", fullScreen = false
 
   return spinner;
 }
-
-  return spinner;
-}

@@ -63,6 +63,14 @@ docker compose --profile dev up
 docker compose --profile prod up
 ```
 
+### Smart Contract Security Scan (Mythril)
+
+```bash
+npm run mythril:scan
+```
+
+The scan writes artifacts to `reports/security/`, including `mythril-SSCToken.json`.
+
 ## Documentation
 
 - [Backend API](server/README.md) - API endpoints, database schema, and setup guide

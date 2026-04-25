@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { Wallet, ArrowUpRight, ArrowDownLeft, History, DollarSign, TrendingUp, RefreshCw, Send, ShoppingCart } from "lucide-react";
+import { Wallet, ArrowUpRight, ArrowDownLeft, History, DollarSign, TrendingUp, Send, ShoppingCart } from "lucide-react";
 import { useWallet } from "../contexts/WalletContext";
 import { Container, Layout } from "../components/Layout";
 import { Button } from "../components/Button";
@@ -17,14 +17,8 @@ const MOCK_TRANSACTIONS = [
 ];
 
 export default function Dashboard() {
-  const { isConnected, account, balance, chainId } = useWallet();
-  const [displayBalance, setDisplayBalance] = useState(balance);
-
-  useEffect(() => {
-    if (balance !== displayBalance) {
-      setDisplayBalance(balance);
-    }
-  }, [balance]);
+  const { isConnected, account, balance } = useWallet();
+  const displayBalance = balance ?? "0.00";
 
   if (!isConnected) {
     return (
@@ -127,13 +121,13 @@ export default function Dashboard() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button as={Link} href="/profit" variant="outline" className="w-full justify-start gap-2">
                   <DollarSign className="w-4 h-4" /> View Profit Distributions
                 </Button>
                 <Button variant="outline" className="w-full justify-start gap-2">
                   <History className="w-4 h-4" /> Transaction History
                 </Button>
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button as={Link} href="/buyback" variant="outline" className="w-full justify-start gap-2">
                   <Send className="w-4 h-4" /> Buyback Request
                 </Button>
                 <Button variant="outline" className="w-full justify-start gap-2">

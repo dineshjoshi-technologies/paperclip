@@ -1,7 +1,32 @@
 import { Response } from 'express';
+import { body, param, query } from 'express-validator';
 import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { setCache, getCache } from '../config/redis';
+
+const TRANSACTION_TYPES = ['BUY', 'SELL', 'BUYBACK', 'PROFIT_DISTRIBUTION', 'TRANSFER'] as const;
+const TRANSACTION_STATUSES = ['PENDING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const;
+
+export const transactionValidators = {
+  create: [
+    body('type').isIn(TRANSACTION_TYPES),
+    body('amountSSC').isFloat({ gt: 0 }).withMessage('amountSSC must be greater than 0'),
+    body('amountUSDT').optional().isFloat({ min: 0 }).withMessage('amountUSDT must be non-negative'),
+    body('rate').optional().isFloat({ gt: 0 }).withMessage('rate must be greater than 0'),
+    body('txHash').optional().isString().trim().isLength({ min: 1, max: 255 }),
+    body('blockNumber').optional().isInt({ min: 0 }).toInt(),
+    body('metadata').optional().isObject(),
+  ],
+  list: [
+    query('page').optional().isInt({ min: 1 }).toInt(),
+    query('limit').optional().isInt({ min: 1, max: 100 }).toInt(),
+    query('status').optional().isIn(TRANSACTION_STATUSES),
+    query('type').optional().isIn(TRANSACTION_TYPES),
+  ],
+  getOne: [
+    param('id').isUUID(),
+  ],
+};
 
 export async function createTransaction(req: AuthRequest, res: Response) {
   const { type, amountSSC, amountUSDT, rate, txHash, blockNumber, metadata } = req.body;

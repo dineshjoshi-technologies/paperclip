@@ -108,3 +108,5 @@ Key models:
 ## Environment Variables
 
 See [.env.example](server/.env.example) for all available configuration options.
+
+Security note: in non-test environments, startup fails if `JWT_SECRET` or `JWT_REFRESH_SECRET` is missing or uses a weak/default placeholder. Use strong random values (for example `openssl rand -hex 64`).

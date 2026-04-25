@@ -23,7 +23,7 @@ exports.sendWelcomeEmail = async (user) => {
 
 exports.sendPasswordResetEmail = async (user, token) => {
   const appName = process.env.APP_NAME || 'DJ Technologies'
-  const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${token}`
+  const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/reset-password?token=${token}`
   
   await prisma.passwordReset.create({
     data: {
@@ -50,7 +50,7 @@ exports.sendPasswordResetEmail = async (user, token) => {
 
 exports.sendEmailVerificationEmail = async (user, token) => {
   const appName = process.env.APP_NAME || 'DJ Technologies'
-  const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${token}`
+  const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/verify-email?token=${token}`
   
   await prisma.emailVerification.create({
     data: {
@@ -233,6 +233,42 @@ exports.verifyEmailPost = async (req, res) => {
     res.json({ message: 'Email verified successfully' })
   } catch (error) {
     res.status(500).json({ error: 'Email verification failed' })
+  }
+}
+
+exports.resendVerificationPost = async (req, res) => {
+  try {
+    const { userId, email } = req.body || {}
+
+    let user = null
+    if (userId) {
+      user = await prisma.user.findUnique({ where: { id: userId } })
+    } else if (email) {
+      user = await prisma.user.findUnique({ where: { email } })
+    }
+
+    if (!user) {
+      return res.json({ message: 'If the account exists, a verification email will be sent' })
+    }
+
+    const alreadyVerified = await prisma.emailVerification.findFirst({
+      where: {
+        userId: user.id,
+        verifiedAt: { not: null }
+      },
+      select: { id: true }
+    })
+
+    if (alreadyVerified) {
+      return res.json({ message: 'Email is already verified' })
+    }
+
+    const token = exports.generateVerificationToken()
+    await exports.sendEmailVerificationEmail(user, token)
+
+    return res.json({ message: 'If the account exists, a verification email will be sent' })
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to resend verification email' })
   }
 }
 

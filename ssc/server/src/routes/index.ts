@@ -19,7 +19,7 @@ router.post('/auth/logout', authController.logout);
 
 // Authenticated user routes
 router.get('/users/me', authenticate, userController.getProfile);
-router.put('/users/me', authenticate, userController.updateProfile);
+router.put('/users/me', authenticate, userController.userValidators.updateProfile, validate, userController.updateProfile);
 router.post(
   '/users/me/change-password',
   authenticate,
@@ -29,13 +29,13 @@ router.post(
 );
 
 // Transaction routes
-router.post('/transactions', authenticate, transactionController.createTransaction);
-router.get('/transactions', authenticate, transactionController.getUserTransactions);
-router.get('/transactions/:id', authenticate, transactionController.getTransaction);
+router.post('/transactions', authenticate, transactionController.transactionValidators.create, validate, transactionController.createTransaction);
+router.get('/transactions', authenticate, transactionController.transactionValidators.list, validate, transactionController.getUserTransactions);
+router.get('/transactions/:id', authenticate, transactionController.transactionValidators.getOne, validate, transactionController.getTransaction);
 
 // Buyback routes
-router.post('/buyback-requests', authenticate, buybackController.createBuybackRequest);
-router.get('/buyback-requests', authenticate, buybackController.getUserBuybackRequests);
+router.post('/buyback-requests', authenticate, buybackController.buybackValidators.create, validate, buybackController.createBuybackRequest);
+router.get('/buyback-requests', authenticate, buybackController.buybackValidators.list, validate, buybackController.getUserBuybackRequests);
 
 // Admin routes
 router.get('/admin/users', authenticate, authorize('ADMIN', 'SUPER_ADMIN'), adminController.getUsers);
@@ -79,30 +79,40 @@ router.post(
   '/admin/profit-distributions',
   authenticate,
   authorize('ADMIN', 'SUPER_ADMIN'),
+  adminProfitController.profitValidators.create,
+  validate,
   adminProfitController.createProfitDistribution,
 );
 router.get(
   '/admin/profit-distributions',
   authenticate,
   authorize('ADMIN', 'SUPER_ADMIN'),
+  adminProfitController.profitValidators.list,
+  validate,
   adminProfitController.getProfitDistributions,
 );
 router.get(
   '/admin/profit-distributions/:id',
   authenticate,
   authorize('ADMIN', 'SUPER_ADMIN'),
+  adminProfitController.profitValidators.getOne,
+  validate,
   adminProfitController.getProfitDistribution,
 );
 router.put(
   '/admin/profit-distributions/:id',
   authenticate,
   authorize('ADMIN', 'SUPER_ADMIN'),
+  adminProfitController.profitValidators.update,
+  validate,
   adminProfitController.updateProfitDistribution,
 );
 router.post(
   '/admin/profit-distributions/:id/execute',
   authenticate,
   authorize('ADMIN', 'SUPER_ADMIN'),
+  adminProfitController.profitValidators.execute,
+  validate,
   adminProfitController.executeProfitDistribution,
 );
 

@@ -1,0 +1,17 @@
+config:
+  target: "http://127.0.0.1:3101"
+  phases:
+    - duration: 10
+      arrivalRate: 20
+      name: warmup
+    - duration: 60
+      arrivalRate: 60
+      name: sustained
+  defaults:
+    headers:
+      Accept: application/json
+scenarios:
+  - name: health-check
+    flow:
+      - get:
+          url: "/health"

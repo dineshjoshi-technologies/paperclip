@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "node": "hardhat node",
+    "deploy:bsc-testnet": "hardhat run scripts/deploy.ts --network bscTestnet",
+    "slither": "slither . --solc-remap '@openzeppelin=node_modules/@openzeppelin'",
+    "mythril:scan": "bash scripts/run-mythril.sh"
   },
   "keywords": [],
   "author": "",

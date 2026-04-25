@@ -8,6 +8,9 @@ on:
       - 'scripts/**'
       - 'test/**'
       - 'hardhat.config.js'
+      - 'hardhat.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
     branches: [main, develop]
     paths:
@@ -15,6 +18,9 @@ on:
       - 'scripts/**'
       - 'test/**'
       - 'hardhat.config.js'
+      - 'hardhat.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   build-and-test:
@@ -44,3 +50,6 @@ jobs:
         run: npx hardhat coverage
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Run Mythril scan
+        run: npm run mythril:scan

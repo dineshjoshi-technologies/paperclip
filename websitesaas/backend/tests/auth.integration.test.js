@@ -42,6 +42,9 @@ const mockPrisma = {
     findFirst: async () => null,
     deleteMany: async () => ({ count: 0 }),
   },
+  emailVerification: {
+    findFirst: async () => null,
+  },
   $transaction: async (fn) => fn(mockPrisma),
 }
 
@@ -57,6 +60,7 @@ const mockEmailController = {
   requestPasswordReset: async (req, res) => res.json({ message: 'If the email exists, a reset link will be sent' }),
   resetPasswordPost: async (req, res) => res.json({ message: 'Password reset successfully' }),
   verifyEmailPost: async (req, res) => res.json({ message: 'Email verified successfully' }),
+  resendVerificationPost: async (req, res) => res.json({ message: 'If the account exists, a verification email will be sent' }),
 }
 
 // Single module override for both Prisma and email controller
@@ -86,6 +90,7 @@ function createTestApp() {
     name: data.data.name || null,
     role: 'USER',
   })
+  mockPrisma.emailVerification.findFirst = async () => null
 
   return app
 }

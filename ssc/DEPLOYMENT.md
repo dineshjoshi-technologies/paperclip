@@ -79,6 +79,14 @@ RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 ```
 
+Generate strong JWT secrets before filling `.env`:
+```bash
+openssl rand -hex 64
+openssl rand -hex 64
+```
+
+The backend now fails fast at startup when `JWT_SECRET` or `JWT_REFRESH_SECRET` is missing/weak in any non-test environment.
+
 ### 2.2 Database Setup
 
 ```bash

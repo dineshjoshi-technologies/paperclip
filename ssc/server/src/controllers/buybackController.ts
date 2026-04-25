@@ -1,6 +1,21 @@
 import { Response } from 'express';
+import { body, query } from 'express-validator';
 import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
+
+const BUYBACK_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'CANCELLED'] as const;
+
+export const buybackValidators = {
+  create: [
+    body('amountSSC').isFloat({ gt: 0 }).withMessage('amountSSC must be greater than 0'),
+    body('rate').isFloat({ gt: 0 }).withMessage('rate must be greater than 0'),
+  ],
+  list: [
+    query('page').optional().isInt({ min: 1 }).toInt(),
+    query('limit').optional().isInt({ min: 1, max: 100 }).toInt(),
+    query('status').optional().isIn(BUYBACK_STATUSES),
+  ],
+};
 
 export async function createBuybackRequest(req: AuthRequest, res: Response) {
   const { amountSSC, rate } = req.body;

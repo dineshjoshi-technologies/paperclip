@@ -13,9 +13,12 @@ interface AuthContextType {
   user: User | null
   token: string | null
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
+  register: (name: string, email: string, password: string) => Promise<void>
   logout: () => void
   isLoading: boolean
+  forgotPassword: (email: string) => Promise<void>
+  resetPassword: (token: string, newPassword: string) => Promise<void>
+  verifyEmail: (token: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -42,35 +45,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, password }),
     })
 
+    const body = await res.json().catch(() => null)
+
     if (!res.ok) {
-      const body = await res.json().catch(() => null)
-      throw new Error(body?.message || `Login failed: ${res.status}`)
+      throw new Error(body?.error || body?.message || `Login failed: ${res.status}`)
     }
 
-    const data = await res.json()
-    setToken(data.token)
-    setUser({ id: data.user.id, email: data.user.email, name: data.user.name })
-    localStorage.setItem('auth_token', data.token)
-    localStorage.setItem('auth_user', JSON.stringify({ id: data.user.id, email: data.user.email, name: data.user.name }))
+    const accessToken = body?.accessToken || body?.token
+    if (!accessToken || !body?.user) {
+      throw new Error('Login response is missing required authentication data')
+    }
+
+    setToken(accessToken)
+    setUser({ id: body.user.id, email: body.user.email, name: body.user.name })
+    localStorage.setItem('auth_token', accessToken)
+    localStorage.setItem('auth_user', JSON.stringify({ id: body.user.id, email: body.user.email, name: body.user.name }))
   }
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (name: string, email: string, password: string) => {
     const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, name }),
     })
 
+    const body = await res.json().catch(() => null)
+
     if (!res.ok) {
-      const body = await res.json().catch(() => null)
-      throw new Error(body?.message || `Registration failed: ${res.status}`)
+      throw new Error(body?.error || body?.message || `Registration failed: ${res.status}`)
     }
 
-    const data = await res.json()
-    setToken(data.token)
-    setUser({ id: data.user.id, email: data.user.email, name: data.user.name })
-    localStorage.setItem('auth_token', data.token)
-    localStorage.setItem('auth_user', JSON.stringify({ id: data.user.id, email: data.user.email, name: data.user.name }))
+    setToken(null)
+    setUser(null)
+    localStorage.removeItem('auth_token')
+    localStorage.removeItem('auth_user')
   }
 
   const logout = () => {
@@ -80,8 +88,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('auth_user')
   }
 
+  const forgotPassword = async (email: string) => {
+    const res = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => null)
+      throw new Error(body?.error || `Failed to send reset email`)
+    }
+  }
+
+  const resetPassword = async (token: string, newPassword: string) => {
+    const res = await fetch(`${API_BASE}/api/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, newPassword }),
+    })
+
+    const body = await res.json().catch(() => null)
+    if (!res.ok) {
+      throw new Error(body?.error || `Password reset failed`)
+    }
+  }
+
+  const verifyEmail = async (token: string) => {
+    const res = await fetch(`${API_BASE}/api/auth/verify-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+
+    const body = await res.json().catch(() => null)
+    if (!res.ok) {
+      throw new Error(body?.error || `Email verification failed`)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading, forgotPassword, resetPassword, verifyEmail }}>
       {children}
     </AuthContext.Provider>
   )

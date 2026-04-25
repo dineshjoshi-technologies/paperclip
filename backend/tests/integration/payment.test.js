@@ -7,7 +7,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 process.env.JWT_SECRET = 'test-secret-key';
-process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb';
+// Use DATABASE_URL from environment (set in CI) or default for local testing
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb';
+}
 
 const createApp = (mockPrisma, mockPaymentService, mockEmailService) => {
   const app = express();

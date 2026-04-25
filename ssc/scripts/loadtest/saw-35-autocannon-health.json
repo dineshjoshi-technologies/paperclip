@@ -1,0 +1,27 @@
+{
+  "issue": "SAW-35",
+  "target": "http://127.0.0.1:3101/health",
+  "tool": "autocannon@8.0.0",
+  "server_start": {
+    "command": "PORT=3101 NODE_ENV=test DATABASE_URL=postgresql://paperclip:paperclip@127.0.0.1:54329/paperclip?schema=public REDIS_URL=redis://127.0.0.1:6379 npm run dev",
+    "working_directory": "server"
+  },
+  "scenario": {
+    "warmup": {
+      "connections": 10,
+      "duration_seconds": 10
+    },
+    "test": {
+      "connections": 50,
+      "duration_seconds": 60,
+      "pipelining": 1,
+      "method": "GET"
+    }
+  },
+  "expected_traffic_target": {
+    "minimum_throughput_rps": 1000,
+    "maximum_p95_latency_ms": 2000,
+    "maximum_p99_latency_ms": 2000,
+    "maximum_error_rate_percent": 1
+  }
+}

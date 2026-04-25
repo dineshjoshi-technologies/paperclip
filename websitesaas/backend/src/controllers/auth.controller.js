@@ -22,6 +22,8 @@ exports.register = async (req, res) => {
 
     const { accessToken, refreshToken } = generateTokens(user.id)
 
+    const verificationToken = emailService.generateVerificationToken()
+    await emailService.sendEmailVerificationEmail(user, verificationToken)
     emailService.sendWelcomeEmail(user)
     emailService.sendAdminNewUserAlert(user)
 
@@ -54,6 +56,28 @@ exports.login = async (req, res) => {
     const isValid = await bcrypt.compare(password, user.passwordHash)
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid credentials' })
+    }
+
+    const hasVerificationRecord = await prisma.emailVerification.findFirst({
+      where: { userId: user.id },
+      select: { id: true }
+    })
+
+    if (hasVerificationRecord) {
+      const verifiedRecord = await prisma.emailVerification.findFirst({
+        where: {
+          userId: user.id,
+          verifiedAt: { not: null }
+        },
+        select: { id: true }
+      })
+
+      if (!verifiedRecord) {
+        return res.status(403).json({
+          error: 'Please verify your email before signing in',
+          code: 'EMAIL_NOT_VERIFIED'
+        })
+      }
     }
 
     const { accessToken, refreshToken } = generateTokens(user.id)

@@ -13,6 +13,7 @@ router.post('/logout', authController.logout)
 router.post('/forgot-password', authLimiter, emailController.requestPasswordReset)
 router.post('/reset-password', authLimiter, emailController.resetPasswordPost)
 router.post('/verify-email', emailController.verifyEmailPost)
+router.post('/resend-verification', authLimiter, emailController.resendVerificationPost)
 router.post('/onboarding-complete', authenticate, authController.completeOnboarding)
 
 module.exports = router

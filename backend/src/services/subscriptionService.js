@@ -157,6 +157,7 @@ async function renewSubscription(subscriptionId) {
 }
 
 module.exports = {
+  getPlanIndex,
   upgradeSubscription,
   downgradeSubscription,
   createSubscription,

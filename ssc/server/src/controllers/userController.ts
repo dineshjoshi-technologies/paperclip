@@ -3,12 +3,31 @@ import { body } from 'express-validator';
 import bcrypt from 'bcrypt';
 import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
-import { validate } from '../middleware/validate';
 
 export const userValidators = {
   changePassword: [
     body('currentPassword').notEmpty().withMessage('Current password is required'),
     body('newPassword').isLength({ min: 8 }).withMessage('New password must be at least 8 characters'),
+  ],
+  updateProfile: [
+    body('firstName').optional().isString().trim().isLength({ min: 1, max: 100 }),
+    body('lastName').optional().isString().trim().isLength({ min: 1, max: 100 }),
+    body('walletAddress').optional().trim().isEthereumAddress(),
+    body().custom((value) => {
+      if (!value || typeof value !== 'object') {
+        throw new Error('Request body must be an object');
+      }
+
+      const hasAllowedField = ['firstName', 'lastName', 'walletAddress'].some(
+        (field) => value[field] !== undefined,
+      );
+
+      if (!hasAllowedField) {
+        throw new Error('At least one profile field must be provided');
+      }
+
+      return true;
+    }),
   ],
 };
 

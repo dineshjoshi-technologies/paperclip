@@ -27,9 +27,15 @@ export default function SiteLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-white text-zinc-900">
-        <div className="site-root">
+        <a
+          href="#site-main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-zinc-900 focus:text-white focus:rounded-md"
+        >
+          Skip to main content
+        </a>
+        <main id="site-main-content" tabIndex={-1} className="site-root focus:outline-none">
           {children}
-        </div>
+        </main>
       </body>
     </html>
   )

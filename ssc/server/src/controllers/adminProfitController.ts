@@ -1,8 +1,37 @@
 import { Response } from 'express';
-import { body, param } from 'express-validator';
-import { validate } from '../middleware/validate';
+import { body, param, query } from 'express-validator';
 import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
+
+const DISTRIBUTION_STATUSES = ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'] as const;
+
+export const profitValidators = {
+  create: [
+    body('distributionPeriod').isString().trim().isLength({ min: 1, max: 100 }),
+    body('totalAmount').isFloat({ gt: 0 }).withMessage('totalAmount must be greater than 0'),
+    body('snapshotDate').isISO8601(),
+    body('recipients').optional().isArray(),
+    body('recipients.*.userId').optional().isUUID(),
+    body('recipients.*.tokenAmount').optional().isFloat({ gt: 0 }),
+  ],
+  list: [
+    query('page').optional().isInt({ min: 1 }).toInt(),
+    query('limit').optional().isInt({ min: 1, max: 100 }).toInt(),
+    query('status').optional().isIn(DISTRIBUTION_STATUSES),
+    query('period').optional().isString().trim().isLength({ min: 1, max: 100 }),
+  ],
+  getOne: [
+    param('id').isUUID(),
+  ],
+  update: [
+    param('id').isUUID(),
+    body('status').optional().isIn(DISTRIBUTION_STATUSES),
+    body('notes').optional().isString().trim().isLength({ max: 1000 }),
+  ],
+  execute: [
+    param('id').isUUID(),
+  ],
+};
 
 export async function createProfitDistribution(req: AuthRequest, res: Response) {
   const { distributionPeriod, totalAmount, snapshotDate, recipients } = req.body;

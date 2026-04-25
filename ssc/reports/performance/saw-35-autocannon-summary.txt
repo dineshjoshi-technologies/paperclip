@@ -1,0 +1,20 @@
+Autocannon summary (captured 2026-04-10 UTC)
+
+Latency
+- 2.5%: 15 ms
+- 50%: 19 ms
+- 97.5%: 51 ms
+- 99%: 62 ms
+- Avg: 22.18 ms
+- Stdev: 10.25 ms
+- Max: 564 ms
+
+Request rate
+- Avg: 2202.45 req/sec
+- 50%: 2203 req/sec
+- 97.5%: 3105 req/sec
+- Min: 775 req/sec
+
+Run totals
+- 44k requests in 20.05s
+- 47.5 MB read
