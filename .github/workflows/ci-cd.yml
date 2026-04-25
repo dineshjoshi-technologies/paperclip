@@ -74,12 +74,28 @@ jobs:
         working-directory: ${{ matrix.service }}
         run: npm run build --if-present
 
-      - name: Set up test database
-        if: matrix.service == 'backend'
-        working-directory: ${{ matrix.service }}
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/dj_tech_test
-        run: npx prisma migrate deploy
+       - name: Set up test database
+         if: matrix.service == 'backend'
+         working-directory: ${{ matrix.service }}
+         env:
+           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/dj_tech_test
+         run: |
+           # Wait for PostgreSQL to be ready and create database if needed
+           echo "Waiting for PostgreSQL to be ready..."
+           for i in {1..30}; do
+             if pg_isready -h localhost -p 5432 -U postgres; then
+               echo "PostgreSQL is ready!"
+               break
+             fi
+             echo "Attempt $i: PostgreSQL not ready yet, waiting 1 second..."
+             sleep 1
+           done
+           
+           # Create database if it doesn't exist
+           psql -h localhost -U postgres -c "CREATE DATABASE dj_tech_test;" || echo "Database already exists"
+           
+           # Run migrations
+           npx prisma migrate deploy
 
       - name: Test with coverage (backend)
         if: matrix.service == 'backend'
