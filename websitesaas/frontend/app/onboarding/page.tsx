@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { OnboardingWizard } from '@/components/onboarding-wizard'
-import { apiFetch } from '@/lib/utils'
+import { apiFetch } from '../../../lib/utils'
 
 interface User {
   id: string

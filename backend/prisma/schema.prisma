@@ -334,10 +334,24 @@ enum PaymentStatus {
 }
 
 enum InvoiceStatus {
-  DRAFT
-  ISSUED
-  PAID
-  OVERDUE
-  CANCELLED
-  REFUNDED
+   DRAFT
+   ISSUED
+   PAID
+   OVERDUE
+   CANCELLED
+   REFUNDED
 }
+
+model WebhookEvent {
+  id            String    @id @default(uuid())
+  eventId       String    @unique
+  eventType     String
+  processedAt   DateTime  @default(now())
+  payload       Json?
+   
+  @@index([eventId])
+  @@index([eventType])
+  @@index([processedAt])
+  @@map("webhook_events")
+}
+

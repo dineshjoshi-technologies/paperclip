@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PageBuilder, type BuilderComponent } from '@/components/builder'
 import { DashboardHeader } from '@/components/layout/dashboard-header'
-import { apiFetch } from '@/lib/utils'
+import { apiFetch } from '../../../lib/utils'
 
 interface WebsiteData {
   id: string

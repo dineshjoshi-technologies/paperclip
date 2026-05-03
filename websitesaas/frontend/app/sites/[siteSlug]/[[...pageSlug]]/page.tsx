@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { SiteRenderer } from '@/components/site-renderer'
 import type { BuilderComponent } from '@/components/builder/types'
-import { API_BASE } from '@/lib/utils'
+import { API_BASE } from '../../../lib/utils'
 
 interface SiteData {
   website: {

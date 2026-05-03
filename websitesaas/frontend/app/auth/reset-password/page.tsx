@@ -4,7 +4,7 @@ import { useState, type FormEvent, useEffect } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { API_BASE } from '@/lib/utils'
+import { API_BASE } from '../../../lib/utils'
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams()
