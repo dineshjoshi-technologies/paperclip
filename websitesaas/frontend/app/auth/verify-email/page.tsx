@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { API_BASE } from '../../../lib/utils'
+import { API_BASE } from '@/lib/utils'
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams()

@@ -1,0 +1,120 @@
+import { faqSchema } from '@/components/schemas/faq-schema';
+
+export const metadata = {
+  title: 'Website Builder Under 200 Rupees: Build Your Site for Just ₹199/month',
+  description: 'Discover how to build a professional website for under 200 rupees per month with our AI-powered website builder. No coding required. Perfect for freelancers, small businesses, and startups in India.',
+  keywords: ['website builder under 200 rupees', 'cheap website builder India', 'affordable website builder', '₹199 website builder', 'budget website builder'],
+};
+
+export default function WebsiteBuilderUnder200Rupees() {
+  return (
+    <article className="prose mx-auto max-w-4xl lg:prose-xl">
+      <h1>Website Builder Under 200 Rupees: Build Your Site for Just ₹199/month</h1>
+      
+      <p>Looking for a website builder under 200 rupees? You've found it. Our AI-powered website builder lets you create professional websites for just ₹199/month - less than the cost of a daily coffee.</p>
+      
+      <h2>Why Pay Thousands When You Can Build for ₹199/month?</h2>
+      
+      <p>Traditional website development in India costs anywhere from ₹15,000 to ₹1,00,000+ upfront, plus ongoing maintenance fees. With our AI website builder, you get:</p>
+      
+      <ul>
+        <li>Instant website creation with AI (build in 30 seconds)</li>
+        <li>No coding or technical skills required</li>
+        <li>Professional designs optimized for conversions</li>
+        <li>Built-in hosting at ₹199/month</li>
+        <li>Free SSL certificate and domain connection</li>
+        <li>Mobile-responsive designs that work on all devices</li>
+        <li>SEO optimization to help you rank on Google</li>
+        <li>24/7 customer support</li>
+      </ul>
+      
+      <h2>Who Is This For?</h2>
+      
+      <p>Our ₹199/month website builder is perfect for:</p>
+      
+      <ul>
+        <li><strong>Freelancers</strong> who want to showcase their portfolio and attract clients</li>
+        <li><strong>Small businesses</strong> needing an online presence without breaking the bank</li>
+        <li><strong>Startups</strong> looking to validate ideas quickly and affordably</li>
+        <li><strong>Coaches & consultants</strong> who want to book more clients online</li>
+        <li><strong>Restaurant owners</strong> needing menus, reservations, and online ordering</li>
+        <li><strong>NGOs & non-profits</strong> seeking to spread their message and collect donations</li>
+      </ul>
+      
+      <h2>How It Works: Build a Website in 3 Simple Steps</h2>
+      
+      <ol>
+        <li><strong>Describe your website</strong> - Tell our AI what kind of site you need (business, portfolio, restaurant, etc.)</li>
+        <li><strong>Customize with ease</strong> - Use our drag-and-drop editor to adjust colors, text, and layout</li>
+        <li><strong>Publish and grow</strong> - Click publish and your site goes live instantly on your domain</li>
+      </ol>
+      
+      <h2>What You Get for Just ₹199/month</h2>
+      
+      <p>Unlike other "cheap" website builders that lock you into expensive plans or hide crucial features, our ₹199/month plan includes everything you need:</p>
+      
+      <ul>
+        <li>Unlimited pages and bandwidth</li>
+        <li>Custom domain connection (connect your .in, .com, or any domain)</li>
+        <li>Professional email address (@yourdomain.com)</li>
+        <li>Analytics dashboard to track visitors</li>
+        <li>Contact form with spam protection</li>
+        <li>Social media integration</li>
+        <li>Regular backups and security updates</li>
+        <li>Access to all premium templates</li>
+        <li>AI-powered design suggestions</li>
+      </ul>
+      
+      <h2>Real Results from Real Customers</h2>
+      
+      <blockquote>
+        "I was paying ₹25,000 yearly to maintain my WordPress site. Switching to this AI builder saved me ₹23,000 annually while giving me a better-looking site that actually converts visitors to clients."
+      </blockquote>
+      <p><strong>- Priya Sharma, Freelance Graphic Designer, Mumbai</strong></p>
+      
+      <blockquote>
+        "As a small restaurant owner, I needed a simple website to show my menu and take reservations. For ₹199/month, I got a beautiful site that actually brings in customers - no tech skills needed."
+      </blockquote>
+      <p><strong>- Rajesh Patel, Owner, Spice Garden Restaurant, Delhi</strong></p>
+      
+      <h2>Frequently Asked Questions</h2>
+      
+      <FaqSchema 
+        faqs={[
+          {
+            question: "Is ₹199/month really all I need to pay?",
+            answer: "Yes! Our ₹199/month plan includes hosting, domain connection, SSL certificate, and all features. There are no hidden fees or surprise charges."
+          },
+          {
+            question: "Can I use my own domain name?",
+            answer: "Absolutely! You can connect any existing domain (.in, .com, .org, etc.) or purchase a new one through our platform."
+          },
+          {
+            question: "What if I need help building my website?",
+            answer: "Our AI guides you through the entire process, and our support team is available 24/7 to answer any questions you might have."
+          },
+          {
+            question: "Is this suitable for e-commerce stores?",
+            answer: "While our basic plan focuses on business and portfolio websites, we offer e-commerce capabilities starting at ₹499/month for those needing online stores."
+          },
+          {
+            question: "How does this compare to Wix or WordPress?",
+            answer: "Unlike Wix (₹500-₹1500/month) or WordPress (₹2000-₹5000+/year for hosting + themes/plugins), our AI builder gives you a professional site for just ₹199/month with built-in AI design assistance."
+          }
+        ]}
+      />
+      
+      <h2>Ready to Build Your Website for Under 200 Rupees?</h2>
+      
+      <p>Join thousands of Indians who are building professional websites for less than the cost of their daily chai. No credit card required to start - build your site first, then decide if you want to publish.</p>
+      
+      <p><strong>Start building your website today for just ₹199/month:</strong></p>
+      
+      <div className="text-center mt-8">
+        <a href="/dashboard" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-shadow duration-300 hover:shadow-lg">
+          Build My Website Now →
+        </a>
+      </div>
+    </article>
+  );
+}

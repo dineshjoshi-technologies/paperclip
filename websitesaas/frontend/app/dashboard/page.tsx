@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/modal'
 import { Input } from '@/components/ui/input'
-import { apiFetch, formatDate, slugify, cn } from '../../lib/utils'
+import { apiFetch, formatDate, slugify, cn } from '@/lib/utils'
 import {
   Globe,
   TrendingUp,
