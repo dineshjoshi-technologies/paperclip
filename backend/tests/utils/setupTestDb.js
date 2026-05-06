@@ -4,7 +4,7 @@ let testPrisma = null;
 
 function getTestPrisma() {
   if (!testPrisma) {
-    testPrisma = new PrismaClient();
+    testPrisma = new PrismaClient({ datasources: { db: { url: process.env.DATABASE_URL } } });
   }
   return testPrisma;
 }
