@@ -171,6 +171,28 @@ model EmailVerification {
   @@map("email_verifications")
 }
 
+model Referral {
+  id            String   @id @default(uuid())
+  referrerId    String   @map("referrer_id")
+  refereeId     String   @map("referee_id")
+  referrer      User     @relation("ReferralReferrer", fields: [referrerId], references: [id])
+  referee       User     @relation("ReferralReferee", fields: [refereeId], references: [id])
+  status        ReferralStatus @default(PENDING)
+  rewardDate    DateTime?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([referrerId])
+  @@index([refereeId])
+  @@unique([referrerId, refereeId])
+}
+
+enum ReferralStatus {
+  PENDING
+  COMPLETED
+  REWARDED
+}
+
 enum EmailStatus {
   PENDING
   SENT
