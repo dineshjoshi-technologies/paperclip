@@ -15,6 +15,7 @@ const publicRoutes = require('./routes/public.routes')
 const emailRoutes = require('./routes/email.routes')
 const paymentRoutes = require('./routes/payments.routes')
 const adminRoutes = require('./routes/admin.routes')
+const referralRoutes = require('./routes/referral.routes')
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -56,6 +57,7 @@ app.use('/api', publicRoutes)
 app.use('/api/email', emailRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/referral', referralRoutes)
 
 // 404 handler
 app.use((req, _res, next) => {

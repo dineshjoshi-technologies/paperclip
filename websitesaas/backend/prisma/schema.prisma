@@ -25,6 +25,8 @@ model User {
   emailPreferences EmailPreference[]
   passwordResets   PasswordReset[]
   emailVerifications EmailVerification[]
+  referralsMade    Referral[] @relation("ReferralReferrer")
+  referralsReceived Referral[] @relation("ReferralReferee")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
