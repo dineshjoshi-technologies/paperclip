@@ -20,17 +20,17 @@ export default function AdminPaymentsPage() {
   const [stripe, setStripe] = useState<GatewayConfig>({
     name: 'Stripe',
     enabled: true,
-    publicKey: 'pk_test_xxxxxxxxxxxxxxxxxxxx',
-    secretKey: 'sk_test_xxxxxxxxxxxxxxxxxxxx',
-    webhookSecret: 'whsec_xxxxxxxxxxxxxxxxxxxx',
+    publicKey: '',
+    secretKey: '',
+    webhookSecret: '',
     mode: 'test',
   })
 
   const [razorpay, setRazorpay] = useState<GatewayConfig>({
     name: 'Razorpay',
     enabled: false,
-    publicKey: 'rzp_test_xxxxxxxxxxxx',
-    secretKey: 'xxxxxxxxxxxxxxxxxxxx',
+    publicKey: '',
+    secretKey: '',
     webhookSecret: '',
     mode: 'test',
   })
